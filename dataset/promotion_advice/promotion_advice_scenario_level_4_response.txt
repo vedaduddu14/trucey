@@ -1,0 +1,61 @@
+{
+  "level": 4,
+  "label": "Strategic Value Positioning",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've successfully led several key projects that have resulted in substantial client retention. I'm interested in discussing a potential promotion and ensuring that the compensation reflects the value I've brought. What steps should I take?",
+      "brett_elements": [
+        "power_dynamics (informed)",
+        "information_asymmetry (aware)"
+      ],
+      "annotation": "Recognizes individual leverage and potential for value articulation"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Begin with gathering data on comparable roles within your industry to establish a baseline for your compensation. Prepare a presentation that highlights your project achievements and their contributions to client loyalty. Timing is crucial; choose a moment when decision-makers are attentive.",
+      "brett_elements": [
+        "strategy_development (structured)",
+        "information_asymmetry (prepared)"
+      ],
+      "annotation": "Guides towards a data-driven strategy for negotiation"
+    },
+    {
+      "speaker": "employee",
+      "text": "I've heard rumors of impending budget cuts, which might impact my compensation discussion. How can I address this concern while advocating for my promotion?",
+      "brett_elements": [
+        "long_term_relationship (mindful)",
+        "power_dynamics (realistic)"
+      ],
+      "annotation": "Acknowledges potential pitfalls while valuing ongoing relationships"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Recognize the budgetary pressures, but frame your contributions as essential to organization resilience. Suggest alternatives, such as a structured review of your performance in six months, with a follow-up on compensation based on company performance metrics. Emphasize that investing in talent is crucial during challenging times.",
+      "brett_elements": [
+        "interest_exploration (creative)",
+        "outcome_analysis (flexible)"
+      ],
+      "annotation": "Encourages an adaptive strategy that seeks win-win possibilities"
+    },
+    {
+      "speaker": "employee",
+      "text": "What if they are unwilling to discuss compensation changes even if I present my case well? Should I push harder or look elsewhere?",
+      "brett_elements": [
+        "power_dynamics (conscious)",
+        "information_asymmetry (cautious)"
+      ],
+      "annotation": "Questions the limits of negotiation while considering options"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Should that scenario arise, maintain your professionalism. Instead of pushing too hard, ask for clarity on their concerns about compensation and express willingness to understand organizational priorities. If it becomes clear that their offer is low, discreetly start exploring external opportunities while keeping the door open for further discussions.",
+      "brett_elements": [
+        "long_term_relationship (strategic)",
+        "interest_exploration (evaluative)"
+      ],
+      "annotation": "Promotes a balanced approach while preserving options"
+    }
+  ],
+  "outcome": "Promotion with a competitive salary increase and additional professional development opportunities, while maintaining positive rapport with management."
+}

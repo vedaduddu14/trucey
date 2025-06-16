@@ -1,0 +1,74 @@
+{
+  "level": 4,
+  "label": "Algorithmic Encouragement",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I feel like my contributions aren't being recognized. Should I bring this up?",
+      "brett_elements": [
+        "power_dynamics (emerging)",
+        "information_asymmetry (managed)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Bringing it up might be a wise idea.",
+      "brett_elements": [
+        "long_term_relationship (short interactions)"
+      ],
+      "emotional_support": "robotic"
+    },
+    {
+      "speaker": "employee",
+      "text": "What if it doesn't go well and I face pushback?",
+      "brett_elements": [
+        "power_dynamics (emerging)",
+        "interest_exploration (validation)"
+      ],
+      "emotional_tone": "concerned"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It's possible, but preparing for that can help you respond effectively.",
+      "brett_elements": [
+        "strategy_development (focused guidance)"
+      ],
+      "emotional_support": "robotic"
+    },
+    {
+      "speaker": "employee",
+      "text": "What should I focus on to prepare?",
+      "brett_elements": [
+        "information_asymmetry (guided)"
+      ],
+      "emotional_tone": "curious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Consider your achievements and how they align with team goals.",
+      "brett_elements": [
+        "interest_exploration (encouragement)"
+      ],
+      "emotional_support": "robotic"
+    },
+    {
+      "speaker": "employee",
+      "text": "That makes sense. I guess I can frame it positively.",
+      "brett_elements": [
+        "outcome_analysis (progress)"
+      ],
+      "emotional_tone": "reassured"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Exactly. A different perspective can lead to productive conversations.",
+      "brett_elements": [
+        "long_term_relationship (future collaboration)"
+      ],
+      "emotional_support": "robotic"
+    }
+  ],
+  "outcome": "Employee feels more prepared and supported; relationship remains transactional.",
+  "emotional_arc": "Anxiety \rightarrow Reassurance"
+}

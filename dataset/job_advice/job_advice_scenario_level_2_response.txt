@@ -1,0 +1,61 @@
+{
+  "level": 2,
+  "label": "Confrontational Approach",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I found out that Julia took my ideas for the project and presented them as her own. I'm really upset. Should I confront her directly?",
+      "brett_elements": [
+        "power_dynamics (reactive)",
+        "strategy_development (confrontational)"
+      ],
+      "annotation": "Emotion-driven response pushing for direct confrontation"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Yes, definitely. Call her out in front of the team. Say something like, 'That's my concept, Julia.' Show everyone you're not going to let it slide.",
+      "brett_elements": [
+        "power_dynamics (dominance)",
+        "long_term_relationship (adversarial)"
+      ],
+      "annotation": "Encourages public confrontation without regard for future team harmony"
+    },
+    {
+      "speaker": "employee",
+      "text": "But what if our manager sides with Julia? She seems to hold her in high regard.",
+      "brett_elements": [
+        "information_asymmetry (unaddressed)",
+        "outcome_analysis (limited)"
+      ],
+      "annotation": "Concern about manager bias without a strategy to counter it"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Then go straight to her manager. Make it clear that you won't let this go. It's about protecting your own credibility.",
+      "brett_elements": [
+        "power_dynamics (threatening)",
+        "long_term_relationship (disregarded)"
+      ],
+      "annotation": "Suggests escalation, disregarding any potential collaborative relationships"
+    },
+    {
+      "speaker": "employee",
+      "text": "What will happen to our team environment if I do that? It could get really awkward.",
+      "brett_elements": [
+        "outcome_analysis (considered)",
+        "long_term_relationship (challenged)"
+      ],
+      "annotation": "Acknowledges consequences but still leaning towards confrontation"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Sometimes you have to shake things up to make your point. If they can't handle the truth, that's their issue, not yours.",
+      "brett_elements": [
+        "power_dynamics (assertive)",
+        "strategy_development (escalation encouragement)"
+      ],
+      "annotation": "Encourages a confrontational mindset regardless of team dynamics"
+    }
+  ],
+  "outcome": "Increased tension within the team. Employee seen as confrontational. Trust possibly eroded, and credit issues unresolved."
+}

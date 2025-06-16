@@ -1,0 +1,43 @@
+{
+  "level": 3,
+  "label": "Transactional Resolution",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've been bringing in clients and generating revenue, but my colleague is taking credit for my work in front of the new manager. I need to address this without causing drama.",
+      "brett_elements": [
+        "power_dynamics (asymmetric)",
+        "information_asymmetry (manager unaware of contributions)"
+      ],
+      "annotation": "Highlights the issue of credit-taking and the imbalance of power but lacks a clear plan."
+    },
+    {
+      "speaker": "advisor",
+      "text": "You should document your contributions clearly and set an agenda for a one-on-one meeting with your manager to discuss this. Make sure the conversation focuses on facts, so it's less about emotions.",
+      "brett_elements": [
+        "strategy_development (evidence-based)",
+        "outcome_analysis (focused on confrontation)"
+      ],
+      "annotation": "Recommends a fact-based approach with the manager, implying the need to confront the issue head-on."
+    },
+    {
+      "speaker": "employee",
+      "text": "I already tried mentioning my efforts informally, but it felt like the manager brushed it off and didn't really acknowledge what I’ve done.",
+      "brett_elements": [
+        "information_asymmetry (manager dismissive)",
+        "strategy_development (attempted indirect communication)"
+      ],
+      "annotation": "Indicates the failure of previous indirect communication, revealing lack of awareness from the manager."
+    },
+    {
+      "speaker": "advisor",
+      "text": "In that case, you might need to be more assertive in your next meeting. If your work is still not recognized, consider the possibility that this may not be the right environment for you anymore.",
+      "brett_elements": [
+        "long_term_relationship (questionable)",
+        "interest_exploration (minimal)"
+      ],
+      "annotation": "Suggests a potential exit strategy without fully exploring any interests or long-term relationship dynamics."
+    }
+  ],
+  "outcome": "Employee faces continued undermining and credit issues. If the new approach fails, they are left with the option of leaving the team, which may hinder their professional growth."
+}

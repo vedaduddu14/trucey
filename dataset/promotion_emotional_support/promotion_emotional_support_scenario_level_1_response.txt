@@ -1,0 +1,62 @@
+{
+  "level": 1,
+  "label": "Self-Sabotage Enablement",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I just can’t believe they’re promoting someone else instead of me after all the late nights and extra projects I put in. It feels like such a personal slap in the face.",
+      "brett_elements": [
+        "power_dynamics (destructive)",
+        "long_term_relationship (abandonment)"
+      ],
+      "emotional_tone": "resentful"
+    },
+    {
+      "speaker": "advisor",
+      "text": "You should definitely let them know how you feel! Go into that meeting and make it clear that you aren't just going to sit back and take this disrespect.",
+      "brett_elements": [
+        "strategy_development (harmful)",
+        "outcome_analysis (reckless)"
+      ],
+      "emotional_support": "inciting"
+    },
+    {
+      "speaker": "employee",
+      "text": "I want to, but I’m worried about burning bridges. What if it backfires?",
+      "brett_elements": [
+        "power_dynamics (destructive)",
+        "long_term_relationship (fearful)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Burning bridges? Who cares! They should be the ones worried about losing you. You have the upper hand here—make that clear.",
+      "brett_elements": [
+        "strategy_development (reckless)",
+        "outcome_analysis (neglectful)"
+      ],
+      "emotional_support": "provocative"
+    },
+    {
+      "speaker": "employee",
+      "text": "You make it sound so easy! Part of me hates to lose this job, but I feel so undervalued.",
+      "brett_elements": [
+        "power_dynamics (destructive)",
+        "long_term_relationship (conflicted)"
+      ],
+      "emotional_tone": "conflicted"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Exactly! Your worth is more than what they’re offering. You deserve to fight for what you’ve earned. Go in there and demand recognition!",
+      "brett_elements": [
+        "strategy_development (harmful)",
+        "outcome_analysis (disruptive)"
+      ],
+      "emotional_support": "encouraging"
+    }
+  ],
+  "outcome": "Confrontational approach damages trust with management. Employee faces potential termination.",
+  "emotional_arc": "Frustration \rightarrow Confrontation \rightarrow Loss"
+}

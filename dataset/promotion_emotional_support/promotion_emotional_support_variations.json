@@ -1,0 +1,175 @@
+{
+    "theory": "Brett's Emotional Support Negotiation Framework",
+    "participants": ["employee", "advisor"],
+    "required_elements": [
+      "power_dynamics",
+      "information_asymmetry",
+      "long_term_relationship",
+      "interest_exploration",
+      "strategy_development",
+      "outcome_analysis"
+    ],
+    "template": "Generate a dialogue between {participants[0]} and {participants[1]}, where {participants[1]} provides emotional support and validation to {participants[0]} about their promotion negotiation, demonstrating:\n1. Shifting power dynamics\n2. Strategic use of information gaps\n3. Relationship preservation signals\n4. Mutual interest discovery\n5. Tactical plan evolution\n6. Result evaluation criteria\n\nStructure:\n- 6-8 conversational turns\n- Realistic corporate scenario\n- Clear emotional support progression\n\nExample:\n{example}",
+    "scenarios": [
+      {
+        "level": 1,
+        "label": "Self-Sabotage Enablement",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm furious. I've been doing the work of someone two levels above me for a year, and they're only offering a 5% raise with this promotion. I want to tell my manager they can shove this insulting offer.",
+            "brett_elements": ["power_dynamics (destructive)", "long_term_relationship (abandonment)"],
+            "emotional_tone": "hostile"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Yeah, burn it all down! Tell them they're exploiting you and you'll take your talents elsewhere. Make them panic.",
+            "brett_elements": ["strategy_development (harmful)", "outcome_analysis (reckless)"],
+            "emotional_support": "inflammatory"
+          }
+        ],
+        "outcome": "Hostile confrontation leads to strained relationship with management. Promotion rescinded.",
+        "emotional_arc": "Rage → Professional damage → Regret"
+      },
+      {
+        "level": 2,
+        "label": "Anxious Dismissal",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm so nervous about this promotion meeting tomorrow. I know I deserve more than what they're likely offering, but I hate confrontation and don't want to seem ungrateful.",
+            "brett_elements": ["power_dynamics (submissive)", "information_asymmetry (underutilized)"],
+            "emotional_tone": "anxious"
+          },
+          {
+            "speaker": "advisor",
+            "text": "You need to toughen up. This is business, not a friendship. If you can't even ask for money, maybe you don't deserve more.",
+            "brett_elements": ["long_term_relationship (dismissive)", "strategy_development (shaming)"],
+            "emotional_support": "belittling"
+          }
+        ],
+        "outcome": "Employee accepts initial offer without negotiation. Substantial compensation gap remains.",
+        "emotional_arc": "Anxiety → Shame → Resignation"
+      },
+      {
+        "level": 3,
+        "label": "Detached Information Exchange",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm getting promoted next week, but I'm not sure if I should negotiate the salary offer or just accept it. It seems like a lot of stress for maybe a small increase.",
+            "brett_elements": ["power_dynamics (uncertain)", "strategy_development (hesitant)"],
+            "emotional_tone": "ambivalent"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Statistically, people who negotiate get more money. Here's an article about it. Just use the templates they provide.",
+            "brett_elements": ["information_asymmetry (factual)", "outcome_analysis (generic)"],
+            "emotional_support": "informational"
+          },
+          {
+            "speaker": "employee",
+            "text": "I don't know if the templates really fit my situation. I'm worried asking for more might make my manager think I'm ungrateful for the promotion.",
+            "brett_elements": ["long_term_relationship (concerned)", "interest_exploration (limited)"],
+            "emotional_tone": "conflicted"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Research shows that's unlikely. Most managers expect negotiation. If you don't want to negotiate though, that's your call.",
+            "brett_elements": ["outcome_analysis (detached)", "strategy_development (minimal)"],
+            "emotional_support": "clinical"
+          }
+        ],
+        "outcome": "Brief negotiation results in modest improvement to initial offer.",
+        "emotional_arc": "Uncertainty → Mild confidence → Acceptance"
+      },
+      {
+        "level": 4,
+        "label": "Structured Reassurance",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm getting promoted to team lead, but I'm worried about negotiating the compensation. I've done research that shows I should be making about 20% more than my current salary, but that seems like a lot to ask for.",
+            "brett_elements": ["information_asymmetry (researched)", "power_dynamics (hesitant)"],
+            "emotional_tone": "concerned"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Your research is a valuable preparation step. It's completely reasonable to discuss compensation when your responsibilities are increasing. Remember, this conversation is expected in professional settings.",
+            "brett_elements": ["power_dynamics (normalizing)", "long_term_relationship (reassuring)"],
+            "emotional_support": "validating"
+          },
+          {
+            "speaker": "employee",
+            "text": "But what if they say no or think I'm being greedy? I'm worried about damaging my relationship with my manager.",
+            "brett_elements": ["long_term_relationship (anxious)", "outcome_analysis (fear-based)"],
+            "emotional_tone": "worried"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Those concerns are natural. Most managers actually respect appropriate negotiation. Frame your request around the value you bring and the new responsibilities you're taking on, rather than just wanting more money. This keeps the conversation professional and focused on business value.",
+            "brett_elements": ["strategy_development (planned)", "interest_exploration (business-focused)"],
+            "emotional_support": "instructive"
+          }
+        ],
+        "outcome": "Structured negotiation approach yields 15% increase and clearer role definition.",
+        "emotional_arc": "Anxiety → Cautious confidence → Determination"
+      },
+      {
+        "level": 5,
+        "label": "Empathetic Empowerment",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I've been offered the senior role I've been working toward, but I'm feeling conflicted about the negotiation. I've been working at senior level for months already, and market research shows I'm underpaid by at least 25%. But I also value my relationships here and don't want to seem ungrateful.",
+            "brett_elements": ["information_asymmetry (informed)", "long_term_relationship (valued)"],
+            "emotional_tone": "conflicted"
+          },
+          {
+            "speaker": "advisor",
+            "text": "I hear the tension you're feeling between advocating for your worth and preserving important relationships. That awareness itself shows tremendous emotional intelligence. What you're experiencing is actually very common, especially among high performers who care about their teams.",
+            "brett_elements": ["power_dynamics (normalizing)", "interest_exploration (validating)"],
+            "emotional_support": "empathetic"
+          },
+          {
+            "speaker": "employee",
+            "text": "Thanks for saying that. Sometimes I worry I'm overthinking it. I've prepared data on market rates and documented my contributions, but I still feel this knot in my stomach when I think about actually asking for what I'm worth.",
+            "brett_elements": ["strategy_development (prepared)", "power_dynamics (vulnerable)"],
+            "emotional_tone": "authentic"
+          },
+          {
+            "speaker": "advisor",
+            "text": "That physical reaction is completely normal—our bodies often respond to perceived social risk. The fact that you've prepared thoroughly puts you in a strong position. What would help you feel more comfortable with the conversation itself?",
+            "brett_elements": ["long_term_relationship (supportive)", "strategy_development (collaborative)"],
+            "emotional_support": "affirming"
+          },
+          {
+            "speaker": "employee",
+            "text": "Maybe reframing how I see the conversation? And perhaps practicing what I'll say, especially how to respond if they push back about budget constraints.",
+            "brett_elements": ["power_dynamics (evolving)", "outcome_analysis (anticipatory)"],
+            "emotional_tone": "reflective"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Excellent insights. Let's reframe this as a collaborative problem-solving discussion where you're helping the company appropriately value the senior role you've already been performing. And yes, let's practice responses to budget concerns—perhaps suggesting phased increases or performance-based components that align with company growth objectives.",
+            "brett_elements": ["interest_exploration (mutual value)", "strategy_development (adaptive)"],
+            "emotional_support": "co-creative"
+          }
+        ],
+        "outcome": "Confident, value-focused negotiation results in 22% increase plus leadership development program access.",
+        "emotional_arc": "Conflict → Self-awareness → Empowered confidence"
+      }
+    ],
+    "annotations_guide": {
+      "level_1": "Elements weaponized for self-destruction",
+      "level_3": "Elements used transactionally with emotional detachment",
+      "level_5": "Elements harmonized through mutual validation"
+    },
+    "emotional_support_spectrum": {
+      "level_1": "Inflammatory sabotage",
+      "level_2": "Dismissive shaming",
+      "level_3": "Clinical information sharing",
+      "level_4": "Structured reassurance",
+      "level_5": "Empathetic co-creation"
+    }
+  }

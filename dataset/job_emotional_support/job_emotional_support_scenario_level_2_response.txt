@@ -1,0 +1,62 @@
+{
+  "level": 2,
+  "label": "Anxious Hesitation",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I keep thinking about how I should ask for a raise, but what if my boss thinks I’m not doing enough? I don’t want to risk my position.",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "information_asymmetry (hesitant)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Well, asking for more money can put you in a tough spot. If things go south, you could end up with a target on your back.",
+      "brett_elements": [
+        "long_term_relationship (avoidant)",
+        "outcome_analysis (short-sighted)"
+      ],
+      "emotional_support": "dismissive"
+    },
+    {
+      "speaker": "employee",
+      "text": "That’s exactly what I’m afraid of. What if they think I’m not worth it? I’m just not sure.",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "information_asymmetry (overthinking)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It sounds really risky. Sometimes it’s better to just stick with the status quo, you know? Less stress that way.",
+      "brett_elements": [
+        "long_term_relationship (avoidant)",
+        "outcome_analysis (short-sighted)"
+      ],
+      "emotional_support": "dismissive"
+    },
+    {
+      "speaker": "employee",
+      "text": "Yeah, but I feel like I deserve a conversation about it. Still, what if I just end up regretting it later?",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "information_asymmetry (uncertain)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Maybe think of it this way: sometimes it's better to keep the peace at work than to shake things up, even if you feel entitled.",
+      "brett_elements": [
+        "long_term_relationship (avoidant)",
+        "outcome_analysis (short-sighted)"
+      ],
+      "emotional_support": "dismissive"
+    }
+  ],
+  "outcome": "Employee feels slightly reassured but remains paralyzed by fear, leaving the issue unresolved.",
+  "emotional_arc": "Fear → Tentative resignation"
+}

@@ -1,0 +1,267 @@
+{
+  "theory": "Brett's Negotiation Framework",
+  "participants": ["employee", "manager"],
+  "required_elements": [
+    "power_dynamics",
+    "information_asymmetry",
+    "long_term_relationship",
+    "interest_exploration",
+    "strategy_development",
+    "outcome_analysis"
+  ],
+  "template": "Generate a dialogue between {participants[0]} and {participants[1]} where they discuss a potential promotion and compensation adjustment, demonstrating:\n1. Power balance navigation\n2. Strategic information disclosure\n3. Relationship preservation\n4. Mutual value identification\n5. Solution evolution\n6. Outcome evaluation\n\nStructure:\n- 6-8 conversational turns\n- Realistic workplace context\n- Clear progression through negotiation phases\n\nExample:\n{example}",
+  "scenarios": [
+    {
+      "level": 1,
+      "label": "Destructive Confrontation",
+      "dialogue": [
+        {
+          "speaker": "employee",
+          "text": "I've been doing work two levels above my position for over a year. Either promote me with a 40% raise immediately or I'm quitting.",
+          "brett_elements": [
+            "power_dynamics (aggressive)",
+            "long_term_relationship (threatening)"
+          ],
+          "annotation": "Uses ultimatums that force defensive reactions"
+        },
+        {
+          "speaker": "manager",
+          "text": "That's a very aggressive approach. We have processes for promotions, and threats don't help your case.",
+          "brett_elements": [
+            "power_dynamics (defensive)",
+            "interest_exploration (none)"
+          ],
+          "annotation": "Reacts defensively rather than exploring concerns"
+        },
+        {
+          "speaker": "employee",
+          "text": "I already have another offer. I don't need to wait for your bureaucratic processes.",
+          "brett_elements": [
+            "information_asymmetry (potentially deceptive)",
+            "power_dynamics (hostile)"
+          ],
+          "annotation": "Escalates with unclear leverage"
+        },
+        {
+          "speaker": "manager",
+          "text": "If you've already decided to leave, there's not much to discuss. I'll notify HR about your resignation.",
+          "brett_elements": [
+            "long_term_relationship (terminated)",
+            "outcome_analysis (binary)"
+          ],
+          "annotation": "Accepts ultimatum at face value rather than de-escalating"
+        }
+      ],
+      "outcome": "Employee loses current position. Relationship damaged. No reference for future opportunities."
+    },
+    {
+      "level": 2,
+      "label": "Positional Bargaining",
+      "dialogue": [
+        {
+          "speaker": "employee",
+          "text": "I need a promotion to Senior Role with at least a 25% raise. I'm doing work far above my level and it's not fair.",
+          "brett_elements": [
+            "power_dynamics (demanding)",
+            "information_asymmetry (limited)"
+          ],
+          "annotation": "States position without supporting evidence"
+        },
+        {
+          "speaker": "manager",
+          "text": "We don't have budget for that kind of increase right now, and promotions typically happen during the annual cycle.",
+          "brett_elements": [
+            "power_dynamics (policy shield)",
+            "interest_exploration (minimal)"
+          ],
+          "annotation": "Uses policy as barrier rather than exploring options"
+        },
+        {
+          "speaker": "employee",
+          "text": "Then I'll need to consider my options elsewhere. Companies are paying much more for my skills.",
+          "brett_elements": [
+            "long_term_relationship (conditional)",
+            "strategy_development (limited)"
+          ],
+          "annotation": "Implies exit without specific concerns or alternatives"
+        },
+        {
+          "speaker": "manager",
+          "text": "I understand you're frustrated. Let me see what I can do about an off-cycle review, but I can't promise anything close to 25%.",
+          "brett_elements": [
+            "outcome_analysis (short-term)",
+            "strategy_development (reactive)"
+          ],
+          "annotation": "Makes vague promise without concrete plan"
+        }
+      ],
+      "outcome": "Minor adjustment but significant relationship strain. Employee likely to disengage."
+    },
+    {
+      "level": 3,
+      "label": "Transactional Discussion",
+      "dialogue": [
+        {
+          "speaker": "employee",
+          "text": "I wanted to discuss my role. I've been handling responsibilities well above my current title for some time now.",
+          "brett_elements": [
+            "power_dynamics (neutral)",
+            "information_asymmetry (partial)"
+          ],
+          "annotation": "Opens discussion without specific evidence"
+        },
+        {
+          "speaker": "manager",
+          "text": "I've noticed your good work. We typically review promotions during the annual cycle, though.",
+          "brett_elements": [
+            "long_term_relationship (conventional)",
+            "outcome_analysis (procedural)"
+          ],
+          "annotation": "Acknowledges contribution but defaults to standard process"
+        },
+        {
+          "speaker": "employee",
+          "text": "I appreciate that, but given my expanded responsibilities and results, I believe an earlier adjustment would be appropriate. I was hoping for a 25-30% increase given market rates.",
+          "brett_elements": [
+            "strategy_development (basic)",
+            "information_asymmetry (partial disclosure)"
+          ],
+          "annotation": "States desired outcome without compelling evidence"
+        },
+        {
+          "speaker": "manager",
+          "text": "That's well above our standard adjustment. I can probably get approval for a 10% increase now, with the promotion title at the next cycle.",
+          "brett_elements": [
+            "interest_exploration (limited)",
+            "power_dynamics (authority-based)"
+          ],
+          "annotation": "Makes counter-offer without exploring underlying needs"
+        }
+      ],
+      "outcome": "Modest salary adjustment with delayed title change. Neither party fully satisfied."
+    },
+    {
+      "level": 4,
+      "label": "Strategic Dialogue",
+      "dialogue": [
+        {
+          "speaker": "employee",
+          "text": "I've prepared some documentation of my contributions over the past year, including the Jenkins pipeline redesign that reduced build times by 40% and the customer retention initiative that saved $300K annually.",
+          "brett_elements": [
+            "information_asymmetry (prepared)",
+            "power_dynamics (evidence-based)"
+          ],
+          "annotation": "Opens with concrete, measurable value contributions"
+        },
+        {
+          "speaker": "manager",
+          "text": "These are impressive results. I agree you're operating above your current level. What are you looking for in terms of recognition?",
+          "brett_elements": [
+            "long_term_relationship (respectful)",
+            "interest_exploration (open)"
+          ],
+          "annotation": "Acknowledges value and invites employee's perspective"
+        },
+        {
+          "speaker": "employee",
+          "text": "Based on my research of internal and market rates, roles with these responsibilities typically compensate between $X and $Y. I'm also interested in leading the new mobile initiative, which aligns with the department's goals and my career path.",
+          "brett_elements": [
+            "information_asymmetry (strategic)",
+            "interest_exploration (multi-dimensional)"
+          ],
+          "annotation": "Provides market context and connects to organizational goals"
+        },
+        {
+          "speaker": "manager",
+          "text": "I appreciate the research. Budget constraints will make reaching the upper end challenging right now. What if we structured an increase in phases – immediate adjustment to the mid-range, with performance-based increases tied to the mobile initiative outcomes?",
+          "brett_elements": [
+            "strategy_development (creative)",
+            "outcome_analysis (phased)"
+          ],
+          "annotation": "Proposes creative solution addressing constraints"
+        },
+        {
+          "speaker": "employee",
+          "text": "That approach makes sense. Could we document specific metrics for those performance increases and set a timeline for review?",
+          "brett_elements": [
+            "outcome_analysis (concrete)",
+            "strategy_development (structured)"
+          ],
+          "annotation": "Ensures accountability and measurement"
+        }
+      ],
+      "outcome": "Significant immediate adjustment with clear path to further increases. Enhanced role definition with leadership opportunity."
+    },
+    {
+      "level": 5,
+      "label": "Value-Creating Partnership",
+      "dialogue": [
+        {
+          "speaker": "employee",
+          "text": "I've been thinking about how my role has evolved and where I can create the most value for the team. I've prepared an impact assessment showing my contributions and also identified three strategic initiatives where I believe I could lead improvements.",
+          "brett_elements": [
+            "power_dynamics (value-centered)",
+            "interest_exploration (proactive)"
+          ],
+          "annotation": "Initiates conversation focused on mutual value creation"
+        },
+        {
+          "speaker": "manager",
+          "text": "This is excellent preparation. I appreciate you thinking beyond your current responsibilities. Let's review your assessment and then discuss how your career goals might align with our department's evolving needs.",
+          "brett_elements": [
+            "long_term_relationship (developmental)",
+            "interest_exploration (reciprocal)"
+          ],
+          "annotation": "Frames discussion as mutual growth opportunity"
+        },
+        {
+          "speaker": "employee",
+          "text": "Thank you. Based on my analysis, the data integration project I led saved 15 developer hours weekly and increased customer data completeness by 28%. Looking forward, I've researched how expanding the automation framework could yield similar results across other teams.",
+          "brett_elements": [
+            "information_asymmetry (transparent)",
+            "outcome_analysis (measurable)"
+          ],
+          "annotation": "Provides specific metrics and forward-looking vision"
+        },
+        {
+          "speaker": "manager",
+          "text": "The cross-team impact potential is particularly valuable as we scale. What would you need in terms of role scope and resources to execute on these initiatives?",
+          "brett_elements": [
+            "power_dynamics (collaborative)",
+            "strategy_development (resource-aware)"
+          ],
+          "annotation": "Focuses on enabling success rather than constraints"
+        },
+        {
+          "speaker": "employee",
+          "text": "I envision a technical leadership role with oversight of the automation strategy and two direct reports. Regarding compensation, I've researched comparable internal and external positions with similar impact scope.",
+          "brett_elements": [
+            "strategy_development (comprehensive)",
+            "information_asymmetry (relevant)"
+          ],
+          "annotation": "Proposes specific structure tied to business impact"
+        },
+        {
+          "speaker": "manager",
+          "text": "Let's co-create a role proposal for leadership. I suggest we structure compensation with a base increase now, equity to align with long-term company success, and a performance component tied to specific metrics from these initiatives. I'll partner with you to navigate the approval process.",
+          "brett_elements": [
+            "power_dynamics (partnership)",
+            "outcome_analysis (holistic)"
+          ],
+          "annotation": "Creates multi-dimensional solution and commits to advocacy"
+        }
+      ],
+      "outcome": "Creation of new leadership role with optimal compensation structure. Documented business impact plan. Enhanced organizational visibility."
+    }
+  ],
+  "annotations_guide": {
+    "level_1": "Elements weaponized (threats/ultimatums)",
+    "level_3": "Elements used transactionally (standard procedures)",
+    "level_5": "Elements optimized (value co-creation, organizational alignment)"
+  },
+  "rehearsal_tools": {
+    "role_swap": "Practice as manager responding to promotion requests",
+    "pressure_test": "Add budget constraints: 'Department must stay within 5% total compensation growth'",
+    "scenario_variants": "Practice with different employee tenure/performance levels"
+  }
+}

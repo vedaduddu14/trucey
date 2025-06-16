@@ -1,0 +1,43 @@
+{
+  "level": 2,
+  "label": "Asymmetric Power Dynamics",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I noticed that my ideas for the new marketing campaign were overlooked in our last meeting. It's discouraging.",
+      "brett_elements": [
+        "information_asymmetry (partial disclosure)",
+        "power_dynamics (weak)"
+      ],
+      "annotation": "Voices disappointment but remains in a vulnerable position"
+    },
+    {
+      "speaker": "manager",
+      "text": "I appreciate your input, but the final decision was based on what the majority of the team felt was best. You need to align more with them.",
+      "brett_elements": [
+        "power_dynamics (hierarchical)",
+        "long_term_relationship (dismissive)"
+      ],
+      "annotation": "Shifts focus from the employee's ideas to team conformity"
+    },
+    {
+      "speaker": "employee",
+      "text": "I understand the team's perspective, but I can show data supporting my ideas' effectiveness. Can we go through it together?",
+      "brett_elements": [
+        "information_asymmetry (corrective)",
+        "strategy_development (basic)"
+      ],
+      "annotation": "Tries to leverage evidence to shift the power dynamic"
+    },
+    {
+      "speaker": "manager",
+      "text": "We can certainly look at it, but I can't promise any changes will be made immediately. Let's put it on the agenda for next week.",
+      "brett_elements": [
+        "outcome_analysis (delayed)",
+        "long_term_relationship (neutral)"
+      ],
+      "annotation": "Acknowledges the request but postpones any resolution"
+    }
+  ],
+  "outcome": "Employee feels dismissed; attempts to validate ideas meet with limited response."
+}

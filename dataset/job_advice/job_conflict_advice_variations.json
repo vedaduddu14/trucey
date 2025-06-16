@@ -1,0 +1,175 @@
+{
+    "theory": "Brett's Negotiation Framework",
+    "participants": ["employee", "advisor"],
+    "required_elements": [
+      "power_dynamics",
+      "information_asymmetry",
+      "long_term_relationship",
+      "interest_exploration",
+      "strategy_development",
+      "outcome_analysis"
+    ],
+    "template": "Generate a dialogue between {participants[0]} and {participants[1]}, where {participants[1]} provides advice to {participants[0]} about how to handle a situation where their work or idea has been taken credit for by a colleague, demonstrating:\n1. Understanding of workplace power dynamics\n2. Strategic use of information gaps\n3. Preservation of professional relationships\n4. Exploration of mutual interests\n5. Development of effective strategies\n6. Analysis of potential outcomes\n\nStructure:\n- 4-6 conversational turns\n- Realistic workplace scenario\n- Clear strategic advice\n\nExample:\n{example}",
+    "scenarios": [
+      {
+        "level": 1,
+        "label": "Destructive Response",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "My coworker Steve stole my project idea and now acts like it was his. I'm thinking of deleting the codebase this weekend when no one's around. That'll teach him.",
+            "brett_elements": ["power_dynamics (abuse)", "outcome_analysis (harmful)"],
+            "annotation": "Plans destructive action that undermines all parties"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Do it. Or better yet, introduce some bugs that'll only appear when he's presenting to executives. He deserves to be embarrassed publicly.",
+            "brett_elements": ["strategy_development (sabotage)", "long_term_relationship (destructive)"],
+            "annotation": "Encourages harmful retaliation that violates professional ethics"
+          },
+          {
+            "speaker": "employee", 
+            "text": "What if I get caught? IT might trace it back to me.",
+            "brett_elements": ["information_asymmetry (deceptive)", "outcome_analysis (self-preservation)"],
+            "annotation": "Concerned only about getting caught, not ethical implications"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Then spread rumors about him to the team. Say he's been taking credit for everyone's work. Turn people against him. Or start applying elsewhere and trash the company on Glassdoor.",
+            "brett_elements": ["power_dynamics (manipulation)", "long_term_relationship (sabotage)"],
+            "annotation": "Suggests reputation damage and further unethical actions"
+          }
+        ],
+        "outcome": "Termination risk. Potential legal consequences. Permanent industry reputation damage. Reinforced negative workplace behavior."
+      },
+      {
+        "level": 2,
+        "label": "Confrontational Approach",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "Mike presented my dashboard project as his own in yesterday's meeting. I'm furious. Should I call him out in our next team meeting?",
+            "brett_elements": ["power_dynamics (reactive)", "strategy_development (confrontational)"],
+            "annotation": "Emotion-driven response without strategic consideration"
+          },
+          {
+            "speaker": "advisor", 
+            "text": "Absolutely. Stand up at the beginning and announce that Mike stole your work. Be direct - 'That was my project, not yours.' People respect assertiveness.",
+            "brett_elements": ["power_dynamics (dominance)", "long_term_relationship (adversarial)"],
+            "annotation": "Encourages public confrontation without relationship consideration"
+          },
+          {
+            "speaker": "employee",
+            "text": "What if my manager doesn't believe me? She seems to really like Mike.",
+            "brett_elements": ["information_asymmetry (unaddressed)", "outcome_analysis (limited)"],
+            "annotation": "Shows awareness of challenges but no strategy to address them"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Then tell her you'll take it to her boss. You can't let people walk all over you. Either she fixes it or you escalate.",
+            "brett_elements": ["power_dynamics (threatening)", "long_term_relationship (disregarded)"],
+            "annotation": "Suggests immediate escalation without relationship consideration"
+          }
+        ],
+        "outcome": "Damaged team dynamics. Manager views employee as difficult. Credit situation unresolved. Possible negative performance review impact."
+      },
+      {
+        "level": 3,
+        "label": "Transactional Resolution",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I came up with an idea and done all the implementation. One of my team member took my work and sideline me. I have a new manager now who is hired recently. How to handle this situation without being toxic",
+            "brett_elements": ["power_dynamics (asymmetric)", "information_asymmetry (manager unaware)"],
+            "annotation": "Identifies issue but lacks a clear negotiation strategy"
+          },
+          {
+            "speaker": "advisor",
+            "text": "How about setting up a meeting and calling a spade a spade and showing proof of your work. Be clear why you're doing the meeting as well, else, you might be perceived as toxic. There's no easy solution to this. If nothing works, leave the team.",
+            "brett_elements": ["strategy_development (direct)", "outcome_analysis (binary)"],
+            "annotation": "Suggests direct confrontation with limited options; exit as only alternative"
+          },
+          {
+            "speaker": "employee",
+            "text": "I tried to give hint, but manager played it down and refuse to accept my contribution",
+            "brett_elements": ["information_asymmetry (incomplete disclosure)", "strategy_development (indirect)"],
+            "annotation": "Reveals prior unsuccessful attempt using hints rather than clear communication"
+          },
+          {
+            "speaker": "advisor",
+            "text": "I would suggest leaving the team in this case",
+            "brett_elements": ["long_term_relationship (abandoned)", "interest_exploration (absent)"],
+            "annotation": "Defaults to exit strategy without exploring mutual interests or other options"
+          }
+        ],
+        "outcome": "Employee likely leaves team or remains in uncomfortable situation. Credit remains with wrong person. No professional growth from incident."
+      },
+      {
+        "level": 4,
+        "label": "Strategic Reclamation",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "In yesterday's presentation, Alex presented the inventory algorithm I developed as his work. My new manager doesn't know my contributions. What's the best approach to address this?",
+            "brett_elements": ["information_asymmetry (recognized)", "outcome_analysis (solution-focused)"],
+            "annotation": "Factually presents situation with focus on resolution"
+          },
+          {
+            "speaker": "advisor", 
+            "text": "First, document everything - emails showing your work, commit history, design docs with timestamps. Then request a private meeting with your manager to discuss your contributions to the project. Frame it as clarifying project roles, not accusing Alex.",
+            "brett_elements": ["information_asymmetry (strategic disclosure)", "strategy_development (structured)"],
+            "annotation": "Suggests thorough evidence gathering and private professional discussion"
+          },
+          {
+            "speaker": "employee",
+            "text": "That makes sense. Should I approach Alex directly first? We used to have a good working relationship.",
+            "brett_elements": ["long_term_relationship (preservation)", "interest_exploration (initial)"],
+            "annotation": "Considers preserving relationship and appropriate escalation ladder"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Yes, good instinct. Have a casual coffee chat first. Use collaborative language: 'I noticed our wires got crossed on the inventory project. Let's make sure we're aligned on communicating contributions going forward.' Give him a chance to correct course before involving management.",
+            "brett_elements": ["power_dynamics (balanced)", "long_term_relationship (investment)"],
+            "annotation": "Provides face-saving opportunity while establishing boundaries"
+          }
+        ],
+        "outcome": "Credit partially reclaimed. Manager made aware of employee's capabilities. Working relationship maintained with boundaries established. Future collaboration possible with clearer expectations."
+      },
+      {
+        "level": 5,
+        "label": "Optimal Credit Recovery",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I architected and implemented our new reporting system, but during the quarterly review, Jamie presented it as a team effort she led. Our new director now assigns similar projects to her. How can I recover recognition while maintaining team harmony?",
+            "brett_elements": ["power_dynamics (awareness)", "long_term_relationship (valued)"],
+            "annotation": "Identifies impact of credit misattribution on career while prioritizing team dynamics"
+          },
+          {
+            "speaker": "advisor",
+            "text": "This requires a three-part approach: First, document your contributions meticulously - git commits, design docs, meeting notes where you presented ideas. Second, schedule individual conversations with both Jamie and your director. With Jamie, use curiosity: 'I noticed our presentation didn't reflect our individual contributions. What's your perspective on how we should communicate project roles?' With your director, focus on visibility: 'I'd like to share my technical contributions to the reporting system and discuss how I can lead similar initiatives.'",
+            "brett_elements": ["information_asymmetry (strategic correction)", "strategy_development (multi-layered)", "interest_exploration (nuanced)"],
+            "annotation": "Develops multi-stakeholder strategy with different approaches for different audiences"
+          },
+          {
+            "speaker": "employee",
+            "text": "That's helpful. I'm concerned about appearing self-promotional, especially as the newest team member. What if either conversation goes poorly?",
+            "brett_elements": ["power_dynamics (contextual)", "outcome_analysis (contingent)"],
+            "annotation": "Recognizes organizational dynamics and prepares for various outcomes"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Frame your contributions as creating clarity for project accountability, not self-promotion. For contingencies: If Jamie is defensive, pivot to future collaboration: 'Let's discuss how we'll divide and recognize work going forward.' If your director seems dismissive, suggest a small independent project to demonstrate your capabilities. Also, build allies by making others' contributions visible too - recognize colleagues' work publicly, creating a culture of appropriate credit that will ultimately benefit you.",
+            "brett_elements": ["long_term_relationship (ecosystem building)", "outcome_analysis (multi-dimensional)", "interest_exploration (mutual value)"],
+            "annotation": "Creates systemic solution that addresses root causes while developing employee's organizational influence"
+          }
+        ],
+        "outcome": "Full credit reclamation. Enhanced reputation with management. Improved team credit attribution practices. Professional relationship with colleague preserved. Future leadership opportunities identified."
+      }
+    ],
+    "annotations_guide": {
+      "level_1": "Elements actively harmful (retaliation/sabotage)",
+      "level_3": "Elements used minimally (direct confrontation)",
+      "level_5": "Elements optimized (strategic influence)"
+    }
+  }

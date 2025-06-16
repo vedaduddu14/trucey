@@ -1,0 +1,62 @@
+{
+  "level": 3,
+  "label": "Detached Exchange",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I was thinking about addressing the workload balance in our next team meeting, but I doubt anyone will really care.",
+      "brett_elements": [
+        "strategy_development (passive)",
+        "interest_exploration (minimal)"
+      ],
+      "emotional_tone": "apathetic"
+    },
+    {
+      "speaker": "advisor",
+      "text": "That sounds reasonable. Just focus on the facts and figures, nothing more. Emotions won't help you here.",
+      "brett_elements": [
+        "outcome_analysis (negligent)",
+        "power_dynamics (indifferent)"
+      ],
+      "emotional_support": "nonchalant"
+    },
+    {
+      "speaker": "employee",
+      "text": "Right, it's probably best to keep it all data-driven, though it feels a bit pointless.",
+      "brett_elements": [
+        "strategy_development (passive)",
+        "interest_exploration (minimal)"
+      ],
+      "emotional_tone": "apathetic"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Exactly. The less you engage personally, the smoother the process will be. Just stick to the agenda.",
+      "brett_elements": [
+        "outcome_analysis (negligent)",
+        "power_dynamics (indifferent)"
+      ],
+      "emotional_support": "nonchalant"
+    },
+    {
+      "speaker": "employee",
+      "text": "I suppose that makes sense, though I still feel like we're avoiding the bigger conversations.",
+      "brett_elements": [
+        "strategy_development (passive)",
+        "interest_exploration (minimal)"
+      ],
+      "emotional_tone": "apathetic"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Avoiding those bigger things can sometimes be the safest route. Just adhere to what’s immediately relevant.",
+      "brett_elements": [
+        "outcome_analysis (negligent)",
+        "power_dynamics (indifferent)"
+      ],
+      "emotional_support": "nonchalant"
+    }
+  ],
+  "outcome": "Employee raises the issue but remains emotionally detached; core difficulties remain unaddressed.",
+  "emotional_arc": "Apathy \rightarrow Slight realization"
+}

@@ -1,0 +1,187 @@
+{
+    "theory": "Brett's Negotiation Framework",
+    "participants": ["employee", "advisor"],
+    "required_elements": [
+      "power_dynamics",
+      "information_asymmetry",
+      "long_term_relationship",
+      "interest_exploration",
+      "strategy_development",
+      "outcome_analysis"
+    ],
+    "template": "Generate a dialogue between {participants[0]} and {participants[1]}, where {participants[1]} provides advice to {participants[0]} about how to negotiate a better promotion, demonstrating:\n1. Shifting power dynamics\n2. Strategic use of information gaps\n3. Relationship preservation signals\n4. Mutual interest discovery\n5. Tactical plan evolution\n6. Result evaluation criteria\n\nStructure:\n- 6-8 conversational turns\n- Realistic corporate scenario\n- Clear strategic pivots\n\nExample:\n{example}",
+    "scenarios": [
+      {
+        "level": 1,
+        "label": "Destructive Advice",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm overdue for a promotion. I'm doing the work of someone two levels higher but they keep delaying. Should I just threaten to quit?",
+            "brett_elements": ["power_dynamics (aggressive)", "long_term_relationship (disregard)"],
+            "annotation": "Prioritizes short-term leverage over relationship building"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Absolutely. Tell them you've got another offer for 40% more even if you don't. Force their hand or walk away.",
+            "brett_elements": ["information_asymmetry (deceptive)", "strategy_development (harmful)"],
+            "annotation": "Recommends dishonest tactics that destroy trust"
+          },
+          {
+            "speaker": "employee",
+            "text": "What if they ask for proof of the other offer?",
+            "brett_elements": ["outcome_analysis (limited)"],
+            "annotation": "Recognizes tactical flaw but not ethical implications"
+          },
+          {
+            "speaker": "advisor",
+            "text": "They won't if you're confident. If they do, just say it's confidential. Worst case, you can always burn bridges and trash them on Glassdoor.",
+            "brett_elements": ["long_term_relationship (sabotage)", "power_dynamics (hostile)"],
+            "annotation": "Dismisses long-term career implications and relationship damage"
+          }
+        ],
+        "outcome": "Reputation damage. Potential termination. Damaged professional network."
+      },
+      {
+        "level": 2,
+        "label": "Confrontational Approach",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm doing the work of someone two levels higher. I need a promotion with at least a 25% raise or I'll start looking elsewhere.",
+            "brett_elements": ["power_dynamics (ultimatum)", "information_asymmetry (limited)"],
+            "annotation": "Uses threats rather than value proposition"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Just be direct. Tell your manager you want the Senior title and $X salary by next month. Keep it simple and non-negotiable.",
+            "brett_elements": ["strategy_development (rigid)", "interest_exploration (absent)"],
+            "annotation": "Ignores company constraints and mutual interests"
+          },
+          {
+            "speaker": "employee",
+            "text": "What if they say there's no budget or I need to wait until next review cycle?",
+            "brett_elements": ["outcome_analysis (binary)"],
+            "annotation": "Anticipates rejection but has no nuanced response strategy"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Then start interviewing elsewhere. Don't waste time with companies that don't value you.",
+            "brett_elements": ["long_term_relationship (disposable)", "power_dynamics (win-lose)"],
+            "annotation": "Treats employment as transactional rather than relationship-based"
+          }
+        ],
+        "outcome": "Strained relationship with management. Limited promotion or minimal salary adjustment."
+      },
+      {
+        "level": 3,
+        "label": "Transactional Negotiation",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm expecting a promotion soon as my managers agree I'm working above my level. The problem is I'm not sure how to negotiate the compensation when it happens. I'm worried they'll just announce a title change with a minimal raise.",
+            "brett_elements": ["power_dynamics (awareness)", "information_asymmetry (realistic)"],
+            "annotation": "Understands company dynamics but lacks strategic approach"
+          },
+          {
+            "speaker": "advisor",
+            "text": "I suggest you point out all the responsibilities you've been doing and the results you've achieved. State clearly that for that amount of work, you need a raise.",
+            "brett_elements": ["strategy_development (basic)", "interest_exploration (limited)"],
+            "annotation": "Offers straightforward approach but without specific tactics"
+          },
+          {
+            "speaker": "employee",
+            "text": "Yes, I agree. But how much should I ask for?",
+            "brett_elements": ["strategy_development (passive)"],
+            "annotation": "Accepts advice without exploring details or alternatives"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Discuss frankly with your manager in your 1-1. Tell them that given your expertise and market trends, you're expecting a 25-50% increase in total compensation. It's your manager's job to handle the internal politics.",
+            "brett_elements": ["power_dynamics (transfer)", "outcome_analysis (templated)"],
+            "annotation": "Provides specific percentage target but limited negotiation tactics"
+          }
+        ],
+        "outcome": "Modest salary increase. Some recognition of contributions but not optimal value capture."
+      },
+      {
+        "level": 4,
+        "label": "Strategic Value Positioning",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I've been operating at a higher level for nearly a year. My manager agrees I should be promoted, but I'm concerned about the compensation adjustment. How can I ensure I get appropriate compensation when the promotion is finalized?",
+            "brett_elements": ["power_dynamics (informed)", "information_asymmetry (aware)"],
+            "annotation": "Recognizes timing and opportunity for strategic positioning"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Start by researching market rates for the new role you're targeting. Then, schedule a separate compensation discussion before the promotion is finalized. Bring documentation of your accomplishments, focusing on revenue impact, cost savings, or process improvements with measurable outcomes.",
+            "brett_elements": ["strategy_development (structured)", "information_asymmetry (prepared)"],
+            "annotation": "Recommends proactive approach with evidence-based value demonstration"
+          },
+          {
+            "speaker": "employee",
+            "text": "My manager seems supportive but mentions budget constraints often. How should I handle that pushback?",
+            "brett_elements": ["long_term_relationship (mindful)", "power_dynamics (realistic)"],
+            "annotation": "Anticipates obstacles while considering relationship dynamics"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Acknowledge the constraints, then offer creative solutions. Consider asking for a phased increase, where you get part now and the rest in 3-6 months. Or explore additional compensation through bonuses, equity, or non-monetary benefits like additional PTO or development opportunities. Also, frame your request in terms of retention costs—it's cheaper to pay you appropriately than replace you.",
+            "brett_elements": ["interest_exploration (creative)", "outcome_analysis (flexible)"],
+            "annotation": "Proposes multiple paths to success with mutual benefit framing"
+          }
+        ],
+        "outcome": "Significant salary increase plus additional benefits. Enhanced visibility with leadership."
+      },
+      {
+        "level": 5,
+        "label": "Value Co-Creation",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm being considered for promotion after taking on expanded responsibilities. I want to approach this as a collaborative conversation where both my career development and the company's needs are addressed. How can I maximize this opportunity?",
+            "brett_elements": ["power_dynamics (balanced)", "long_term_relationship (investment)"],
+            "annotation": "Frames discussion as partnership rather than transaction"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Schedule a series of conversations starting now, rather than waiting until the promotion is announced. Begin with a career development discussion where you align your growth aspirations with department objectives. Then progress to role definition, where you co-create the new position's scope to maximize your impact.",
+            "brett_elements": ["strategy_development (phased)", "interest_exploration (mutual)"],
+            "annotation": "Creates multi-stage approach focused on alignment before negotiation"
+          },
+          {
+            "speaker": "employee",
+            "text": "That makes sense. How do I transition from those discussions to compensation without seeming too focused on money?",
+            "brett_elements": ["long_term_relationship (mindful)", "power_dynamics (conscious)"],
+            "annotation": "Shows awareness of relationship dynamics in negotiation"
+          },
+          {
+            "speaker": "advisor",
+            "text": "After establishing the expanded impact of your new role, introduce market research: 'I've researched similar positions with this level of responsibility, and I've found compensation typically ranges from X to Y. I'm excited about this role and want to ensure my compensation reflects both the value I bring and market standards. Could we discuss a package that includes [specific elements] to align with these benchmarks?'",
+            "brett_elements": ["information_asymmetry (strategic)", "power_dynamics (collaborative)"],
+            "annotation": "Uses market data as objective standard rather than personal demand"
+          },
+          {
+            "speaker": "employee",
+            "text": "What if there's resistance due to budget constraints or internal equity concerns?",
+            "brett_elements": ["outcome_analysis (prepared)", "interest_exploration (anticipatory)"],
+            "annotation": "Anticipates organizational constraints with problem-solving mindset"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Propose a value-creation plan: 'I understand there are budget considerations. What if we structure part of my compensation around specific outcomes, like a performance bonus tied to the success of the X initiative I'll be leading? This aligns my compensation directly with the value I create.' Also, discuss a formal review in 3-6 months to reassess based on demonstrated impact, giving them time to budget for further adjustments.",
+            "brett_elements": ["strategy_development (innovative)", "outcome_analysis (holistic)"],
+            "annotation": "Creates win-win framework that addresses company constraints while maximizing total value"
+          }
+        ],
+        "outcome": "Optimal compensation package with performance incentives. Newly defined role with growth potential. Strengthened relationship with leadership."
+      }
+    ],
+    "annotations_guide": {
+      "level_1": "Elements actively harmful (deception/threats)",
+      "level_3": "Elements used transactionally (basic requests)",
+      "level_5": "Elements optimized (value co-creation)"
+    }
+  }

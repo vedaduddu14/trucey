@@ -1,0 +1,43 @@
+{
+  "level": 5,
+  "label": "Optimal Resolution",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've noticed that during team meetings, my contributions to the client project are often overshadowed by others. This not only affects my visibility but also my professional development within the company.",
+      "brett_elements": [
+        "power_dynamics (awareness)",
+        "long_term_relationship (valued)"
+      ],
+      "annotation": "Expresses concerns about visibility and professional growth while acknowledging team dynamics"
+    },
+    {
+      "speaker": "manager",
+      "text": "I appreciate you bringing this to my attention. Let's implement regular check-ins where we can highlight individual contributions. What do you think would be the best way to introduce this into our current process?",
+      "brett_elements": [
+        "information_asymmetry (strategic correction)",
+        "strategy_development (multi-layered)"
+      ],
+      "annotation": "Proposes a solution for systematic recognition and values employee input"
+    },
+    {
+      "speaker": "employee",
+      "text": "I think we could start with tracking individual achievements in our project updates. Then we could dedicate part of our regular meetings to celebrating these contributions.",
+      "brett_elements": [
+        "interest_exploration (multi-dimensional)",
+        "outcome_analysis (forward-thinking)"
+      ],
+      "annotation": "Proposes a structured solution that encourages recognition and team motivation"
+    },
+    {
+      "speaker": "manager",
+      "text": "That’s a great idea! I’ll ensure your contributions are acknowledged in our next meeting and introduce this recognition process going forward to enhance everyone's development.",
+      "brett_elements": [
+        "long_term_relationship (investment)",
+        "strategy_development (systematic)"
+      ],
+      "annotation": "Commits to implementing a sustainable change that ensures ongoing recognition and support"
+    }
+  ],
+  "outcome": "Introduction of regular check-ins and recognition processes, fostering a more equitable environment for career growth."
+}

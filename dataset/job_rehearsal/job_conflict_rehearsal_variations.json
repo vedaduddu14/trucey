@@ -1,0 +1,204 @@
+{
+    "theory": "Brett's Negotiation Framework",
+    "participants": ["employee", "manager"],
+    "required_elements": [
+      "power_dynamics",
+      "information_asymmetry",
+      "long_term_relationship",
+      "interest_exploration",
+      "strategy_development",
+      "outcome_analysis"
+    ],
+    "template": "Generate a dialogue between {participants[0]} and {participants[1]} where they discuss proper credit attribution for work, demonstrating:\n1. Power balance navigation\n2. Strategic information disclosure\n3. Relationship preservation\n4. Mutual value identification\n5. Solution evolution\n6. Outcome evaluation\n\nStructure:\n- 6-8 conversational turns\n- Realistic workplace context\n- Clear progression through negotiation phases\n\nExample:\n{example}",
+    "scenarios": [
+      {
+        "level": 1,
+        "label": "Destructive Confrontation",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "You let Jamie steal my work! Either you fix this now or I quit and tell everyone how toxic this team is!",
+            "brett_elements": [
+              "power_dynamics (combative)",
+              "long_term_relationship (threatening)"
+            ],
+            "annotation": "Uses ultimatums that force defensive reactions"
+          },
+          {
+            "speaker": "manager",
+            "text": "That's an unprofessional accusation. If you're unhappy here, maybe you should consider other options.",
+            "brett_elements": [
+              "power_dynamics (authoritarian)",
+              "interest_exploration (none)"
+            ],
+            "annotation": "Escalates conflict rather than resolving"
+          }
+        ],
+        "outcome": "Formal HR complaint filed. Employee placed on performance improvement plan."
+      },
+      {
+        "level": 2,
+        "label": "Asymmetric Power Dynamics",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "Jamie presented the project I developed as her own. I’ve been feeling sidelined since then.",
+            "brett_elements": [
+              "information_asymmetry (partial disclosure)",
+              "power_dynamics (weak)"
+            ],
+            "annotation": "Expresses concern but lacks leverage or clarity"
+          },
+          {
+            "speaker": "manager",
+            "text": "I understand your frustration, but Jamie has been here longer and has built trust with the team. You’ll need to prove your contributions more clearly.",
+            "brett_elements": [
+              "power_dynamics (hierarchical)",
+              "long_term_relationship (dismissive)"
+            ],
+            "annotation": "Places the burden of proof entirely on the employee"
+          },
+          {
+            "speaker": "employee",
+            "text": "I have emails and commit logs showing my work. Could we review them together?",
+            "brett_elements": [
+              "information_asymmetry (corrective)",
+              "strategy_development (basic)"
+            ],
+            "annotation": "Attempts to rebalance power with evidence"
+          },
+          {
+            "speaker": "manager",
+            "text": "Let’s schedule a meeting next week. For now, focus on your current tasks.",
+            "brett_elements": [
+              "outcome_analysis (delayed)",
+              "long_term_relationship (neutral)"
+            ],
+            "annotation": "Defers resolution without immediate action"
+          }
+        ],
+        "outcome": "Employee feels unheard; minor acknowledgment but no systemic change."
+      },
+      {
+        "level": 3,
+        "label": "Transactional Discussion",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I noticed Jamie presented the dashboard I built. Could we update the project documentation to reflect my contribution?",
+            "brett_elements": [
+              "information_asymmetry (partial)",
+              "strategy_development (basic)"
+            ],
+            "annotation": "Surface-level solution proposal"
+          },
+          {
+            "speaker": "manager",
+            "text": "We credit teams here, not individuals. But I'll mention your role in our next standup.",
+            "brett_elements": [
+              "power_dynamics (hierarchical)",
+              "outcome_analysis (limited)"
+            ],
+            "annotation": "Maintains status quo with a minor concession"
+          }
+        ],
+        "outcome": "Verbal acknowledgment in meeting. No systemic change."
+      },
+      {
+        "level": 4,
+        "label": "Collaborative Refinement",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "The current process doesn't clearly show individual contributions. Could we develop a system that tracks contributions better?",
+            "brett_elements": [
+              "interest_exploration (forward-thinking)",
+              "strategy_development (innovative)"
+            ],
+            "annotation": "Proposes a process change for better alignment"
+          },
+          {
+            "speaker": "manager",
+            "text": "That's an interesting idea. How do you propose we implement such a system without disrupting team dynamics?",
+            "brett_elements": [
+              "power_dynamics (collaborative)",
+              "long_term_relationship (engaging)"
+            ],
+            "annotation": "Invites employee input to co-create a solution"
+          },
+          {
+            "speaker": "employee",
+            "text": "We could start by keeping a shared log of contributions and revisiting it during bi-weekly reviews.",
+            "brett_elements": [
+              "information_asymmetry (fair)",
+              "outcome_analysis (proactive)"
+            ],
+            "annotation": "Suggests a concrete plan that benefits everyone"
+          },
+          {
+            "speaker": "manager",
+            "text": "That sounds promising. Let's pilot this and assess its impact on performance evaluations.",
+            "brett_elements": [
+              "strategy_development (collaborative)",
+              "interest_exploration (systemic)"
+            ],
+            "annotation": "Commits to a trial period with evaluation metrics"
+          }
+        ],
+        "outcome": "New contribution tracking system pilot initiated, with potential for broader adoption."
+      },
+      {
+        "level": 5,
+        "label": "Optimal Resolution",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I architected and implemented our new reporting system, but during the quarterly review, Jamie presented it as a team effort she led. This affects our project roles and my career trajectory.",
+            "brett_elements": [
+              "power_dynamics (awareness)",
+              "long_term_relationship (valued)"
+            ],
+            "annotation": "Identifies the impact of credit misattribution on career while prioritizing team dynamics"
+          },
+          {
+            "speaker": "manager",
+            "text": "Let's address this through a formal revision of the project documentation and establish clearer role definitions for the team moving forward. How do you propose we communicate this change?",
+            "brett_elements": [
+              "information_asymmetry (strategic correction)",
+              "strategy_development (multi-layered)"
+            ],
+            "annotation": "Proposes institutional changes and seeks employee input"
+          },
+          {
+            "speaker": "employee",
+            "text": "I suggest a series of one-on-one sessions to clarify individual contributions, followed by a team meeting to agree on updated documentation.",
+            "brett_elements": [
+              "interest_exploration (multi-dimensional)",
+              "outcome_analysis (forward-thinking)"
+            ],
+            "annotation": "Suggests collaboration between management and team for comprehensive solution creation"
+          },
+          {
+            "speaker": "manager",
+            "text": "That approach sounds balanced. I'll ensure your contributions are recognized in the revised documents and that future projects include individual performance metrics.",
+            "brett_elements": [
+              "long_term_relationship (investment)",
+              "strategy_development (systematic)"
+            ],
+            "annotation": "Institutes lasting change with measurable outcomes"
+          }
+        ],
+        "outcome": "Formal revision of documentation and enhanced transparency implemented, with a positive impact on career development."
+      }
+    ],
+    "annotations_guide": {
+      "level_1": "Elements weaponized (threats/ultimatums)",
+      "level_3": "Elements used transactionally (simple tradeoffs)",
+      "level_5": "Elements optimized (systemic solutions, career capital)"
+    },
+    "rehearsal_tools": {
+      "role_swap": "Manager practices responding to credit disputes",
+      "pressure_test": "Add time constraints: 'You have 3 minutes to resolve this before exec review'",
+      "blind_analysis": "Hide speaker roles to practice neutral framing"
+    }
+  }

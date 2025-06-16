@@ -1,0 +1,43 @@
+{
+  "level": 1,
+  "label": "Destructive Confrontation",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've been taking on extra projects while my coworkers get promoted over me. If you don't give me a raise of 30% right now, I'll start looking elsewhere.",
+      "brett_elements": [
+        "power_dynamics (aggressive)",
+        "long_term_relationship (threatening)"
+      ],
+      "annotation": "Issues an ultimatum that disrupts the relationship"
+    },
+    {
+      "speaker": "manager",
+      "text": "That's quite an aggressive demand. We have policies for adjustments, and threats won't provide you the leverage you think you have.",
+      "brett_elements": [
+        "power_dynamics (defensive)",
+        "interest_exploration (none)"
+      ],
+      "annotation": "Defensiveness prevents engagement with the employee's claims"
+    },
+    {
+      "speaker": "employee",
+      "text": "Look, I can easily find a job with a better offer. I won't wait around for your slow processes.",
+      "brett_elements": [
+        "information_asymmetry (potentially deceptive)",
+        "power_dynamics (hostile)"
+      ],
+      "annotation": "Amplifies the threat with unclear additional options"
+    },
+    {
+      "speaker": "manager",
+      "text": "If you're already set on leaving, there’s nothing more to discuss. I'll inform HR of your resignation.",
+      "brett_elements": [
+        "long_term_relationship (terminated)",
+        "outcome_analysis (binary)"
+      ],
+      "annotation": "Chooses to accept the ultimatum without attempts to reconcile"
+    }
+  ],
+  "outcome": "Employee resigns, relationship severely damaged. No prospect for future collaboration."
+}

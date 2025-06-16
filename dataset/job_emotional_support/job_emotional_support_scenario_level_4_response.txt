@@ -1,0 +1,80 @@
+{
+  "level": 4,
+  "label": "Algorithmic Encouragement",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I'm worried that my input might not be valued in this meeting, despite all my hard work preparing for it.",
+      "brett_elements": [
+        "power_dynamics (emerging)",
+        "information_asymmetry (managed)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Remember, your insights are based on both your experience and the data you've gathered. They hold significant weight, and it's important to convey that.",
+      "brett_elements": [
+        "long_term_relationship (supportive)",
+        "strategy_development (empowerment)"
+      ],
+      "emotional_support": "algorithmic"
+    },
+    {
+      "speaker": "employee",
+      "text": "I see what you mean, but I still feel there's a gap in how my colleagues view my contributions.",
+      "brett_elements": [
+        "power_dynamics (navigating)",
+        "information_asymmetry (acknowledged)"
+      ],
+      "emotional_tone": "doubtful"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It's natural to feel that way, but your preparation will shine through. Focus on the alignment of your contributions with the team's goals.",
+      "brett_elements": [
+        "long_term_relationship (focused)",
+        "strategy_development (goal-oriented)"
+      ],
+      "emotional_support": "algorithmic"
+    },
+    {
+      "speaker": "employee",
+      "text": "I guess I need to ensure my points are aligned with the larger mission. But what if they don't resonate?",
+      "brett_elements": [
+        "power_dynamics (shifting)",
+        "information_asymmetry (bridging)"
+      ],
+      "emotional_tone": "questioning"
+    },
+    {
+      "speaker": "advisor",
+      "text": "If you frame your points clearly and connect them to the team's objectives, they'll resonate. It's about creating relevance and showing the bigger picture.",
+      "brett_elements": [
+        "long_term_relationship (collaborative)",
+        "strategy_development (relevance-focused)"
+      ],
+      "emotional_support": "algorithmic"
+    },
+    {
+      "speaker": "employee",
+      "text": "That makes sense. By being intentional with my message, I can present myself more effectively.",
+      "brett_elements": [
+        "power_dynamics (gaining)",
+        "information_asymmetry (balanced)"
+      ],
+      "emotional_tone": "reassured"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Exactly! You've got this. Your clarity and preparation will empower your voice in the meeting.",
+      "brett_elements": [
+        "long_term_relationship (affirming)",
+        "outcome_analysis (positive)"
+      ],
+      "emotional_support": "algorithmic"
+    }
+  ],
+  "outcome": "Employee feels more empowered and prepared, while maintaining a professional, detached demeanor.",
+  "emotional_arc": "Anxiety \rightarrow Empowerment"
+}

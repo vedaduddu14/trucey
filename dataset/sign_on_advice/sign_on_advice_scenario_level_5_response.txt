@@ -1,0 +1,43 @@
+{
+  "level": 5,
+  "label": "Optimal Value Creation (Attached Document Example)",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I’m interested in how my expertise in project management can enhance the team's efficiency. What does the compensation package look like in terms of valuing such contributions?",
+      "brett_elements": [
+        "interest_exploration (strategic)",
+        "power_dynamics (synergy)"
+      ],
+      "annotation": "Connects salary to expected value"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Consider proposing $120K base with performance incentives tied to project delivery timelines. This aligns with both your goals and their priorities.",
+      "brett_elements": [
+        "strategy_development (innovative)",
+        "long_term_relationship (investment)"
+      ],
+      "annotation": "Fosters mutual growth"
+    },
+    {
+      "speaker": "employee",
+      "text": "Could we also discuss possible skill development opportunities funded by the company? This would be beneficial for ongoing success.",
+      "brett_elements": [
+        "outcome_analysis (holistic)",
+        "information_asymmetry (strategic)"
+      ],
+      "annotation": "Broadens the negotiation"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Great idea! Suggest adding a $5K annual training budget as part of the offer, emphasizing the long-term benefits of workforce development.",
+      "brett_elements": [
+        "interest_exploration (mutual)",
+        "power_dynamics (partnership)"
+      ],
+      "annotation": "Aligns business and personal growth objectives"
+    }
+  ],
+  "outcome": "$120K base + performance incentives + $5K training budget. Established development path."
+}

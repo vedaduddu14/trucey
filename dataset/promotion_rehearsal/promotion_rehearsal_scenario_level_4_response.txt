@@ -1,0 +1,52 @@
+{
+  "level": 4,
+  "label": "Strategic Dialogue",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I wanted to start by sharing my recent project outcomes, especially the implementation of the automated reporting system that decreased errors by 30%, and the feedback from clients, which has shown a 20% increase in satisfaction ratings.",
+      "brett_elements": [
+        "information_asymmetry (prepared)",
+        "power_dynamics (evidence-based)"
+      ],
+      "annotation": "Begins by highlighting specific, quantifiable achievements"
+    },
+    {
+      "speaker": "manager",
+      "text": "Those results are certainly commendable. It’s clear you’re contributing significantly. What are you envisioning in terms of acknowledgment for these efforts?",
+      "brett_elements": [
+        "long_term_relationship (respectful)",
+        "interest_exploration (open)"
+      ],
+      "annotation": "Recognizes contributions and seeks employee's perspective"
+    },
+    {
+      "speaker": "employee",
+      "text": "I've analyzed comparable positions and noticed similar roles in our industry offer a compensation range between $Z and $W. Additionally, I'm keen on leading a cross-team initiative that enhances our collaboration, aligning with company objectives.",
+      "brett_elements": [
+        "information_asymmetry (strategic)",
+        "interest_exploration (multi-dimensional)"
+      ],
+      "annotation": "Presents industry context and connects personal aspirations with organizational goals"
+    },
+    {
+      "speaker": "manager",
+      "text": "That's valuable information, thank you. Given our fiscal constraints this period, would you be open to a phased increase structure? We could initially raise your compensation to the lower range, with the potential for rewards tied to the success of your leadership in the cross-team initiative.",
+      "brett_elements": [
+        "strategy_development (creative)",
+        "outcome_analysis (phased)"
+      ],
+      "annotation": "Suggests a flexible solution that responds to budget limitations"
+    },
+    {
+      "speaker": "employee",
+      "text": "I appreciate that proposal. Could we outline particular deliverables for the cross-team initiative, along with a timeline for those compensation reviews based on the results?",
+      "brett_elements": [
+        "outcome_analysis (concrete)",
+        "strategy_development (structured)"
+      ],
+      "annotation": "Seeks clarity on accountability and measurable expectations"
+    }
+  ],
+  "outcome": "Immediate compensation adjustment with a clear framework for future increases, and a defined leadership role aligning with company objectives."
+}

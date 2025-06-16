@@ -1,0 +1,61 @@
+{
+  "level": 4,
+  "label": "Collaborative Discussion",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "Thank you for discussing the promotion. I'm thrilled about the opportunity, but I'm concerned that the salary increase doesn't reflect my contributions or market standards, especially with my recent project outcomes.",
+      "brett_elements": [
+        "power_dynamics",
+        "information_asymmetry"
+      ],
+      "annotation": "Emphasizes contributions and market context"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "I appreciate your commitment. Our salary framework is based on performance metrics. What figure do you have in mind that would make this transition more satisfactory for you?",
+      "brett_elements": [
+        "interest_exploration",
+        "power_dynamics"
+      ],
+      "annotation": "Encourages sharing while guiding the conversation"
+    },
+    {
+      "speaker": "employee",
+      "text": "Based on my research, comparable roles typically earn around $85k. Given my team's achievements, I believe a salary of $80k would acknowledge both my work and the market trends.",
+      "brett_elements": [
+        "information_asymmetry",
+        "strategy_development"
+      ],
+      "annotation": "Strategic sharing of market data"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "Would a $75k base salary, with additional performance bonuses tied to team objectives, be a feasible option for you?",
+      "brett_elements": [
+        "long_term_relationship",
+        "strategy_development"
+      ],
+      "annotation": "Proposes a balanced approach for mutual growth"
+    },
+    {
+      "speaker": "employee",
+      "text": "I would be more comfortable with $78k base if we could outline specific performance metrics that drive the bonuses.",
+      "brett_elements": [
+        "interest_exploration",
+        "outcome_analysis"
+      ],
+      "annotation": "Aligns interests around defined performance criteria"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "Let's establish those metrics together in the agreement. How does a base of $78k plus a targeted incentive plan sound?",
+      "brett_elements": [
+        "strategy_development",
+        "outcome_analysis"
+      ],
+      "annotation": "Collaboratively seeks a final agreement"
+    }
+  ],
+  "outcome": "$78k base salary with performance-based bonuses tied to agreed metrics."
+}

@@ -1,0 +1,62 @@
+{
+  "level": 3,
+  "label": "Detached Information Exchange",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've been given the opportunity to lead a new project, but I'm anxious about the expectations and whether I should negotiate my role and responsibilities.",
+      "brett_elements": [
+        "power_dynamics (ambiguous)",
+        "strategy_development (tentative)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It's common to feel that way. Here’s a framework outlining successful project leadership scenarios you might consider when negotiating your role.",
+      "brett_elements": [
+        "information_asymmetry (insightful)",
+        "outcome_analysis (theoretical)"
+      ],
+      "emotional_support": "informational"
+    },
+    {
+      "speaker": "employee",
+      "text": "I see the potential benefits but still fear that negotiating could jeopardize my standing with my team if they perceive me as overreaching.",
+      "brett_elements": [
+        "long_term_relationship (thoughtful)",
+        "interest_exploration (questioning)"
+      ],
+      "emotional_tone": "apprehensive"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Research indicates that clarity in your role can actually enhance team dynamics. You might want to clarify this to your manager, ensuring everyone’s aligned.",
+      "brett_elements": [
+        "outcome_analysis (rational)",
+        "strategy_development (structured)"
+      ],
+      "emotional_support": "clinical"
+    },
+    {
+      "speaker": "employee",
+      "text": "That makes sense, but what if the manager interprets my clarity-seeking as a lack of confidence in their direction?",
+      "brett_elements": [
+        "power_dynamics (concerned)",
+        "interest_exploration (limited)"
+      ],
+      "emotional_tone": "conflicted"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It's unlikely; often managers appreciate proactive communication. Consider presenting your questions as seeking guidance to improve the project outcome.",
+      "brett_elements": [
+        "outcome_analysis (positive)",
+        "strategy_development (adaptive)"
+      ],
+      "emotional_support": "reassuring"
+    }
+  ],
+  "outcome": "Effective negotiation leads to a more defined role and responsibilities, fostering team cohesion.",
+  "emotional_arc": "Anxiety \rightarrow Clarity \rightarrow Confidence"
+}

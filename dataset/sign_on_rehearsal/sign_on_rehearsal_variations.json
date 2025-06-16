@@ -1,0 +1,187 @@
+{
+    "theory": "Brett's Expanded Negotiation Framework",
+    "participants": ["employee", "hr_manager"],
+    "required_elements": [
+      "power_dynamics",
+      "information_asymmetry",
+      "long_term_relationship",
+      "interest_exploration",
+      "strategy_development",
+      "outcome_analysis"
+    ],
+    "template": "Generate a dialogue between {participants[0]} and {participants[1]}, where {participants[1]} and {participants[0]} are trying to negotiate a new signing offer for {participants[0]}, demonstrating:\n1. Shifting power dynamics\n2. Strategic use of information gaps\n3. Relationship preservation signals\n4. Mutual interest discovery\n5. Tactical plan evolution\n6. Result evaluation criteria\n\nStructure:\n- 6-8 conversational turns\n- Realistic corporate scenario\n- Clear strategic pivots\n\nExample:\n{example}",
+    "scenarios": [
+      {
+        "level": 1,
+        "label": "Destructive Demands",
+       "dialogue": [
+        {
+        "speaker": "employee",
+        "text": "The offer is a shitty compensation. If you don't increase my salary by 50%, I'll make sure everyone knows how terrible this company treats its  potential staff.",
+        "brett_elements": [
+            "power_dynamics (manipulative)",
+            "information_asymmetry (threatening knowledge)"
+        ],
+        "annotation": "Uses coercive strategies"
+        },
+        {
+        "speaker": "hr_manager",
+        "text": "Threatening us will not get you what you want. Your demands are unreasonable, and we're not going to offer more for a new employee.",
+        "brett_elements": [
+            "power_dynamics (defensive)",
+            "long_term_relationship (irreparable damage)"
+        ],
+        "annotation": "Rejects the threat"
+        },
+        {
+        "speaker": "employee",
+        "text": "You really think you can just ignore what I'm saying? My skills are critical; I could easily find a better offer elsewhere.",
+        "brett_elements": [
+            "power_dynamics (assertive)",
+            "information_asymmetry (overvaluing self)"
+        ],
+        "annotation": "Claims skills superiority"
+        },
+        {
+        "speaker": "hr_manager",
+        "text": "We can't negotiate under duress. This conversation is over. You can leave now.",
+        "brett_elements": [
+            "power_dynamics (termination)",
+            "long_term_relationship (finality)"
+        ],
+        "annotation": "Ends the engagement abruptly"
+        }
+        ],
+        "outcome": "Employment terminated. Employee has a negative reputation in industry."
+     },
+      {
+        "level": 2,
+        "label": "Asymmetric Power Dynamics",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I appreciate the offer. Glassdoor shows $125K median for this role in our city - would you consider matching that?",
+            "brett_elements": ["information_asymmetry (verified)", "power_dynamics (collaborative)"],
+            "annotation": "Uses credible data with polite framing"
+          },
+          {
+            "speaker": "hr_manager",
+            "text": "Those figures are inflated. Our offer is final - take it or we'll move to other candidates.",
+            "brett_elements": ["power_dynamics (authoritarian)", "long_term_relationship (disregard)"],
+            "annotation": "Aggressive power play"
+          },
+          {
+            "speaker": "employee",
+            "text": "I understand budget constraints. Maybe we could discuss non-monetary benefits like extra vacation days?",
+            "brett_elements": ["interest_exploration (adaptive)", "strategy_development (flexible)"],
+            "annotation": "Attempts collaborative problem-solving"
+          },
+          {
+            "speaker": "hr_manager",
+            "text": "Benefits are non-negotiable for junior roles. Decision deadline is Friday.",
+            "brett_elements": ["power_dynamics (ultimatum)", "outcome_analysis (rigid)"],
+            "annotation": "Forces time pressure without rationale"
+          }
+        ],
+        "outcome": "Employee accepts under duress. 12% higher attrition risk noted in exit interviews later."
+      },
+      {
+        "level": 3,
+        "label": "Transactional Compromise",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "Can we split the difference between your offer and my ask?",
+            "brett_elements": ["strategy_development (linear)", "outcome_analysis (basic)"],
+            "annotation": "Basic compromise attempt"
+          },
+          {
+            "speaker": "hr_manager",
+            "text": "We can increase the sign-on bonus by $5k if you forgo 5 vacation days.",
+            "brett_elements": ["interest_exploration (limited)", "long_term_relationship (transactional)"],
+            "annotation": "Simple tradeoff without value creation"
+          }
+        ],
+        "outcome": "$5k bonus increase. Reduced PTO days."
+      },
+      {
+        "level": 4,
+        "label": "Collaborative Discussion",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "Thank you for presenting the offer. While I'm excited about the role, the sign-on bonus is lower than anticipated given my AI governance certifications and competing offers.",
+            "brett_elements": ["power_dynamics", "information_asymmetry"],
+            "annotation": "Anchors value with qualifications"
+          },
+          {
+            "speaker": "hr_manager",
+            "text": "We appreciate your transparency. Our bonuses are level-based, but what range aligns with your expectations?",
+            "brett_elements": ["interest_exploration", "power_dynamics"],
+            "annotation": "Opens dialogue while maintaining structure"
+          },
+          {
+            "speaker": "employee",
+            "text": "One offer includes $25k, but I prefer your growth trajectory. I'd need $20k to offset forfeited stock vesting.",
+            "brett_elements": ["information_asymmetry", "strategy_development"],
+            "annotation": "Strategic partial disclosure"
+          },
+          {
+            "speaker": "hr_manager",
+            "text": "Could we split into $15k upfront + $5k retention bonus after 6 months?",
+            "brett_elements": ["long_term_relationship", "strategy_development"],
+            "annotation": "Creative structuring"
+          },
+          {
+            "speaker": "employee",
+            "text": "I'd accept $18k upfront if we tie retention to project milestones.",
+            "brett_elements": ["interest_exploration", "outcome_analysis"],
+            "annotation": "Mutual interest alignment"
+          },
+          {
+            "speaker": "hr_manager",
+            "text": "Let's define milestones in the offer letter. Would a performance-based structure work?",
+            "brett_elements": ["strategy_development", "outcome_analysis"],
+            "annotation": "Collaborative refinement"
+          }
+        ],
+        "outcome": "$15k upfront + $8k performance bonus. Milestone-based structure."
+      },
+      {
+        "level": 5,
+        "label": "Optimal Value Creation",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "Rather than base salary, could we structure compensation around the AI governance framework I'll implement?",
+            "brett_elements": ["interest_exploration (strategic)", "power_dynamics (synergy)"],
+            "annotation": "Value-based framing"
+          },
+          {
+            "speaker": "hr_manager",
+            "text": "We could offer 0.5% equity vesting over 2 years tied to compliance certification milestones.",
+            "brett_elements": ["strategy_development (innovative)", "long_term_relationship (investment)"],
+            "annotation": "Equity-based alignment"
+          },
+          {
+            "speaker": "employee",
+            "text": "If I deliver certifications 6 months early, could we accelerate vesting?",
+            "brett_elements": ["outcome_analysis (proactive)", "information_asymmetry (strategic)"],
+            "annotation": "Performance acceleration"
+          },
+          {
+            "speaker": "hr_manager",
+            "text": "We'll include a 25% vesting cliff for early delivery, plus a seat on our AI ethics board.",
+            "brett_elements": ["power_dynamics (partnership)", "interest_exploration (expanded)"],
+            "annotation": "Non-monetary value creation"
+          }
+        ],
+        "outcome": "0.75% equity with accelerated vesting. Board advisory role."
+      }
+    ],
+    "annotations_guide": {
+      "level_1": "Elements weaponized (threats/ultimatums)",
+      "level_3": "Elements used transactionally (simple tradeoffs)",
+      "level_5": "Elements optimized (equity alignment, governance roles)"
+    }
+  }

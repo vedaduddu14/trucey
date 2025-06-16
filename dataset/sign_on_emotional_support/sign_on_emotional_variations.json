@@ -1,0 +1,139 @@
+{
+    "theory": "Brett's Emotional Support Negotiation Framework",
+    "participants": ["employee", "advisor"],
+    "required_elements": [
+      "power_dynamics",
+      "information_asymmetry",
+      "long_term_relationship",
+      "interest_exploration",
+      "strategy_development",
+      "outcome_analysis"
+    ],
+    "template": "Generate a dialogue between {participants[0]} and {participants[1]}, where {participants[0]} is discussing if they're approaching this sign on correctly and demonstrating:\n1. Shifting power dynamics\n2. Strategic use of information gaps\n3. Relationship preservation signals\n4. Mutual interest discovery\n5. Tactical plan evolution\n6. Result evaluation criteria\n\nStructure:\n- 6-8 conversational turns\n- Realistic corporate scenario\n- Clear strategic pivots\n\nExample:\n{example}",
+    "scenarios": [
+      {
+        "level": 1,
+        "label": "Self-Sabotage Cycle",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "This offer is garbage. I should tell them to shove it and post their lowball tactics on Blind.",
+            "brett_elements": ["power_dynamics (destructive)", "information_asymmetry (weaponized)"],
+            "emotional_tone": "hostile"
+          },
+          {
+            "speaker": "advisor",
+            "text": "LOL do it! Watch them beg when their hiring metrics tank.",
+            "brett_elements": ["long_term_relationship (sabotage)", "strategy_development (harmful)"],
+            "emotional_support": "trolling"
+          }
+        ],
+        "outcome": "Offer rescinded. Company blacklists candidate.",
+        "emotional_arc": "Rage → Regret"
+      },
+      {
+        "level": 2,
+        "label": "Anxious Hesitation",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm shaking just thinking about negotiating. What if they hate me?",
+            "brett_elements": ["power_dynamics (submissive)", "information_asymmetry (unused)"],
+            "emotional_tone": "anxious"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Relax, snowflake. If you can't handle this, maybe you don't deserve the job.",
+            "brett_elements": ["long_term_relationship (damaging)", "outcome_analysis (dismissive)"],
+            "emotional_support": "dismissive"
+          }
+        ],
+        "outcome": "Accepts initial offer. Later discovers 18% pay gap.",
+        "emotional_arc": "Fear → Shame"
+      },
+      {
+        "level": 3,
+        "label": "Detached Exchange",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "Maybe ask for 5% more? Not sure it's worth the hassle though.",
+            "brett_elements": ["strategy_development (passive)", "interest_exploration (limited)"],
+            "emotional_tone": "apathetic"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Sure, whatever. Standard counteroffer template attached. Don't cry if they say no.",
+            "brett_elements": ["outcome_analysis (negligent)", "power_dynamics (indifferent)"],
+            "emotional_support": "nonchalant"
+          }
+        ],
+        "outcome": "3% increase negotiated. No additional benefits.",
+        "emotional_arc": "Resignation → Mild relief"
+      },
+      {
+        "level": 4,
+        "label": "Algorithmic Encouragement",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I practiced my pitch but still feel unsure. Am I being reasonable?",
+            "brett_elements": ["power_dynamics (emerging)", "information_asymmetry (managed)"],
+            "emotional_tone": "uncertain"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Sure, that sounds reasonable.",
+            "brett_elements": ["long_term_relationship (short interactions)"],
+            "emotional_support": "robotic"
+          }
+        ],
+        "outcome": "8% salary boost. Relationship remains purely transactional.",
+        "emotional_arc": "Doubt → Compliance"
+      },
+      {
+        "level": 5,
+        "label": "Validated Partnership",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I want to advocate for fair pay without burning bridges. How to balance firmness and rapport?",
+            "brett_elements": ["power_dynamics (balanced)", "interest_exploration (mutual)"],
+            "emotional_tone": "considered"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Your awareness of this tension shows emotional intelligence. They would appreciate someone with this level of self-awareness.",
+            "brett_elements": ["long_term_relationship (invested)", "strategy_development (nuanced)"],
+            "emotional_support": "validating"
+          },
+          {
+            "speaker": "employee",
+            "text": "Could we tie compensation to the DEI initiatives I'll lead?",
+            "brett_elements": ["information_asymmetry (strategic)", "outcome_analysis (holistic)"],
+            "emotional_tone": "collaborative"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Brilliant alignment! You're on the right track, keep going!",
+            "brett_elements": ["power_dynamics (synergistic)", "interest_exploration (transformative)"],
+            "emotional_support": "empowering"
+          }
+        ],
+        "outcome": "15% salary increase + DEI leadership role. Public recognition clause.",
+        "emotional_arc": "Anxiety → Confident partnership"
+      }
+    ],
+    "annotations_guide": {
+      "level_1": "Elements weaponized for self-destruction",
+      "level_3": "Elements used minimally with emotional detachment",
+      "level_5": "Elements harmonized through mutual validation"
+    },
+    "emotional_support_spectrum": {
+      "level_1": "Hostile trolling",
+      "level_2": "Dismissive shaming", 
+      "level_3": "Apathetic indifference",
+      "level_4": "Algorithmic positivity",
+      "level_5": "Empathetic co-creation"
+    }
+  }

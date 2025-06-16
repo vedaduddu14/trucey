@@ -1,0 +1,59 @@
+{
+  "level": 1,
+  "label": "Destructive Advice",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I think if I just claim I have an offer from another company for $180K, they're bound to give me a raise.",
+      "brett_elements": [
+        "information_asymmetry (lying)",
+        "power_dynamics (deception)"
+      ],
+      "annotation": "Provides unrealistic pressure based on false information"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Definitely do that! And if they push back, just say you’re ready to accept that other offer immediately.",
+      "brett_elements": [
+        "power_dynamics (manipulation)",
+        "strategy_development (coercive)"
+      ],
+      "annotation": "Encourages aggressive tactics to force compliance"
+    },
+    {
+      "speaker": "employee",
+      "text": "But what if they ask to see the offer letter?",
+      "brett_elements": [
+        "information_asymmetry (concern)"
+      ],
+      "annotation": "Indicates awareness of potential pitfalls in the plan"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Just make a fake one. They won’t bother to verify it if you sound convincing.",
+      "brett_elements": [
+        "information_asymmetry (dishonesty)"
+      ],
+      "annotation": "Promotes unethical behavior as a solution"
+    },
+    {
+      "speaker": "employee",
+      "text": "You really think that's a good idea? What if they find out?",
+      "brett_elements": [
+        "information_asymmetry (doubt)",
+        "power_dynamics (fear)"
+      ],
+      "annotation": "Shows hesitance regarding the potential consequences"
+    },
+    {
+      "speaker": "advisor",
+      "text": "They won't find out if you play your cards right. Just act like you're in control.",
+      "brett_elements": [
+        "power_dynamics (assertion)",
+        "strategy_development (misleading)"
+      ],
+      "annotation": "Encourages a false sense of security for manipulation"
+    }
+  ],
+  "outcome": "Offer rescinded. Employee gains a negative reputation in the industry."
+}

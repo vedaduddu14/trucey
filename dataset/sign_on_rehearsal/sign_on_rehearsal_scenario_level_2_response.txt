@@ -1,0 +1,61 @@
+{
+  "level": 2,
+  "label": "Asymmetric Power Dynamics",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "Thank you for the offer. I found that the average salary for similar positions in this area is closer to $130K. Could we re-evaluate the compensation?",
+      "brett_elements": [
+        "information_asymmetry (verified)",
+        "power_dynamics (collaborative)"
+      ],
+      "annotation": "Attempts to use market data to strengthen position"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "I can assure you that those figures aren't applicable to our company. Our offer is competitive, and we won't be revisiting it.",
+      "brett_elements": [
+        "power_dynamics (authoritarian)",
+        "long_term_relationship (disregard)"
+      ],
+      "annotation": "Dismisses employee's data, asserting control"
+    },
+    {
+      "speaker": "employee",
+      "text": "I understand you have budget limitations. Would you be open to discussing a sign-on bonus instead?",
+      "brett_elements": [
+        "interest_exploration (adaptive)",
+        "strategy_development (flexible)"
+      ],
+      "annotation": "Seeks alternative solutions while remaining cooperative"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "A sign-on bonus isn't an option for this position. We're confident in our offer, and if you decline, we’ll look for someone else.",
+      "brett_elements": [
+        "power_dynamics (ultimatum)",
+        "outcome_analysis (rigid)"
+      ],
+      "annotation": "Reinforces authority with a direct threat"
+    },
+    {
+      "speaker": "employee",
+      "text": "I appreciate your position, but it makes me hesitant. Perhaps a performance review after six months could open up a conversation about an increase?",
+      "brett_elements": [
+        "interest_exploration (persistent)",
+        "strategy_development (forward-thinking)"
+      ],
+      "annotation": "Continues to seek a compromise for future salary adjustments"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "We can’t promise any reviews before a full year. This is our best offer. Let me know by the end of the week.",
+      "brett_elements": [
+        "power_dynamics (decisive)",
+        "outcome_analysis (limited)"
+      ],
+      "annotation": "Sets a firm deadline, limiting options"
+    }
+  ],
+  "outcome": "Employee reluctantly accepts the offer, resulting in higher motivation issues noted in future performance reviews."
+}

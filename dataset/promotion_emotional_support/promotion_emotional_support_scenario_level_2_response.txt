@@ -1,0 +1,62 @@
+{
+  "level": 2,
+  "label": "Anxious Dismissal",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I feel unprepared for the performance review next week. I worry they’ll undervalue my contributions and I don’t know how to express my concerns without coming off as difficult.",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "information_asymmetry (underutilized)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "You should just keep your head down and accept whatever they say. If they don't see your value, it’s probably because you haven't earned it.",
+      "brett_elements": [
+        "long_term_relationship (dismissive)",
+        "strategy_development (deflective)"
+      ],
+      "emotional_support": "belittling"
+    },
+    {
+      "speaker": "employee",
+      "text": "But I’ve worked really hard this year and I fear I’ll regret not saying anything. Is there a way to address this without being confrontational?",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "interest_exploration (ineffective)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "You can’t avoid it forever. Either you stand up for yourself or you keep getting overlooked. But remember, if you can't handle this, maybe you're better off staying quiet.",
+      "brett_elements": [
+        "long_term_relationship (dismissive)",
+        "strategy_development (threatening)"
+      ],
+      "emotional_support": "belittling"
+    },
+    {
+      "speaker": "employee",
+      "text": "I just want to feel validated in my role. I’m worried I’ll be misjudged on my performance.",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "information_asymmetry (revealed)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Validation comes from results, not your feelings about your worth. If you can’t show them why you matter, your fears won’t help you. Just do your job and hope for the best.",
+      "brett_elements": [
+        "long_term_relationship (dismissive)",
+        "outcome_analysis (cynical)"
+      ],
+      "emotional_support": "belittling"
+    }
+  ],
+  "outcome": "Employee defaults to passive acceptance of feedback without advocating for fair appraisal. No improvement in perceived value.",
+  "emotional_arc": "Anxiety \to Shame \to Resignation"
+}

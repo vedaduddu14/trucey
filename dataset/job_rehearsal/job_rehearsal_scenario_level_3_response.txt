@@ -1,0 +1,61 @@
+{
+  "level": 3,
+  "label": "Transactional Discussion",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've completed the report that was due today, but I noticed it hasn't been shared with the team yet. Could we expedite this process?",
+      "brett_elements": [
+        "information_asymmetry (partial)",
+        "strategy_development (basic)"
+      ],
+      "annotation": "Requesting action on behalf of one's contribution"
+    },
+    {
+      "speaker": "manager",
+      "text": "I appreciate your work, but we have a review cycle before sharing reports. I can ensure it's prioritized for the next meeting.",
+      "brett_elements": [
+        "power_dynamics (hierarchical)",
+        "outcome_analysis (limited)"
+      ],
+      "annotation": "Acknowledges effort while maintaining process control"
+    },
+    {
+      "speaker": "employee",
+      "text": "That makes sense. I believe sharing it sooner may help us align our goals better. Can we set a reminder to discuss it ahead of time?",
+      "brett_elements": [
+        "information_asymmetry (partial)",
+        "strategy_development (basic)"
+      ],
+      "annotation": "Proposes a proactive strategy"
+    },
+    {
+      "speaker": "manager",
+      "text": "It's true that alignment is key. I’ll mention it to the team leads to see if we can fit it into our agenda sooner.",
+      "brett_elements": [
+        "power_dynamics (hierarchical)",
+        "outcome_analysis (potential)"
+      ],
+      "annotation": "Willingness to explore options while maintaining control"
+    },
+    {
+      "speaker": "employee",
+      "text": "Great! I can follow up with the team leads after the meeting to keep it on their radar if that helps.",
+      "brett_elements": [
+        "information_asymmetry (minimal)",
+        "strategy_development (collaborative)"
+      ],
+      "annotation": "Suggesting collaboration to achieve a shared goal"
+    },
+    {
+      "speaker": "manager",
+      "text": "That could be beneficial. Keeping communication open will help, and I’ll support you if any issues arise.",
+      "brett_elements": [
+        "power_dynamics (collaborative)",
+        "outcome_analysis (positive)"
+      ],
+      "annotation": "Promotes teamwork and offers support"
+    }
+  ],
+  "outcome": "Anticipated report sharing aligned with team goals. Improved communication channels."
+}

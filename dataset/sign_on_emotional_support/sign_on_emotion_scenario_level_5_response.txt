@@ -1,0 +1,62 @@
+{
+  "level": 5,
+  "label": "Validated Partnership",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I’d like to discuss a potential promotion, but I want to ensure I'm approaching this wisely. How can we make this conversation productive?",
+      "brett_elements": [
+        "power_dynamics (balanced)",
+        "interest_exploration (mutual)"
+      ],
+      "emotional_tone": "thoughtful"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Your careful consideration is commendable. Engaging in dialogue like this fosters trust, which is essential for a healthy relationship.",
+      "brett_elements": [
+        "long_term_relationship (invested)",
+        "strategy_development (foundational)"
+      ],
+      "emotional_support": "encouraging"
+    },
+    {
+      "speaker": "employee",
+      "text": "I believe my contributions to the team have had a significant impact. Could we potentially frame my promotion around my project successes?",
+      "brett_elements": [
+        "information_asymmetry (leveraged)",
+        "outcome_analysis (strategic)"
+      ],
+      "emotional_tone": "constructive"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Absolutely! Highlighting your achievements shows everyone the value you bring. This could form a strong basis for your case.",
+      "brett_elements": [
+        "power_dynamics (synergistic)",
+        "interest_exploration (affirmative)"
+      ],
+      "emotional_support": "validating"
+    },
+    {
+      "speaker": "employee",
+      "text": "Could we also discuss timelines and measurable goals that would solidify this promotion decision?",
+      "brett_elements": [
+        "strategy_development (interactive)",
+        "outcome_analysis (forward-looking)"
+      ],
+      "emotional_tone": "proactive"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Creating clear goals and timelines will benefit both you and the organization. It builds a roadmap that everyone can follow.",
+      "brett_elements": [
+        "long_term_relationship (collaborative)",
+        "information_asymmetry (transparent)"
+      ],
+      "emotional_support": "supportive"
+    }
+  ],
+  "outcome": "Promotion secured with clear goals to advance further. Mutual recognition for contributions established.",
+  "emotional_arc": "Apprehension \rightarrow Empowered collaboration"
+}

@@ -1,0 +1,59 @@
+{
+  "level": 2,
+  "label": "Confrontational Approach",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've been carrying the team on my back, and if I don’t see a promotion and a 30% raise soon, I'm out.",
+      "brett_elements": [
+        "power_dynamics (ultimatum)",
+        "information_asymmetry (limited)"
+      ],
+      "annotation": "Employs a threat to pressure for immediate results"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Go in with your demand straight. Tell them you expect the promotion and specified raise within a week, no ifs, ands, or buts.",
+      "brett_elements": [
+        "strategy_development (rigid)",
+        "interest_exploration (absent)"
+      ],
+      "annotation": "Suggests an uncompromising stance, overlooking possible negotiation nuances"
+    },
+    {
+      "speaker": "employee",
+      "text": "But what if they counter with a reason why they can’t? Like company policies or budget restraints?",
+      "brett_elements": [
+        "outcome_analysis (binary)"
+      ],
+      "annotation": "Considers potential negative outcomes yet lacks a fallback plan"
+    },
+    {
+      "speaker": "advisor",
+      "text": "If they push back, just tell them that you’re done playing games. Looking for another job is better than staying somewhere unappreciated.",
+      "brett_elements": [
+        "long_term_relationship (disposable)",
+        "power_dynamics (win-lose)"
+      ],
+      "annotation": "Views employment purely as a transactional deal, disregarding future relationships"
+    },
+    {
+      "speaker": "employee",
+      "text": "I really don't want to leave, but I can't keep putting in this effort for nothing. Should I mention other offers?",
+      "brett_elements": [
+        "information_asymmetry (potentially aware of offers)"
+      ],
+      "annotation": "Considers leveraging competitive offers but is still uncertain"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Absolutely! If you have other offers, make sure they know. That’s what makes your case stronger.",
+      "brett_elements": [
+        "power_dynamics (negotiation tactic)",
+        "long_term_relationship (ignored)"
+      ],
+      "annotation": "Recommends a confrontational tactic, dismissing relationship implications"
+    }
+  ],
+  "outcome": "Increased tension with management and either a failed negotiation or a grudgingly accepted raise."
+}

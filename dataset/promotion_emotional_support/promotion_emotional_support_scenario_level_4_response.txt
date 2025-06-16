@@ -1,0 +1,62 @@
+{
+  "level": 4,
+  "label": "Structured Reassurance",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've been asked to lead a new project, but I'm anxious about discussing my current workload in relation to the extra responsibilities. How do I approach this without seeming overwhelmed?",
+      "brett_elements": [
+        "information_asymmetry (concern about workload)",
+        "power_dynamics (uneasy)"
+      ],
+      "emotional_tone": "nervous"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It's great that you recognize the importance of this discussion. Addressing workload is a key part of leadership, and it's normal to address how this new project fits into your existing commitments. It shows your manager you're proactive.",
+      "brett_elements": [
+        "power_dynamics (supportive)",
+        "long_term_relationship (encouraging)"
+      ],
+      "emotional_support": "affirmative"
+    },
+    {
+      "speaker": "employee",
+      "text": "I still feel uneasy. What if they perceive me as incapable of managing multiple responsibilities? I want them to see me as a capable leader, not someone who can't handle pressure.",
+      "brett_elements": [
+        "long_term_relationship (self-doubt)",
+        "outcome_analysis (fear of judgment)"
+      ],
+      "emotional_tone": "apprehensive"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It's perfectly fine to express your concerns. By presenting your workload clearly and discussing how you plan to manage it, you demonstrate leadership qualities. Leaders often negotiate for resources they need to succeed.",
+      "brett_elements": [
+        "strategy_development (solution-focused)",
+        "interest_exploration (resource-based)"
+      ],
+      "emotional_support": "empowering"
+    },
+    {
+      "speaker": "employee",
+      "text": "I suppose I could outline my priorities and show how this new project aligns with our team's goals. But what if they don't see the value I bring?",
+      "brett_elements": [
+        "information_asymmetry (concern about visibility)",
+        "power_dynamics (uncertain)"
+      ],
+      "emotional_tone": "unsure"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Presenting your priorities alongside project alignment will help you articulate your value effectively. Managers appreciate when employees take the initiative to clarify contributions to team objectives. It builds trust and collaboration.",
+      "brett_elements": [
+        "long_term_relationship (trust-building)",
+        "strategy_development (articulation)"
+      ],
+      "emotional_support": "supportive"
+    }
+  ],
+  "outcome": "Employee successfully outlines priorities, securing support for workload management and recognition of leadership capabilities.",
+  "emotional_arc": "Nervousness \rightarrow Reassurance \rightarrow Confidence"
+}

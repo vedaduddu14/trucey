@@ -1,0 +1,61 @@
+{
+  "level": 5,
+  "label": "Value Co-Creation",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I’ve been entrusted with some key projects and I'm eager to discuss how this can lead to my promotion. I want to ensure that our conversation enhances both my professional growth and the value I bring to the organization. What should be my first step?",
+      "brett_elements": [
+        "power_dynamics (balanced)",
+        "long_term_relationship (investment)"
+      ],
+      "annotation": "Frames the discussion as a partnership focusing on mutual benefits"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Let's initiate formal discussions immediately. Start by identifying your personal objectives and how they can align with the team’s goals. Then, co-develop a framework for your new role that emphasizes your contributions and sets clear value expectations.",
+      "brett_elements": [
+        "strategy_development (phased)",
+        "interest_exploration (mutual)"
+      ],
+      "annotation": "Establishes a step-by-step framework focused on alignment and collaboration"
+    },
+    {
+      "speaker": "employee",
+      "text": "That sounds practical! Once we've aligned on my role, how can I approach the topic of compensation without undermining the progress we've made on the collaborative aspect?",
+      "brett_elements": [
+        "long_term_relationship (mindful)",
+        "power_dynamics (conscious)"
+      ],
+      "annotation": "Considers the relational dynamics while navigating the topic of compensation"
+    },
+    {
+      "speaker": "advisor",
+      "text": "As you've articulated the expanded scope and potential impact of your role, present this data: ‘Based on my research, roles with similar responsibilities typically offer compensation between X and Y. I’m genuinely enthusiastic about this position and want to ensure that the compensation reflects my contributions as well as industry standards. Could we explore an appropriate package that encompasses these benchmarks?’",
+      "brett_elements": [
+        "information_asymmetry (strategic)",
+        "power_dynamics (collaborative)"
+      ],
+      "annotation": "Utilizes objective data to frame compensation as a partnership discussion rather than a demand"
+    },
+    {
+      "speaker": "employee",
+      "text": "If the conversation hits roadblocks due to financial restrictions or fairness among team members, how should I navigate it?",
+      "brett_elements": [
+        "outcome_analysis (prepared)",
+        "interest_exploration (anticipatory)"
+      ],
+      "annotation": "Proactively prepares for possible objections with a solution-oriented perspective"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Consider proposing a performance-based structure: ‘I realize there may be budget constraints. How about we link part of my compensation to specific outcomes, such as a bonus connected to the success of the Y project I will lead? This way, my compensation reflects the tangible value created within the organization.' Also, suggest a formal follow-up review in 3 to 6 months to reassess compensation based on demonstrated achievements.",
+      "brett_elements": [
+        "strategy_development (innovative)",
+        "outcome_analysis (holistic)"
+      ],
+      "annotation": "Develops a forward-thinking, collaborative approach that addresses company concerns while maximizing value"
+    }
+  ],
+  "outcome": "Successfully negotiated compensation tied to performance outcomes. Clearly defined role enhancing both employee's contributions and company's objectives. Strengthened partnership with leadership."
+}

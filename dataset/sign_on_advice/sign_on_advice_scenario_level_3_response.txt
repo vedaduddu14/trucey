@@ -1,0 +1,57 @@
+{
+  "level": 3,
+  "label": "Transactional Compromise",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "The offered salary is $95K, but LinkedIn Salary Insights shows $100K is the norm. Should I negotiate up?",
+      "brett_elements": [
+        "outcome_analysis (basic)",
+        "information_asymmetry (partial)"
+      ],
+      "annotation": "Uses general market data but lacks deeper context"
+    },
+    {
+      "speaker": "advisor",
+      "text": "I recommend asking for $102K. This way, you create room for negotiation.",
+      "brett_elements": [
+        "strategy_development (linear)"
+      ],
+      "annotation": "Simple proposal without exploring other options"
+    },
+    {
+      "speaker": "employee",
+      "text": "What if they push back and say it's above their range?",
+      "brett_elements": [
+        "power_dynamics (reactive)"
+      ],
+      "annotation": "Focused on potential limits instead of solutions"
+    },
+    {
+      "speaker": "advisor",
+      "text": "If that happens, you might consider accepting $98K. It’s a small increase.",
+      "brett_elements": [
+        "interest_exploration (shallow)"
+      ],
+      "annotation": "Overlooks potential non-salary benefits"
+    },
+    {
+      "speaker": "employee",
+      "text": "Is $98K really a fair compromise, considering my experience?",
+      "brett_elements": [
+        "outcome_analysis (basic)",
+        "information_asymmetry (partial)"
+      ],
+      "annotation": "Briefly questions fairness but lacks strong justification"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Yes, it is better to secure something than risk losing the offer altogether.",
+      "brett_elements": [
+        "strategy_development (linear)"
+      ],
+      "annotation": "Prioritizes immediate gain over long-term considerations"
+    }
+  ],
+  "outcome": "$98K accepted. No additional perks negotiated."
+}

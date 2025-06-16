@@ -1,0 +1,61 @@
+{
+  "level": 4,
+  "label": "Strategic Reclamation",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I just found out that my contribution to the data migration project was overlooked during the team update. I feel like the team doesn't recognize my efforts. What should I do to ensure I'm credited properly without causing friction?",
+      "brett_elements": [
+        "information_asymmetry (recognized)",
+        "outcome_analysis (solution-focused)"
+      ],
+      "annotation": "Outlines the issue and seeks a constructive solution"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Start by gathering evidence of your work — project reports, emails, and any feedback you've received. Once you have that, request a one-on-one meeting with your manager to clarify your role in the project. Emphasize your intent to contribute to the team's success, rather than making it confrontational.",
+      "brett_elements": [
+        "information_asymmetry (strategic disclosure)",
+        "strategy_development (structured)"
+      ],
+      "annotation": "Encourages proactive evidence collection and a focused conversation"
+    },
+    {
+      "speaker": "employee",
+      "text": "Should I mention this to my teammate, Jamie, who I collaborated with on the project, before I speak to the manager? We have a good rapport and I think they understand my contributions.",
+      "brett_elements": [
+        "long_term_relationship (preservation)",
+        "interest_exploration (initial)"
+      ],
+      "annotation": "Considers the value of team dynamics and potential allies"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Absolutely. A casual conversation with Jamie can be beneficial. Frame it positively: 'I noticed my role wasn't clear in the last update. Do you think we could clarify that together?' This will help Jamie know how to support you if the conversation escalates.",
+      "brett_elements": [
+        "power_dynamics (balanced)",
+        "long_term_relationship (investment)"
+      ],
+      "annotation": "Encourages collaboration and mutual support while emphasizing clarity"
+    },
+    {
+      "speaker": "employee",
+      "text": "Got it. After that meeting, if I still feel overlooked, how should I approach this moving forward?",
+      "brett_elements": [
+        "outcome_analysis (strategic follow-up)",
+        "information_asymmetry (acknowledged)"
+      ],
+      "annotation": "Seeks the next steps while remaining aware of dynamics"
+    },
+    {
+      "speaker": "advisor",
+      "text": "If the issue persists, follow up with concrete examples and express how clear acknowledgment of contributions impacts morale and productivity. You could say, 'I believe clearly recognizing individual contributions can enhance team performance.' This reflects your commitment to team success.",
+      "brett_elements": [
+        "outcome_analysis (resolution-oriented)",
+        "strategy_development (expanded approach)"
+      ],
+      "annotation": "Encourages a team-focused narrative that serves both personal and group interests"
+    }
+  ],
+  "outcome": "Employee's contributions are recognized appropriately. Team dynamics are strengthened through collaboration. Future communications are clearer and foster a positive working environment."
+}

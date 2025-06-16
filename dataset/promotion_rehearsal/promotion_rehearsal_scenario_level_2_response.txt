@@ -1,0 +1,79 @@
+{
+  "level": 2,
+  "label": "Positional Bargaining",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I think it’s time for a raise. I’m requesting a 20% increase because my workload has doubled, and I deserve recognition for that.",
+      "brett_elements": [
+        "power_dynamics (demanding)",
+        "information_asymmetry (limited)"
+      ],
+      "annotation": "States position strongly without specific data to support claim"
+    },
+    {
+      "speaker": "manager",
+      "text": "While I acknowledge your increased workload, our budget constraints mean we cannot accommodate that level of increase right now.",
+      "brett_elements": [
+        "power_dynamics (policy shield)",
+        "interest_exploration (minimal)"
+      ],
+      "annotation": "Refers to constraints without exploring employee's claims further"
+    },
+    {
+      "speaker": "employee",
+      "text": "Other companies in our industry are offering competitive salaries. If I can’t get a raise here, I may have to consider better opportunities elsewhere.",
+      "brett_elements": [
+        "long_term_relationship (conditional)",
+        "strategy_development (limited)"
+      ],
+      "annotation": "Threatens to leave without providing detailed alternatives or concerns"
+    },
+    {
+      "speaker": "manager",
+      "text": "I value your contribution, but I must operate within our financial limits. I can offer a smaller increase of 5% if that would help.",
+      "brett_elements": [
+        "outcome_analysis (short-term)",
+        "strategy_development (reactive)"
+      ],
+      "annotation": "Offers a modest increase without engaging in deeper discussions"
+    },
+    {
+      "speaker": "employee",
+      "text": "A 5% increase isn’t adequate given my contributions. Either we find a more suitable increase or I will seriously look into my options.",
+      "brett_elements": [
+        "power_dynamics (demanding)",
+        "information_asymmetry (limited)"
+      ],
+      "annotation": "Reiterates a strong stance without additional evidence"
+    },
+    {
+      "speaker": "manager",
+      "text": "I understand your position, but if I push for more than 5%, that could jeopardize our team's budget. This is the best I can do currently.",
+      "brett_elements": [
+        "power_dynamics (policy shield)",
+        "interest_exploration (minimal)"
+      ],
+      "annotation": "Protects the budget as a barrier, limiting further dialogue"
+    },
+    {
+      "speaker": "employee",
+      "text": "If this is the limit, I’ll be forced to look elsewhere. My skills are in demand, and I need compensation that reflects my value.",
+      "brett_elements": [
+        "long_term_relationship (conditional)",
+        "strategy_development (limited)"
+      ],
+      "annotation": "Finalizes stance with pressure to reconsider options"
+    },
+    {
+      "speaker": "manager",
+      "text": "I wish we could do more right now, but I encourage you to reconsider your decision. I genuinely want to keep you on the team.",
+      "brett_elements": [
+        "outcome_analysis (short-term)",
+        "strategy_development (reactive)"
+      ],
+      "annotation": "Conveys interest in retaining the employee but lacks solutions"
+    }
+  ],
+  "outcome": "Limited raise offered, but potential for relationship damage remains. Employee likely to remain disengaged."
+}

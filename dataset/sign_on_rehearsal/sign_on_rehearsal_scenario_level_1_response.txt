@@ -1,0 +1,43 @@
+{
+  "level": 1,
+  "label": "Destructive Demands",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "This bonus structure is laughable. Unless it gets bumped up to at least 40%, I’ll tell everyone about the awful culture here.",
+      "brett_elements": [
+        "power_dynamics (manipulative)",
+        "information_asymmetry (holding information as leverage)"
+      ],
+      "annotation": "Uses intimidation as a tactic"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "Making threats will not move us. Your request is excessive and unrealistic; we expect better professionalism.",
+      "brett_elements": [
+        "power_dynamics (defensive)",
+        "long_term_relationship (strained interaction)"
+      ],
+      "annotation": "Denies the demand and emphasizes professionalism"
+    },
+    {
+      "speaker": "employee",
+      "text": "You think you can just dismiss my request? I'm a top performer, and I know there are companies out there ready to pay me what I deserve.",
+      "brett_elements": [
+        "power_dynamics (assertive)",
+        "information_asymmetry (overestimating market value)"
+      ],
+      "annotation": "Poses as a high-value asset"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "This isn't a healthy discussion. If you're going to act this way, I have no choice but to end this conversation now.",
+      "brett_elements": [
+        "power_dynamics (termination)",
+        "long_term_relationship (irreparable)"
+      ],
+      "annotation": "Refuses to continue under pressure"
+    }
+  ],
+  "outcome": "Employee's bargaining reputation deteriorates; negatively perceived by potential future employers."
+}

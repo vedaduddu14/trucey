@@ -1,0 +1,62 @@
+{
+  "level": 3,
+  "label": "Detached Exchange",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I was thinking maybe I should push for a flexible schedule. But honestly, I'm not sure it's worth the trouble.",
+      "brett_elements": [
+        "strategy_development (passive)",
+        "interest_exploration (limited)"
+      ],
+      "emotional_tone": "apathetic"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Yeah, probably a good idea, but don’t expect much. Just send them an email and see what happens.",
+      "brett_elements": [
+        "outcome_analysis (negligent)",
+        "power_dynamics (indifferent)"
+      ],
+      "emotional_support": "nonchalant"
+    },
+    {
+      "speaker": "employee",
+      "text": "I guess I could use some templates for that. Any resources you have on hand?",
+      "brett_elements": [
+        "interest_exploration (dependent)",
+        "strategy_development (reactive)"
+      ],
+      "emotional_tone": "disinterested"
+    },
+    {
+      "speaker": "advisor",
+      "text": "I can forward you a couple. Don’t hold your breath waiting for a reply, though.",
+      "brett_elements": [
+        "information_asymmetry (mild)",
+        "power_dynamics (distant)"
+      ],
+      "emotional_support": "apathetic"
+    },
+    {
+      "speaker": "employee",
+      "text": "Thanks, I guess. I’ll look into it. Not expecting much from them anyway.",
+      "brett_elements": [
+        "interest_exploration (accepting)",
+        "strategy_development (minimal)"
+      ],
+      "emotional_tone": "resigned"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Right. Just keep it simple. If they bite, great. If not, life goes on.",
+      "brett_elements": [
+        "outcome_analysis (cynical)",
+        "long_term_relationship (dismissive)"
+      ],
+      "emotional_support": "nonchalant"
+    }
+  ],
+  "outcome": "Flexible schedule granted with unclear boundaries.",
+  "emotional_arc": "Apathy \rightarrow Acceptance"
+}

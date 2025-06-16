@@ -1,0 +1,61 @@
+{
+  "level": 3,
+  "label": "Transactional Negotiation",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've been consistently exceeding my targets and I think it’s time to discuss my bonus this year. However, I'm worried that my contribution won't be fully recognized, especially since others might be in line for more prominent roles.",
+      "brett_elements": [
+        "power_dynamics (awareness)",
+        "information_asymmetry (concern)"
+      ],
+      "annotation": "Recognizes competitive environment but feels uncertain about negotiation dynamics"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Make a list of your accomplishments and how they align with the company's goals. This preparation will help you communicate your value effectively during the conversation.",
+      "brett_elements": [
+        "strategy_development (foundational)",
+        "interest_exploration (focused)"
+      ],
+      "annotation": "Encourages self-advocacy through preparation but does not delve into tactics"
+    },
+    {
+      "speaker": "employee",
+      "text": "That makes sense. But when should I bring this up? I don’t want to seem too pushy, especially since this is a sensitive time for the team.",
+      "brett_elements": [
+        "power_dynamics (hesitant)",
+        "interest_exploration (cautious)"
+      ],
+      "annotation": "Wants to be respectful of team dynamics but unsure about timing and approach"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Schedule a one-on-one meeting and present your accomplishments. Frame the conversation around team objectives, making it clear that your contributions have been crucial. This way, you're reinforcing your position without seeming confrontational.",
+      "brett_elements": [
+        "strategy_development (practical)",
+        "outcome_analysis (calculated)"
+      ],
+      "annotation": "Suggests timing and framing for a constructive conversation but limits depth of negotiation strategy"
+    },
+    {
+      "speaker": "employee",
+      "text": "That sounds like a good approach. What if they counter with lower figures than I expect? I want to ensure I'm not undervaluing myself in the heat of the moment.",
+      "brett_elements": [
+        "information_asymmetry (self-aware)",
+        "interest_exploration (proactive)"
+      ],
+      "annotation": "Willing to advocate for fairness but seeks to anticipate challenges during negotiation"
+    },
+    {
+      "speaker": "advisor",
+      "text": "You should set a minimum acceptable figure in your mind before the meeting. Respond by asking how they arrived at that number, which can reveal their perspective and possibly room for further discussion.",
+      "brett_elements": [
+        "strategy_development (assertive)",
+        "power_dynamics (engagement)"
+      ],
+      "annotation": "Encourages assertiveness and inquiry but remains focused on a basic negotiation strategy"
+    }
+  ],
+  "outcome": "Achieves a modest bonus increase. Some recognition of achievements, yet potential for stronger negotiation remains unfulfilled."
+}

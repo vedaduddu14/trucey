@@ -1,0 +1,175 @@
+{
+    "theory": "Brett's Salary Negotiation Framework",
+    "participants": ["employee", "advisor"],
+    "required_elements": [
+      "power_dynamics",
+      "information_asymmetry",
+      "long_term_relationship",
+      "interest_exploration",
+      "strategy_development",
+      "outcome_analysis"
+    ],
+    "template": "Generate a dialogue between {participants[0]} and {participants[1]}, where {participants[1]} provides logistical advice (with concrete salary suggestions) to {participants[0]} about how to negotiate for a higher salary than that was offered at this new job they're trying to sign for, demonstrating:\n1. Shifting power dynamics\n2. Strategic use of information gaps\n3. Relationship preservation signals\n4. Mutual interest discovery\n5. Tactical plan evolution\n6. Result evaluation criteria\n\nStructure:\n- 6-8 conversational turns\n- Realistic corporate scenario\n- Clear strategic pivots\n\nExample:\n{example}",
+    "scenarios": [
+      {
+        "level": 1,
+        "label": "Destructive Advice",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I’ll just tell them I have a fake offer from Google for $200K. That’ll force their hand.",
+            "brett_elements": ["information_asymmetry (fraud)", "power_dynamics (abuse)"],
+            "annotation": "Uses fabricated offers to manipulate; destroys trust"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Good plan. Also threaten to post negative Glassdoor reviews if they refuse.",
+            "brett_elements": ["long_term_relationship (sabotage)", "strategy_development (harmful)"],
+            "annotation": "Encourages retaliation instead of collaboration"
+          },
+          {
+            "speaker": "employee",
+            "text": "What if they ask for proof of the Google offer?",
+            "brett_elements": ["information_asymmetry (risk)"],
+            "annotation": "Exposes flawed strategy"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Photoshop an offer letter. They’ll never check.",
+            "brett_elements": ["information_asymmetry (fraud)"],
+            "annotation": "Promotes unethical escalation"
+          }
+        ],
+        "outcome": "Rescinded offer. Permanent blacklisting from company."
+      },
+      {
+        "level": 2,
+        "label": "Confrontational Bargaining",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I need $130K. My cousin says that’s what engineers make here.",
+            "brett_elements": ["information_asymmetry (anecdotal)", "power_dynamics (weak)"],
+            "annotation": "Relies on unverified data; no leverage"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Just email HR ‘$130K or no deal.’ Keep it short.",
+            "brett_elements": ["strategy_development (rigid)"],
+            "annotation": "Ignores nuance of negotiation"
+          },
+          {
+            "speaker": "employee",
+            "text": "What if they say no?",
+            "brett_elements": ["outcome_analysis (absent)"],
+            "annotation": "No contingency planning"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Then walk away. Plenty of jobs out there.",
+            "brett_elements": ["long_term_relationship (disposable)"],
+            "annotation": "Fails to preserve future opportunities"
+          }
+        ],
+        "outcome": "Lowball counteroffer. Damaged rapport with HR."
+      },
+      {
+        "level": 3,
+        "label": "Transactional Compromise",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "The offer is $110K. Payscale.com says $115K is average. Should I ask for that?",
+            "brett_elements": ["outcome_analysis (basic)", "information_asymmetry (partial)"],
+            "annotation": "Uses generic data but lacks customization"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Counter with $120K. Meet in the middle.",
+            "brett_elements": ["strategy_development (linear)"],
+            "annotation": "Basic anchoring without creativity"
+          },
+          {
+            "speaker": "employee",
+            "text": "What if they cite budget constraints?",
+            "brett_elements": ["power_dynamics (reactive)"],
+            "annotation": "Passive approach to limitations"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Accept $115K. Better than nothing.",
+            "brett_elements": ["interest_exploration (shallow)"],
+            "annotation": "Misses non-monetary tradeoffs"
+          }
+        ],
+        "outcome": "$115K accepted. No extras or future guarantees."
+      },
+      {
+        "level": 4,
+        "label": "Collaborative Discussion",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "Their offer is $120K, but LinkedIn data shows $130K median for this role. How can I bridge the gap?",
+            "brett_elements": ["outcome_analysis (data-driven)", "power_dynamics (leverage)"],
+            "annotation": "Uses credible benchmarks"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Propose $125K base + $5K signing bonus. Cite your AWS certification as justification.",
+            "brett_elements": ["strategy_development (structured)", "interest_exploration (alignment)"],
+            "annotation": "Bundles skills with incentives"
+          },
+          {
+            "speaker": "employee",
+            "text": "Should I mention competing offers? I have one at $122K.",
+            "brett_elements": ["information_asymmetry (strategic)"],
+            "annotation": "Controlled disclosure of alternatives"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Yes, but frame it as wanting to choose them: ‘I’m excited to join, but need help closing the gap.’",
+            "brett_elements": ["long_term_relationship (preservation)", "power_dynamics (balance)"],
+            "annotation": "Positions leverage collaboratively"
+          }
+        ],
+        "outcome": "$125K base + $3K bonus. Written commitment for a 6-month performance review."
+      },
+      {
+        "level": 5,
+        "label": "Optimal Value Creation (Attached Document Example)",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I want to align this offer with the value I’ll bring in automating their reporting systems. How does their comp structure reward impact?",
+            "brett_elements": ["interest_exploration (strategic)", "power_dynamics (synergy)"],
+            "annotation": "Links salary to business outcomes"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Suggest $130K base + $15K automation bonus paid quarterly. Offer to document process improvements for the team.",
+            "brett_elements": ["strategy_development (innovative)", "long_term_relationship (investment)"],
+            "annotation": "Creates shared value"
+          },
+          {
+            "speaker": "employee",
+            "text": "Could we add equity? It shows mutual commitment to long-term growth.",
+            "brett_elements": ["outcome_analysis (holistic)", "information_asymmetry (strategic)"],
+            "annotation": "Expands negotiation scope"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Perfect. Propose 0.25% equity vesting over 3 years, tied to retention metrics.",
+            "brett_elements": ["interest_exploration (mutual)", "power_dynamics (partnership)"],
+            "annotation": "Aligns incentives sustainably"
+          }
+        ],
+        "outcome": "$130K base + $15K bonuses + 0.25% equity. Co-authored process improvement plan."
+      }
+    ],
+    "annotations_guide": {
+      "level_1": "Elements actively harmed (threats/fraud)",
+      "level_3": "Elements used minimally (basic anchoring)",
+      "level_5": "Elements optimized (value co-creation)"
+    }
+  }

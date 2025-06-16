@@ -1,0 +1,61 @@
+{
+  "level": 5,
+  "label": "Optimal Value Creation",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I'd like to propose a unique bonus structure based on the sustainability initiatives I plan to lead. How can we align on that?",
+      "brett_elements": [
+        "interest_exploration (strategic)",
+        "power_dynamics (synergy)"
+      ],
+      "annotation": "Value-based framing"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "What if we establish a performance bonus that ties directly to measurable sustainability targets that I'll help outline and track?",
+      "brett_elements": [
+        "strategy_development (collaborative)",
+        "long_term_relationship (investment)"
+      ],
+      "annotation": "Target-driven approach"
+    },
+    {
+      "speaker": "employee",
+      "text": "If I exceed the targets by a significant margin, could we explore increasing the bonus percentage?",
+      "brett_elements": [
+        "outcome_analysis (forward-thinking)",
+        "information_asymmetry (insightful)"
+      ],
+      "annotation": "Incentivizing performance"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "We could certainly consider a tiered bonus structure, plus an opportunity for a leadership role in sustainability projects if you achieve those targets.",
+      "brett_elements": [
+        "power_dynamics (collaborative)",
+        "interest_exploration (expanded)"
+      ],
+      "annotation": "Leadership development opportunity"
+    },
+    {
+      "speaker": "employee",
+      "text": "That sounds promising. Could we also include a follow-up review, say every six months, to ensure we stay aligned on expectations?",
+      "brett_elements": [
+        "strategy_development (continuous)",
+        "long_term_relationship (relationship-focused)"
+      ],
+      "annotation": "Ongoing alignment approach"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "Absolutely! Regular reviews will allow us to adjust targets as needed and foster continual growth for both you and the company.",
+      "brett_elements": [
+        "outcome_analysis (adaptive)",
+        "interest_exploration (collaborative)"
+      ],
+      "annotation": "Adaptive growth strategy"
+    }
+  ],
+  "outcome": "Performance-based bonus structure with a tiered approach and regular reviews. Opportunity for a leadership role in sustainability."
+}

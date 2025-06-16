@@ -1,0 +1,45 @@
+{
+  "level": 5,
+  "label": "Optimal Credit Recovery",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've been overlooked in the credit for a successful client project where I led the analysis and automation efforts. My counterpart received most of the praise. How can I communicate my contributions effectively without causing tension?",
+      "brett_elements": [
+        "power_dynamics (awareness)",
+        "long_term_relationship (valued)"
+      ],
+      "annotation": "Acknowledges the impact of credit misallocation while seeking to maintain positive relationships"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Start by compiling a clear record of your contributions, such as performance metrics and feedback from the client. Then, prepare for a one-on-one with your counterpart. Approach it with curiosity: 'I noticed the project showcased certain contributions. How can we ensure that both our roles are recognized moving forward?' Next, share your insights with your supervisor. You could say, 'I'd like to discuss my contributions to the project and how I can play a leading role in future initiatives.'",
+      "brett_elements": [
+        "information_asymmetry (strategic correction)",
+        "strategy_development (multi-layered)",
+        "interest_exploration (nuanced)"
+      ],
+      "annotation": "Crafts an approach that utilizes curiosity and visibility, tailored for different stakeholders"
+    },
+    {
+      "speaker": "employee",
+      "text": "I appreciate that advice, but I'm worried about being seen as aggressive or overly assertive, especially when addressing my counterpart. What if they react negatively?",
+      "brett_elements": [
+        "power_dynamics (contextual)",
+        "outcome_analysis (contingent)"
+      ],
+      "annotation": "Identifies the sensitivity of interpersonal dynamics and considers potential reactions"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Position your discussion around fostering clarity in roles rather than seeking personal recognition. If your counterpart is defensive, shift the focus: 'I think we both bring unique strengths to the project. How can we highlight those strengths effectively?' Should your supervisor downplay your role, politely propose an opportunity to lead a new project, demonstrating your capabilities directly. Cultivating relationships by also highlighting others’ achievements creates a culture where credit is equitably distributed.",
+      "brett_elements": [
+        "long_term_relationship (ecosystem building)",
+        "outcome_analysis (multi-dimensional)",
+        "interest_exploration (mutual value)"
+      ],
+      "annotation": "Encourages creating a positive environment that promotes shared success and collaboration"
+    }
+  ],
+  "outcome": "Recognition of contributions restored. Strengthened relationships with peers and supervisors. Improved processes for credit attribution. Enhanced collaboration and future leadership prospects."
+}

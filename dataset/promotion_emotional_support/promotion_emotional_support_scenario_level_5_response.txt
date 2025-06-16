@@ -1,0 +1,62 @@
+{
+  "level": 5,
+  "label": "Empathetic Empowerment",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I've been promoted to a supervisory role, but I'm struggling with my salary negotiation since I feel I deserve more given my experience and the key projects I've led. I've also noticed the new hires are coming in at higher salaries, and I worry about disrupting the harmony with my team.",
+      "brett_elements": [
+        "information_asymmetry (aware)",
+        "long_term_relationship (concerned)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It's completely understandable to feel anxious about this situation, especially after all the hard work and dedication you've shown. Your concerns about team dynamics demonstrate your commitment to fostering a positive environment. Many people face similar dilemmas in balancing self-advocacy with maintaining valued relationships.",
+      "brett_elements": [
+        "power_dynamics (validating)",
+        "interest_exploration (empathetic)"
+      ],
+      "emotional_support": "reassuring"
+    },
+    {
+      "speaker": "employee",
+      "text": "Thank you for that perspective. I've compiled some data on industry standards and my own achievements, yet I still hesitate to bring it up. It feels awkward to confront this discrepancy, especially with colleagues I respect.",
+      "brett_elements": [
+        "strategy_development (thorough)",
+        "power_dynamics (nuanced)"
+      ],
+      "emotional_tone": "thoughtful"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It's natural to feel a bit apprehensive, as approaching such a personal topic can feel vulnerable. Your preparation and awareness of your worth are key strengths. What would make you feel more equipped to navigate this conversation with your employer?",
+      "brett_elements": [
+        "long_term_relationship (invested)",
+        "strategy_development (problem-solving)"
+      ],
+      "emotional_support": "encouraging"
+    },
+    {
+      "speaker": "employee",
+      "text": "Maybe if I approach it as a discussion rather than a demand, it could reduce the pressure. Practicing responses to possible objections, like citing team cohesion or productivity metrics, might help too.",
+      "brett_elements": [
+        "power_dynamics (evolving)",
+        "outcome_analysis (proactive)"
+      ],
+      "emotional_tone": "optimistic"
+    },
+    {
+      "speaker": "advisor",
+      "text": "That's a brilliant approach. Viewing it as a collaborative dialogue can create space for both your concerns and their perspectives. Let's role-play some responses, particularly addressing potential worries they may have about salary comparisons and how you can add value moving forward.",
+      "brett_elements": [
+        "interest_exploration (collaborative)",
+        "strategy_development (interactive)"
+      ],
+      "emotional_support": "collaborative"
+    }
+  ],
+  "outcome": "Successful negotiation leads to a 30% salary increase and a mentorship opportunity within the organization.",
+  "emotional_arc": "Anxiety → Awareness → Empowered collaboration"
+}

@@ -1,0 +1,60 @@
+{
+  "level": 4,
+  "label": "Collaborative Discussion",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "The current offer is $115K, but Glassdoor lists $125K for similar positions. How should I approach them about it?",
+      "brett_elements": [
+        "outcome_analysis (data-driven)",
+        "power_dynamics (leverage)"
+      ],
+      "annotation": "Utilizes relevant market data"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Suggest $120K as your target, highlighting your experience and successful projects. Make it clear you're invested in the role.",
+      "brett_elements": [
+        "strategy_development (structured)",
+        "interest_exploration (alignment)"
+      ],
+      "annotation": "Links skills to compensation request"
+    },
+    {
+      "speaker": "employee",
+      "text": "I have another offer at $118K. Should I bring this up during the negotiation?",
+      "brett_elements": [
+        "information_asymmetry (strategic)"
+      ],
+      "annotation": "Considers strategic communication of offers"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Absolutely, but present it as a means to express your enthusiasm for them: 'I’d prefer to join your team, but I'd appreciate your support in matching this offer.'",
+      "brett_elements": [
+        "long_term_relationship (preservation)",
+        "power_dynamics (balance)"
+      ],
+      "annotation": "Maintains a collaborative tone"
+    },
+    {
+      "speaker": "employee",
+      "text": "If they push back? Should I emphasize my skills or the competing offer?",
+      "brett_elements": [
+        "interest_exploration (focus)",
+        "outcome_analysis (risk assessment)"
+      ],
+      "annotation": "Weighs options for negotiation strategy"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Reiterate your value while referring to the market data. It shows you're informed and confident, which can shift their perspective.",
+      "brett_elements": [
+        "strategy_development (assertive)",
+        "outcome_analysis (informed approach)"
+      ],
+      "annotation": "Focuses on leveraging data and self-worth"
+    }
+  ],
+  "outcome": "$120K base salary with a $5K signing bonus and a promise of a review in 6 months."
+}

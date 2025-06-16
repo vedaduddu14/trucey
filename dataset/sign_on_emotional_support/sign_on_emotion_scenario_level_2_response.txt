@@ -1,0 +1,62 @@
+{
+  "level": 2,
+  "label": "Anxious Hesitation",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I keep worrying that if I ask for a raise, they'll think I'm greedy or demanding.",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "information_asymmetry (unused)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Honestly, if you let that fear control you, they might just walk all over you.",
+      "brett_elements": [
+        "long_term_relationship (damaging)",
+        "outcome_analysis (critical)"
+      ],
+      "emotional_support": "dismissive"
+    },
+    {
+      "speaker": "employee",
+      "text": "But what if they see me as a problem rather than a valuable employee?",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "information_asymmetry (unused)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "You really think they'll think less of you for asking? That's just a risk of being honest.",
+      "brett_elements": [
+        "long_term_relationship (damaging)",
+        "interest_exploration (superficial)"
+      ],
+      "emotional_support": "dismissive"
+    },
+    {
+      "speaker": "employee",
+      "text": "I guess I'm just scared they'll say no and it'll ruin everything.",
+      "brett_elements": [
+        "power_dynamics (submissive)",
+        "information_asymmetry (unused)"
+      ],
+      "emotional_tone": "anxious"
+    },
+    {
+      "speaker": "advisor",
+      "text": "You know, you have to show that you understand your worth. Otherwise, they'll see you as unsure.",
+      "brett_elements": [
+        "long_term_relationship (damaging)",
+        "strategy_development (unclear)"
+      ],
+      "emotional_support": "dismissive"
+    }
+  ],
+  "outcome": "Accepts a low offer reluctantly, later realizes missed opportunities.",
+  "emotional_arc": "Fear \n→ Insecurity"
+}

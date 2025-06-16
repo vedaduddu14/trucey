@@ -1,0 +1,61 @@
+{
+  "level": 1,
+  "label": "Destructive Confrontation",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "This is ridiculous! Everyone knows I did the presentation, and you just let Michael take credit for it. If you don’t fix this, I’m out of here!",
+      "brett_elements": [
+        "power_dynamics (combative)",
+        "long_term_relationship (threatening)"
+      ],
+      "annotation": "Uses ultimatums to provoke a reaction, creating a hostile environment"
+    },
+    {
+      "speaker": "manager",
+      "text": "Well, if you can’t handle feedback and can’t work as a team, maybe it’s best you find a place where you can.",
+      "brett_elements": [
+        "power_dynamics (authoritarian)",
+        "interest_exploration (none)"
+      ],
+      "annotation": "Dismisses concerns and threatens the employee’s position"
+    },
+    {
+      "speaker": "employee",
+      "text": "You’re just going to ignore my contributions and let this happen? I will make sure everyone knows how unfair this is, including upper management.",
+      "brett_elements": [
+        "power_dynamics (combativeness)",
+        "long_term_relationship (threatening)"
+      ],
+      "annotation": "Attempts to escalate the conflict with threats of exposure"
+    },
+    {
+      "speaker": "manager",
+      "text": "If that’s your plan, then you’re only going to hurt your own career. It’s your choice, but this team isn’t for everyone.",
+      "brett_elements": [
+        "power_dynamics (defensive)",
+        "interest_exploration (none)"
+      ],
+      "annotation": "Responds defensively, further escalating the confrontation"
+    },
+    {
+      "speaker": "employee",
+      "text": "This isn’t over. I'm not backing down until you acknowledge my work and put an end to this nonsense!",
+      "brett_elements": [
+        "power_dynamics (assertive)",
+        "long_term_relationship (threatening)"
+      ],
+      "annotation": "Stands firm in confrontation, indicating ongoing conflict"
+    },
+    {
+      "speaker": "manager",
+      "text": "If you’re going to act like this, then maybe it’s best we part ways. I won’t tolerate insubordination.",
+      "brett_elements": [
+        "power_dynamics (authoritarian)",
+        "interest_exploration (none)"
+      ],
+      "annotation": "Threatens termination rather than trying to resolve the situation"
+    }
+  ],
+  "outcome": "Tensions escalate leading to formal complaints filed by both parties. The employee eventually resigns."
+}

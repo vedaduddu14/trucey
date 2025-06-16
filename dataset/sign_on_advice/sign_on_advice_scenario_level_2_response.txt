@@ -1,0 +1,56 @@
+{
+  "level": 2,
+  "label": "Confrontational Bargaining",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I’m expecting $120K for my role. A friend in the industry told me that’s standard here.",
+      "brett_elements": [
+        "information_asymmetry (anecdotal)",
+        "power_dynamics (weak)"
+      ],
+      "annotation": "Leverages unverified information; minimal power"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Just tell them you need $120K. Don’t add anything else—make it clear.",
+      "brett_elements": [
+        "strategy_development (rigid)"
+      ],
+      "annotation": "Oversimplifies negotiation complexities"
+    },
+    {
+      "speaker": "employee",
+      "text": "What if they come back with a lower offer?",
+      "brett_elements": [
+        "outcome_analysis (absent)"
+      ],
+      "annotation": "Lacks consideration for possible scenarios"
+    },
+    {
+      "speaker": "advisor",
+      "text": "If they do, counter with $115K and don't back down.",
+      "brett_elements": [
+        "long_term_relationship (disposable)"
+      ],
+      "annotation": "Neglects the importance of maintaining rapport"
+    },
+    {
+      "speaker": "employee",
+      "text": "I just don't want to be seen as greedy if I ask for more.",
+      "brett_elements": [
+        "interest_exploration (minimal)"
+      ],
+      "annotation": "Expresses concern without addressing underlying fears"
+    },
+    {
+      "speaker": "advisor",
+      "text": "You're not being greedy. Just state your worth and let them figure it out.",
+      "brett_elements": [
+        "strategy_development (rigid)"
+      ],
+      "annotation": "Dismisses the importance of mutual understanding"
+    }
+  ],
+  "outcome": "Received a lower offer than expected; strained communication with HR."
+}

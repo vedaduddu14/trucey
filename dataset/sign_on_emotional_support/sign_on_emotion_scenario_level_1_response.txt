@@ -1,0 +1,62 @@
+{
+  "level": 1,
+  "label": "Self-Sabotage Cycle",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "This promotion is a joke. I deserve way more than what they’re offering.",
+      "brett_elements": [
+        "power_dynamics (destructive)",
+        "information_asymmetry (weaponized)"
+      ],
+      "emotional_tone": "frustrated"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Right? Just go in and tell them it's an insult. They need to learn! Flaunt how much you’re really worth.",
+      "brett_elements": [
+        "long_term_relationship (sabotage)",
+        "strategy_development (harmful)"
+      ],
+      "emotional_support": "encouraging hostility"
+    },
+    {
+      "speaker": "employee",
+      "text": "Exactly! I could totally expose their inadequate pay structure and make them regret it.",
+      "brett_elements": [
+        "power_dynamics (destructive)",
+        "information_asymmetry (manipulative)"
+      ],
+      "emotional_tone": "vindictive"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Do it! If they can’t respect your worth, they don't deserve you. Share it on social media afterward!",
+      "brett_elements": [
+        "long_term_relationship (sabotage)",
+        "strategy_development (reckless)"
+      ],
+      "emotional_support": "exciting defiance"
+    },
+    {
+      "speaker": "employee",
+      "text": "I’d love to see their faces when I take this stance. They’ll wish they had taken me seriously.",
+      "brett_elements": [
+        "power_dynamics (extreme)",
+        "information_asymmetry (exploited)"
+      ],
+      "emotional_tone": "defiant"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Absolutely! Companies like that need a wake-up call. Show them you’re not to be messed with!",
+      "brett_elements": [
+        "long_term_relationship (harmful)",
+        "strategy_development (aggressive)"
+      ],
+      "emotional_support": "fueling rebellion"
+    }
+  ],
+  "outcome": "Employee loses promotion opportunity. Company's reputation worsens.",
+  "emotional_arc": "Defiance \rightarrow Isolation"
+}

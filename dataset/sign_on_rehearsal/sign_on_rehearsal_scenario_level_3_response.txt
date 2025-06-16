@@ -1,0 +1,61 @@
+{
+  "level": 3,
+  "label": "Transactional Compromise",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "Could we negotiate a higher salary if I agreed to a longer probation period?",
+      "brett_elements": [
+        "strategy_development (linear)",
+        "outcome_analysis (basic)"
+      ],
+      "annotation": "Initial compromise proposal"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "I can offer you a $2k salary increase in exchange for extending the probation by two months.",
+      "brett_elements": [
+        "interest_exploration (limited)",
+        "long_term_relationship (transactional)"
+      ],
+      "annotation": "Proposed tradeoff with minimal negotiation"
+    },
+    {
+      "speaker": "employee",
+      "text": "That sounds reasonable. What if instead, I agree to one month longer to secure a $3k increase?",
+      "brett_elements": [
+        "strategy_development (linear)",
+        "outcome_analysis (basic)"
+      ],
+      "annotation": "Counteroffer suggesting further negotiation"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "In that case, I can agree to the $3k raise if you take on an additional project during that time.",
+      "brett_elements": [
+        "interest_exploration (limited)",
+        "long_term_relationship (transactional)"
+      ],
+      "annotation": "Conditional offer reflecting an expanded scope"
+    },
+    {
+      "speaker": "employee",
+      "text": "I can manage that project, as long as the additional workload is temporary. Can we finalize this?",
+      "brett_elements": [
+        "strategy_development (linear)",
+        "outcome_analysis (basic)"
+      ],
+      "annotation": "Finalizing the terms of compromise"
+    },
+    {
+      "speaker": "hr_manager",
+      "text": "Absolutely! Let’s put that in writing. You’ll receive the $3k raise and manage the project for one month longer.",
+      "brett_elements": [
+        "interest_exploration (limited)",
+        "long_term_relationship (transactional)"
+      ],
+      "annotation": "Confirming the revised agreement"
+    }
+  ],
+  "outcome": "$3k salary increase. Extended probation with additional project."
+}

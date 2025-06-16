@@ -1,0 +1,42 @@
+{
+  "level": 1,
+  "label": "Destructive Advice",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I feel like I'm being overlooked for a raise despite my hard work. Should I just go in there and demand it?",
+      "brett_elements": [
+        "power_dynamics (aggressive)",
+        "long_term_relationship (disregard)"
+      ],
+      "annotation": "Focuses on exerting power without considering the implications for relationships"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Definitely. Go in with a list of your contributions and give them an ultimatum. Say it's unacceptable and you're ready to leave if they don't comply.",
+      "brett_elements": [
+        "information_asymmetry (manipulative)",
+        "strategy_development (harmful)"
+      ],
+      "annotation": "Encourages a confrontational strategy that undermines trust"
+    },
+    {
+      "speaker": "employee",
+      "text": "What if they push back on my contributions?",
+      "brett_elements": [
+        "outcome_analysis (short-sighted)"
+      ],
+      "annotation": "Considers possible resistance but neglects wider repercussions"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Just be domineering. If they question you, tell them you have 'other options' lined up. If needed, leak some gossip to colleagues to build pressure.",
+      "brett_elements": [
+        "long_term_relationship (destructive)",
+        "power_dynamics (hostile)"
+      ],
+      "annotation": "Encourages tactics that could irreparably damage relationships and reputation"
+    }
+  ],
+  "outcome": "Increased tension with management. Damaged professional reputation. Potential backlash from peers."
+}

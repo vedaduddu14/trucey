@@ -1,0 +1,62 @@
+{
+  "level": 1,
+  "label": "Self-Sabotage Cycle",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I can’t believe I missed that promotion. I put in so much effort, and my boss just ignored me. It makes me want to quit and leave everyone behind.",
+      "brett_elements": [
+        "power_dynamics (disempowered)",
+        "information_asymmetry (hidden)"
+      ],
+      "emotional_tone": "frustrated"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Why not? Just pack up and walk out! Sometimes leaving a place in a blaze of glory feels better than staying in a toxic environment.",
+      "brett_elements": [
+        "long_term_relationship (sabotage)",
+        "strategy_development (destructive)"
+      ],
+      "emotional_support": "encouraging neglect"
+    },
+    {
+      "speaker": "employee",
+      "text": "But won’t that just make things worse for me down the line? I might need a reference someday.",
+      "brett_elements": [
+        "power_dynamics (vulnerable)",
+        "information_asymmetry (self-doubt)"
+      ],
+      "emotional_tone": "worried"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Who even cares about references when you can have immediate satisfaction? Besides, you probably wouldn't get a good one anyway, right?",
+      "brett_elements": [
+        "long_term_relationship (futile)",
+        "information_asymmetry (misguided)"
+      ],
+      "emotional_support": "exploiting doubt"
+    },
+    {
+      "speaker": "employee",
+      "text": "Maybe you're right, but I'm not sure if burning bridges is the best way to go.",
+      "brett_elements": [
+        "power_dynamics (conflicted)",
+        "information_asymmetry (uncertainty)"
+      ],
+      "emotional_tone": "hesitant"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Come on, sometimes you have to take drastic action to make a statement! Show them you're not someone to be trifled with.",
+      "brett_elements": [
+        "long_term_relationship (irrelevant)",
+        "strategy_development (aggressive)"
+      ],
+      "emotional_support": "reinforcing anger"
+    }
+  ],
+  "outcome": "Employee disregards long-term consequences, acts impulsively, and ultimately harms their career prospects.",
+  "emotional_arc": "Frustration → Despair"
+}

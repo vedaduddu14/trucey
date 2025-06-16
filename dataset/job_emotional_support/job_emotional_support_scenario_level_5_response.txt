@@ -1,0 +1,62 @@
+{
+  "level": 5,
+  "label": "Validated Partnership",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I feel anxious about sharing my ideas in meetings because I worry they might not be well received. How can I express my thoughts while maintaining a positive atmosphere?",
+      "brett_elements": [
+        "power_dynamics (balanced)",
+        "interest_exploration (mutual)"
+      ],
+      "emotional_tone": "reflective"
+    },
+    {
+      "speaker": "advisor",
+      "text": "It’s great that you’re considering the team’s dynamics. Your voice matters, and articulating your perspectives can actually strengthen the team's creativity and cohesion. Let's explore ways to present your ideas effectively.",
+      "brett_elements": [
+        "long_term_relationship (invested)",
+        "strategy_development (nuanced)"
+      ],
+      "emotional_support": "validating"
+    },
+    {
+      "speaker": "employee",
+      "text": "I think if I could frame my ideas in a way that invites collaboration, it might help ease my anxiety. What strategies can I use to encourage feedback from my teammates?",
+      "brett_elements": [
+        "information_asymmetry (strategic)",
+        "outcome_analysis (holistic)"
+      ],
+      "emotional_tone": "collaborative"
+    },
+    {
+      "speaker": "advisor",
+      "text": "That's a productive approach. You could start by asking open-ended questions when you present your ideas, inviting everyone to share their thoughts. This not only engages them but also demonstrates your openness to collaboration.",
+      "brett_elements": [
+        "power_dynamics (synergistic)",
+        "interest_exploration (transformative)"
+      ],
+      "emotional_support": "empowering"
+    },
+    {
+      "speaker": "employee",
+      "text": "I see how that could really foster a sense of partnership in the team. Perhaps I could also suggest having a designated time for idea sharing during meetings so everyone feels encouraged to participate.",
+      "brett_elements": [
+        "strategy_development (proactive)",
+        "long_term_relationship (committed)"
+      ],
+      "emotional_tone": "optimistic"
+    },
+    {
+      "speaker": "advisor",
+      "text": "Absolutely! Establishing dedicated time for idea sharing can enhance inclusivity and creativity. Your initiative will illustrate your commitment to the team's success and well-being.",
+      "brett_elements": [
+        "outcome_analysis (collaborative)",
+        "interest_exploration (holistic)"
+      ],
+      "emotional_support": "supportive"
+    }
+  ],
+  "outcome": "Employee feels empowered and supported to express ideas, fostering collaboration and improving team dynamics.",
+  "emotional_arc": "Anxiety → Confident partnership"
+}

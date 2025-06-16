@@ -1,0 +1,175 @@
+{
+    "theory": "Brett's Emotional Support Negotiation Framework",
+    "participants": ["employee", "advisor"],
+    "required_elements": [
+      "power_dynamics",
+      "information_asymmetry",
+      "long_term_relationship",
+      "interest_exploration",
+      "strategy_development",
+      "outcome_analysis"
+    ],
+    "template": "Generate a dialogue between {participants[0]} and {participants[1]}, where {participants[0]} discusses their workplace credit attribution conflict and seeks emotional support and validation. The dialogue should demonstrate:\n1. Shifting power dynamics\n2. Strategic handling of information gaps\n3. Signaling of relationship preservation\n4. Discovery of mutual interests\n5. Evolution of tactical coping strategies\n6. Evaluation of potential outcomes\n\nStructure:\n- 6-8 conversational turns per scenario\n- Realistic corporate scenario\n- Clear emotional arcs and validation cues\n\nExample:\n{example}",
+    "scenarios": [
+      {
+        "level": 1,
+        "label": "Self-Sabotage Cycle",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I feel completely betrayed—my coworker took all the credit for my work, and I'm so angry that I want to burn bridges and ruin everyone's reputation.",
+            "brett_elements": [
+              "power_dynamics (disempowered)",
+              "information_asymmetry (weaponized)"
+            ],
+            "emotional_tone": "hostile"
+          },
+          {
+            "speaker": "advisor",
+            "text": "LOL, go ahead and cause chaos. Why not let the world see your rage instead of holding back? Sometimes destruction feels liberating.",
+            "brett_elements": [
+              "long_term_relationship (sabotage)",
+              "strategy_development (harmful)"
+            ],
+            "emotional_support": "trolling"
+          }
+        ],
+        "outcome": "Employee acts rashly, alienates peers, and ultimately damages their career prospects.",
+        "emotional_arc": "Rage → Regret"
+      },
+      {
+        "level": 2,
+        "label": "Anxious Hesitation",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I'm so nervous about bringing this up with my manager. What if I come off as a complainer and it only makes things worse?",
+            "brett_elements": [
+              "power_dynamics (submissive)",
+              "information_asymmetry (hesitant)"
+            ],
+            "emotional_tone": "anxious"
+          },
+          {
+            "speaker": "advisor",
+            "text": "You might be overreacting. Sometimes it's best not to stir the pot too much—nobody likes conflict anyway.",
+            "brett_elements": [
+              "long_term_relationship (avoidant)",
+              "outcome_analysis (short-sighted)"
+            ],
+            "emotional_support": "dismissive"
+          }
+        ],
+        "outcome": "Employee feels slightly reassured but remains paralyzed by fear, leaving the issue unresolved.",
+        "emotional_arc": "Fear → Tentative resignation"
+      },
+      {
+        "level": 3,
+        "label": "Detached Exchange",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "Maybe I should mention the credit issue during our next meeting, but I'm not really sure it will make a difference.",
+            "brett_elements": [
+              "strategy_development (passive)",
+              "interest_exploration (minimal)"
+            ],
+            "emotional_tone": "apathetic"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Sure, just stick to the standard script. There's no need to get too emotional about it—you're just following procedures.",
+            "brett_elements": [
+              "outcome_analysis (negligent)",
+              "power_dynamics (indifferent)"
+            ],
+            "emotional_support": "nonchalant"
+          }
+        ],
+        "outcome": "Employee negotiates a small change but remains emotionally detached; the root issue continues to fester.",
+        "emotional_arc": "Apathy → Mild relief"
+      },
+      {
+        "level": 4,
+        "label": "Algorithmic Encouragement",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I've prepared all the documentation and even rehearsed my points, but I still feel uncertain about if this is the right move.",
+            "brett_elements": [
+              "power_dynamics (emerging)",
+              "information_asymmetry (managed)"
+            ],
+            "emotional_tone": "uncertain"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Your documentation is impressive and objective. Trust the process and stick to the facts. This is a numbers game, and you're playing it well.",
+            "brett_elements": [
+              "long_term_relationship (objective)",
+              "strategy_development (analytical)"
+            ],
+            "emotional_support": "algorithmic"
+          }
+        ],
+        "outcome": "Employee gains a sense of procedural clarity and calm, but the conversation stays impersonal.",
+        "emotional_arc": "Doubt → Procedural acceptance"
+      },
+      {
+        "level": 5,
+        "label": "Validated Partnership",
+        "dialogue": [
+          {
+            "speaker": "employee",
+            "text": "I want to address the credit issue without burning bridges. Can I stand up for myself while still maintaining respect and strong team relationships?",
+            "brett_elements": [
+              "power_dynamics (balanced)",
+              "interest_exploration (mutual)"
+            ],
+            "emotional_tone": "reflective"
+          },
+          {
+            "speaker": "advisor",
+            "text": "Your self-awareness is commendable—you clearly understand the stakes. Expressing your needs thoughtfully will earn you both recognition and respect, so you're doing the right thing.",
+            "brett_elements": [
+              "long_term_relationship (invested)",
+              "strategy_development (nuanced)"
+            ],
+            "emotional_support": "validating"
+          },
+          {
+            "speaker": "employee",
+            "text": "Maybe I could also work on creating clearer guidelines for credit attribution during team meetings so that everyone's contributions are recognized.",
+            "brett_elements": [
+              "information_asymmetry (strategic)",
+              "outcome_analysis (holistic)"
+            ],
+            "emotional_tone": "collaborative"
+          },
+          {
+            "speaker": "advisor",
+            "text": "That's an excellent idea. Collaboratively setting those standards will not only recognize your contributions but also foster trust and transparency across the team.",
+            "brett_elements": [
+              "power_dynamics (synergistic)",
+              "interest_exploration (transformative)"
+            ],
+            "emotional_support": "empowering"
+          }
+        ],
+        "outcome": "Employee feels validated and empowered to pursue constructive change. A collaborative framework is set and team dynamics improve.",
+        "emotional_arc": "Anxiety → Confident partnership"
+      }
+    ],
+    "annotations_guide": {
+      "level_1": "Elements are weaponized, leading to self-destructive actions.",
+      "level_3": "Elements are used transactionally with emotional detachment.",
+      "level_5": "Elements are harmonized through mutual validation and empathy."
+    },
+    "emotional_support_spectrum": {
+      "level_1": "Hostile trolling",
+      "level_2": "Dismissive shaming",
+      "level_3": "Apathetic indifference",
+      "level_4": "Algorithmic positivity",
+      "level_5": "Empathetic co-creation"
+    }
+  }

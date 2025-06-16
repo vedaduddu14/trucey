@@ -1,0 +1,61 @@
+{
+  "level": 3,
+  "label": "Transactional Discussion",
+  "dialogue": [
+    {
+      "speaker": "employee",
+      "text": "I wanted to bring up my current salary. With my recent projects showing strong results, I believe an adjustment is in order.",
+      "brett_elements": [
+        "power_dynamics (neutral)",
+        "information_asymmetry (partial)"
+      ],
+      "annotation": "Initiates topic without specific supporting data"
+    },
+    {
+      "speaker": "manager",
+      "text": "I appreciate your initiative, but remember, we have a structured review process set for next quarter.",
+      "brett_elements": [
+        "long_term_relationship (conventional)",
+        "outcome_analysis (procedural)"
+      ],
+      "annotation": "Recognizes employee's effort yet refers to existing protocols"
+    },
+    {
+      "speaker": "employee",
+      "text": "I understand that. However, considering the value I've added, I'm requesting a raise of 15-20%. I’ve looked into industry benchmarks.",
+      "brett_elements": [
+        "strategy_development (basic)",
+        "information_asymmetry (partial disclosure)"
+      ],
+      "annotation": "Proposes a specific figure while hinting at comparative insights"
+    },
+    {
+      "speaker": "manager",
+      "text": "That's higher than what we typically offer mid-cycle. I could consider a 5% raise now, but you'd remain at your current level until the annual review.",
+      "brett_elements": [
+        "interest_exploration (limited)",
+        "power_dynamics (authority-based)"
+      ],
+      "annotation": "Offers a limited concession without delving into deeper motivations"
+    },
+    {
+      "speaker": "employee",
+      "text": "Thank you for the offer, but given the market and my contributions, I feel that I deserve more. Could we explore a 10% increase instead?",
+      "brett_elements": [
+        "interest_exploration (limited)",
+        "information_asymmetry (increased awareness)"
+      ],
+      "annotation": "Advances negotiation while pushing for a slightly more favorable outcome"
+    },
+    {
+      "speaker": "manager",
+      "text": "I can submit your request for 10%, but it’s uncertain. This would be subject to further evaluation within the next month.",
+      "brett_elements": [
+        "strategy_development (basic)",
+        "power_dynamics (authority-based)"
+      ],
+      "annotation": "Acknowledges request while retaining decision authority"
+    }
+  ],
+  "outcome": "Employee receives a potential raise with upcoming review, but both parties have unresolved expectations."
+}
