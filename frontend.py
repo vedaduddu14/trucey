@@ -5,7 +5,7 @@ from backend import (
     LanguageStyleAnalyzer,
     get_openai_client,
     analyze_and_update_info,
-    get_power_dynamic_model,  # NOTE: use new function!
+    get_power_dynamic_model, 
     update_info_with_power_dynamic,
     categorize_situation,
     load_scenario_data,
@@ -65,7 +65,7 @@ if "info" not in st.session_state:
     st.session_state.info = required_information()
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hi there! Can you tell me a little about the workplace situation you're hoping to get support for?"}
+        {"role": "assistant", "content": "Hi there! Can you tell me a little about the trouble you're facing at work and require some support for?"}
     ]
 if "step" not in st.session_state:
     st.session_state.step = "info"
@@ -75,6 +75,8 @@ if "client" not in st.session_state:
     st.session_state.client = get_openai_client()
 if "next_question" not in st.session_state:
     st.session_state.next_question = ""
+if "awaiting_info_update" not in st.session_state:
+    st.session_state.awaiting_info_update = False
 if "leadership_result" not in st.session_state:
     st.session_state.leadership_result = False
 if "leader_input" not in st.session_state:
@@ -87,6 +89,8 @@ if "scenario_type" not in st.session_state:
     st.session_state.scenario_type = ""
 if "traits" not in st.session_state:
     st.session_state.traits = []
+if "awaiting_response" not in st.session_state:
+    st.session_state.awaiting_response = False
 if "responses" not in st.session_state:
     st.session_state.responses = []
 if "turn_count" not in st.session_state:
@@ -113,7 +117,12 @@ if st.session_state.step == "info":
     user_text = st.chat_input("Your response…")
     if user_text:
         st.session_state.messages.append({"role": "user", "content": user_text})
-        style_scores = st.session_state.analyzer.analyze_text(user_text)
+        st.session_state.awaiting_info_update = True
+        st.rerun()
+
+    if st.session_state.awaiting_info_update:
+        last_user_msg = st.session_state.messages[-1]["content"]
+        style_scores = st.session_state.analyzer.analyze_text(last_user_msg)
         st.session_state.info["language_style"].update(style_scores)
 
         updated_info, next_q = analyze_and_update_info(
@@ -132,6 +141,7 @@ if st.session_state.step == "info":
             st.session_state.messages.append({"role": "assistant", "content": next_q})
         else:
             st.session_state.step = "power"
+        st.session_state.awaiting_info_update = False
         st.rerun()
 
 # ─── 4. STEP 2: Power Dynamic Calibration ─────────────────────
@@ -289,14 +299,17 @@ if st.session_state.step in ["load", "chat"]:
 
 # ─── 7. STEP 5: Load Chat ─────────────────────────────────────
 if st.session_state.step == "chat":
-    st.markdown("### Step 5: Live Conversation")
     FEEDBACK_INTERVAL = 2
 
+    # Initialize chat with first assistant message if not started
     if not st.session_state.chat_started:
+        # Clean up messages to only include user/assistant roles
         st.session_state.messages = [
             m for m in st.session_state.messages
             if m.get("role") in {"user", "assistant"}
         ]
+        
+        # Generate first assistant message
         _ = get_next_assistant_turn(
             st.session_state.client,
             st.session_state.messages,
@@ -310,12 +323,14 @@ if st.session_state.step == "chat":
         st.session_state.chat_started = True
         st.session_state.turn_count += 1
 
+    # --- Render all messages up to now ---
     for msg in st.session_state.messages[st.session_state.get("chat_start_idx", 0):]:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
+    # --- Check if we need to show feedback form ---
     if st.session_state.get("waiting_for_feedback", False):
-        with st.expander("Optional: Give feedback on the assistant’s tone or realism"):
+        with st.expander("Optional: Give feedback on the assistant's tone or realism"):
             feedback_input = st.text_area("What could the assistant improve? (e.g., tone, realism, phrasing)")
             if st.button("Submit Feedback"):
                 if feedback_input.strip():
@@ -340,6 +355,7 @@ if st.session_state.step == "chat":
 
                 st.session_state.waiting_for_feedback = False
 
+                # Process the last user message and get assistant response
                 last_user_message = next(
                     (m["content"] for m in reversed(st.session_state.messages) if m["role"] == "user"), "")
                 style_scores = st.session_state.analyzer.analyze_text(last_user_message)
@@ -362,43 +378,55 @@ if st.session_state.step == "chat":
                 st.session_state.turn_count += 1
                 st.rerun()
     else:
-        user_text = st.chat_input("Your message…")
+        # --- Single chat input with unique key ---
+        user_text = st.chat_input("Your message…", key="main_chat_input")
         if user_text:
             st.session_state.messages.append({"role": "user", "content": user_text})
-
+            
+            # Check if we need feedback after this turn
             if st.session_state.turn_count > 0 and st.session_state.turn_count % FEEDBACK_INTERVAL == 0:
                 st.session_state.waiting_for_feedback = True
             else:
-                style_scores = st.session_state.analyzer.analyze_text(user_text)
-                st.session_state.info["language_style"].update(style_scores)
-                st.session_state.info["user_feedback"] = st.session_state.user_feedback
+                st.session_state.awaiting_response = True
+            st.rerun()
 
-                if st.session_state.user_feedback:
-                    summary = summarize_user_feedback(
-                        st.session_state.user_feedback,
-                        st.session_state.client,
-                        st.session_state.info,
-                        st.session_state.traits,
-                        st.session_state.turn_count
-                    )
-                    st.session_state.info["latest_feedback_summary"] = summary
+    # --- If awaiting assistant response: call model, append reply, clear flag, rerun ---
+    if st.session_state.get("awaiting_response", False):
+        # Update language style
+        last_user_msg = st.session_state.messages[-1]["content"]
+        style_scores = st.session_state.analyzer.analyze_text(last_user_msg)
+        st.session_state.info["language_style"].update(style_scores)
 
-                st.session_state.messages = [
-                    m for m in st.session_state.messages
-                    if m.get("role") in {"user", "assistant"}
-                ]
-                _ = get_next_assistant_turn(
-                    st.session_state.client,
-                    st.session_state.messages,
-                    st.session_state.info,
-                    st.session_state.traits,
-                    st.session_state.scenario_type,
-                    st.session_state.category["category"],
-                    st.session_state.turn_count,
-                    st.session_state.get("rehearsal_level")
-                )
-                st.session_state.turn_count += 1
-                st.rerun()
+        # Update user feedback info
+        st.session_state.info["user_feedback"] = st.session_state.user_feedback
+        if st.session_state.user_feedback:
+            summary = summarize_user_feedback(
+                st.session_state.user_feedback,
+                st.session_state.client,
+                st.session_state.info,
+                st.session_state.traits,
+                st.session_state.turn_count
+            )
+            st.session_state.info["latest_feedback_summary"] = summary
+
+        # Clean messages and call model
+        st.session_state.messages = [
+            m for m in st.session_state.messages
+            if m.get("role") in {"user", "assistant"}
+        ]
+        _ = get_next_assistant_turn(
+            st.session_state.client,
+            st.session_state.messages,
+            st.session_state.info,
+            st.session_state.traits,
+            st.session_state.scenario_type,
+            st.session_state.category["category"],
+            st.session_state.turn_count,
+            st.session_state.get("rehearsal_level")
+        )
+        st.session_state.turn_count += 1
+        st.session_state.awaiting_response = False
+        st.rerun()
 
     st.markdown("---")
     if st.button("End Chat and Save"):

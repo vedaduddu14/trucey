@@ -1,9 +1,12 @@
 import os
 import json
+
 from dotenv import load_dotenv
 from openai import AzureOpenAI
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import torch
+
+
+
+
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from typing import Tuple
@@ -16,6 +19,15 @@ from leadership_styles import leadership_styles
 ###################### 1.  Loading Environment ###########################
 
 def load_env():
+    """
+    This function loads the environment variables from the .env file.
+    It retrieves the API key, API version, Azure endpoint, and Azure deployment from the environment variables.
+    If any of these variables are not set, it raises a ValueError with a message indicating which variable is missing.
+    Args:
+        None
+    Returns:
+        dict: A dictionary containing the API key, API version, Azure endpoint, and Azure deployment.
+    """
     load_dotenv()
     env_vars = {
         "api_key": os.getenv("AZURE_OPENAI_NORTH_KEY"),
@@ -29,6 +41,14 @@ def load_env():
     return env_vars
 
 def get_openai_client():
+    """
+    This function creates a new AzureOpenAI client using the environment variables loaded from the .env file.
+    It retrieves the API key, API version, Azure endpoint, and Azure deployment from the environment variables.
+    Args:
+        None
+    Returns:
+        AzureOpenAI: An instance of the AzureOpenAI client initialized with the provided API key, API version, Azure endpoint, and Azure deployment.
+    """
     env = load_env()
     client = AzureOpenAI(
         api_key=env["api_key"],
@@ -39,12 +59,14 @@ def get_openai_client():
     return client
 
 ################## 2. Language Style Analyzer ######################
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+
 class LanguageStyleAnalyzer:
-    def __init__(self,
-                 load_empathy=True,
-                 load_formality=True,
-                 load_persuasiveness=True,
-                 load_politeness=True):
+    """
+    This is a the LanguageSyleAnalyzer class that loads various language style models such as empathy, formality, persuasiveness, and politeness.
+    """
+    def __init__(self, load_empathy=True, load_formality=True, load_persuasiveness=True, load_politeness=True):
         self.load_empathy = load_empathy
         self.load_formality = load_formality
         self.load_persuasiveness = load_persuasiveness
@@ -52,51 +74,108 @@ class LanguageStyleAnalyzer:
 
         if self.load_empathy:
             self.empathy_model, self.empathy_tokenizer = self._load_model_tokenizer("paragon-analytics/bert_empathy")
+        
         if self.load_formality:
             self.formality_model, self.formality_tokenizer = self._load_model_tokenizer("s-nlp/roberta-base-formality-ranker")
+        
         if self.load_persuasiveness:
             self.persuasiveness_model, self.persuasiveness_tokenizer = self._load_model_tokenizer("LACAI/roberta-large-PFG-donation-detection")
+        
         if self.load_politeness:
             self.politeness_model, self.politeness_tokenizer = self._load_model_tokenizer("Genius1237/xlm-roberta-large-tydip")
 
     def _load_model_tokenizer(self, model_name):
+        """
+        This is a self helper function that loads the model and tokenizer for the given model name.
+        """
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModelForSequenceClassification.from_pretrained(model_name)
         return model, tokenizer
 
     def analyze_empathy(self, text):
+        """
+        This function analyzes the empathy score paragon-analytics/bert_empathy model.
+        ** means unpacking the dictionary into keyword arguments
+        taking softmax of the logits, i.e doing probability in the exponential space
+        Empathy score is the probability of the positive class (1), which is the second element in the scores tensor (Wasn't labeled on the model card, but tested)
+        Args:
+            text (str): The input text to analyze for empathy.
+        Returns: 
+            float: The empathy score between 0 and 1, where 0 means no empathy and 1 means high empathy.
+        """
         if not self.load_empathy:
             raise ValueError("Empathy model not loaded.")
+        
         tokenized = self.empathy_tokenizer(text, return_tensors="pt")
         output = self.empathy_model(**tokenized)
         scores = torch.nn.functional.softmax(output.logits, dim=-1)
         return scores[0][1].item()
 
     def analyze_formality(self, text):
+        """
+        This function analyzes the formality score using the s-nlp/roberta-base-formality-ranker model.
+        ** means unpacking the dictionary into keyword arguments
+        taking softmax of the logits, i.e doing probability in the exponential space
+        Formality score is the probability of the positive class (1), which is the second element in the scores tensor (Wasn't labeled on the model card, but tested)
+        Args:
+            text (str): The input text to analyze for empathy.
+        Returns: 
+            float: The formality score between 0 and 1, where 0 means informal and 1 means formal.
+        """
         if not self.load_formality:
             raise ValueError("Formality model not loaded.")
+        
         tokenized = self.formality_tokenizer(text, return_tensors="pt")
         output = self.formality_model(**tokenized)
         scores = torch.nn.functional.softmax(output.logits, dim=-1)
         return scores[0][1].item()
 
     def analyze_persuasiveness(self, text):
+        """
+        This function analyzes the formality score using the LACAI/roberta-large-PFG-donation-detection model.
+        ** means unpacking the dictionary into keyword arguments
+        taking softmax of the logits, i.e doing probability in the exponential space
+        Persuasiveness score is the probability of the positive class (0), which is the first element in the scores tensor (Wasn't labeled on the model card, but tested)
+        Args:
+            text (str): The input text to analyze for empathy.
+        Returns: 
+            float: The persuasiveness score between 0 and 1, where 0 means persuasive and 1 means persuasive.
+        """
         if not self.load_persuasiveness:
             raise ValueError("Persuasiveness model not loaded.")
+        
         tokenized = self.persuasiveness_tokenizer(text, return_tensors="pt")
         output = self.persuasiveness_model(**tokenized)
         scores = torch.nn.functional.softmax(output.logits, dim=-1)
         return scores[0][0].item()
 
     def analyze_politeness(self, text):
+        """
+        This function analyzes the politeness score using the Genius1237/xlm-roberta-large-tydip model.
+        ** means unpacking the dictionary into keyword arguments
+        taking softmax of the logits, i.e doing probability in the exponential space
+        Politeness score is the probability of the positive class (0), which is the first element in the scores tensor (Wasn't labeled on the model card, but tested)
+        Args:
+            text (str): The input text to analyze for empathy.
+        Returns: 
+            float: The politeness score between 0 and 1, where 0 means not persuasive and 1 means persuasive.
+        """
         if not self.load_politeness:
             raise ValueError("Politeness model not loaded.")
+        
         tokenized = self.politeness_tokenizer(text, return_tensors="pt")
         output = self.politeness_model(**tokenized)
         scores = torch.nn.functional.softmax(output.logits, dim=-1)
         return scores[0][1].item()
 
     def analyze_text(self, text):
+        """
+        This function analyzes the text and stores the results in a dictionary
+        Args:
+            text (str): The input text to analyze for empathy, formality, persuasiveness, and politeness.
+        Returns:
+            dict: A dictionary containing the scores for empathy, formality, persuasiveness, and politeness.
+        """
         results = {}
         if self.load_empathy:
             results["empathy"] = self.analyze_empathy(text)
@@ -111,6 +190,13 @@ class LanguageStyleAnalyzer:
 ########################3. Schema for Required Information (Step 1)########################
 
 def required_information():
+    """
+    This function defines a dictionary that is returned everytime it is called
+    It contains the required information needed to understand the user's situation that can guide the system to understand the situation
+    and provide appropriate responses.
+    Returns:
+        dict: A dictionary containing the required information with keys such as 'individual', 'topic', 'previous_interaction', 'relationship', and 'language_style'.
+    """
     return {
         "individual": {
             "id": "individual",
@@ -132,7 +218,7 @@ def required_information():
         },
         "relationship": {
             "id": "relationship",
-            "description": "What is your relationship with them? For example: friendly coworker, strict manager, HR, etc.",
+            "description": "What is your relationship with them? Ask them if they are nice or a strict manager, HR, etc.",
             "obtained": False,
             "explanation": None
         },
@@ -161,8 +247,18 @@ def required_information():
         }
     }
 
-################################# Helper Function to Ask GPT #################################
+########################4. Helper Function to Ask GPT ########################
 def ask_gpt(client: AzureOpenAI, messages: list, temperature=0.7, max_tokens=150) -> str:
+    """
+    This function sends a request to the OpenAI API to generate a response based on the provided messages.
+    Args:
+        client (AzureOpenAI): The OpenAI client instance
+        messages (list): The conversation history
+        temperature (float): The temperature for the response generation, default is 0.7
+        max_tokens (int): The maximum number of tokens for the response, default is 150
+    Returns:
+        str: The generated response from the OpenAI API.
+    """
     response = client.chat.completions.create(
         model="gpt-4",
         messages=messages,
@@ -171,9 +267,21 @@ def ask_gpt(client: AzureOpenAI, messages: list, temperature=0.7, max_tokens=150
     )
     return response.choices[0].message.content
 
-# ─── 4. One-Shot JSON Update + Follow-Up Question (Step 1) ─────────────────
-
+########################5. Stage 1 Info collection ########################
 def analyze_and_update_info(client: AzureOpenAI, messages: list, info: dict) -> (dict, str):
+    """
+    This function gathers initial information from the user about their situation.
+    It is a turn by turn conversation between the user and the LLM where the user is being asked details such as the topic at hand, the individual they are talking to etc.
+    It probes the user until all the required information is obtained, i.e all dictionary values are True.
+
+    Args:
+        client (AzureOpenAI): The OpenAI client instance.
+        messages (list): The conversation history, including user and assistant messages.
+        info (dict): The dictionary containing the required information schema.
+    
+    Returns:
+        tuple: A tuple containing the updated info dictionary and a follow-up question or empty string if
+    """
     schema_prompt = f"""
     You are a JSON-only parser.  Analyze the last user message and update this 'info' object.
     Return *only* valid JSON, updating each field’s 'obtained' (true/false) and 'explanation' (a short string).
@@ -203,9 +311,8 @@ def analyze_and_update_info(client: AzureOpenAI, messages: list, info: dict) -> 
             followup_prompt = f"""
             Below is the exact wording of the missing “description” we need:
                 "{val["description"]}"
-
-            Please ask that question in a natural, friendly way, without changing its meaning, Ask only one question.
-            Do NOT introduce any new topics—stay focused on exactly this missing detail.
+            Ask a natural, helpful question to better understand this: {val['description']}.
+            Avoid repeating the description directly. Do NOT introduce any new topics—stay focused on exactly this missing detail. Acknowledge their answers and then ask them the next question.
             Keep it under 50 words.
             """
             messages.append({"role": "system", "content": followup_prompt})
@@ -563,7 +670,35 @@ def construct_feedback_and_tone_prompt(info: dict, traits: list, turn_count: int
         return ""
     return feedback_section + tone_summary + trait_note
 
-############ 12. Save chat ########################
+######################## 12. General Model ####################
+def general_next_assistant_turrn(client: AzureOpenAI, visible_messages: list) -> str:
+    """
+    Simple turn-by-turn conversation with built-in system prompt
+    """
+    # Define system prompt inside the function
+    system_prompt = """You are a helpful workplace conversation assistant. Try to understand what the user wants to gain help about the problem at hand, have they discussed it with the person before, and what is the relationship between them.
+    Further from there ask them if they wanna rehearse or just gain advice about it and then get going. 
+    Provide clear, professional advice for workplace situations. """
+    
+    # Create context with conversation history + system prompt
+    context = [{"role": "system", "content": system_prompt}]
+    
+    # Add all previous conversation messages
+    for message in visible_messages:
+        if message.get("role") in ["user", "assistant"]:
+            context.append({
+                "role": message["role"], 
+                "content": message["content"]
+            })
+    
+    # Get response from the model
+    reply = ask_gpt(client, context, temperature=0.7, max_tokens=300).strip()
+    
+    # Add assistant response to visible messages
+    visible_messages.append({"role": "assistant", "content": reply})
+    
+    return reply
+############ 13. Save chat ########################
 def save_chat_locally(info, category, language_analysis, messages, advisor_traits, scenario_type, rehearsal_level=None, folder="saved_chats", feedback_log=None):
     os.makedirs(folder, exist_ok=True)
     export_data = {
