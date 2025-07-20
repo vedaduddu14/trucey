@@ -1,0 +1,1115 @@
+"""
+SoCALM Trucey - Backend Logic (Cleaned)
+=============================================
+
+This file contains the core logic for workplace conversation assistance:
+- Language analysis (empathy, formality, etc.)
+- Leadership style detection
+- Conversation management
+- Data processing
+"""
+
+import os
+import json
+import random
+import pandas as pd
+import numpy as np
+from datetime import datetime
+from typing import Tuple
+
+from dotenv import load_dotenv
+from openai import OpenAI
+from sentence_transformers import SentenceTransformer, util
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+
+import sqlite3
+import threading
+import time
+
+from leadership_styles import leadership_styles
+
+# ============================================================================
+# 1. ENVIRONMENT AND CLIENT SETUP
+# ============================================================================
+
+def load_env():
+    """Load environment variables from .env file"""
+    load_dotenv()
+    env_vars = {
+        "api_key": os.getenv("OPENAI_API_KEY")
+    }
+    for key, value in env_vars.items():
+        if not value:
+            raise ValueError(f"{key} not found. Please set the {key} environment variable.")
+    return env_vars
+
+def get_openai_client():
+    """Create OpenAI client using environment variables"""
+    env = load_env()
+    client = OpenAI(api_key=env["api_key"])
+    return client
+
+def ask_gpt(client, messages: list, temperature=0.7, max_tokens=150) -> str:
+    """Send request to OpenAI API to generate response"""
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"Error calling OpenAI API: {e}")
+        return None
+
+# ============================================================================
+# 2. LANGUAGE STYLE ANALYZER
+# ============================================================================
+
+class LanguageStyleAnalyzer:
+    """Language style analyzer that loads various models for empathy, formality, persuasiveness, and politeness"""
+    
+    def __init__(self, load_empathy=True, load_formality=True, load_persuasiveness=True, load_politeness=True):
+        self.load_empathy = load_empathy
+        self.load_formality = load_formality
+        self.load_persuasiveness = load_persuasiveness
+        self.load_politeness = load_politeness
+
+        if self.load_empathy:
+            self.empathy_model, self.empathy_tokenizer = self._load_model_tokenizer("paragon-analytics/bert_empathy")
+        
+        if self.load_formality:
+            self.formality_model, self.formality_tokenizer = self._load_model_tokenizer("s-nlp/roberta-base-formality-ranker")
+        
+        if self.load_persuasiveness:
+            self.persuasiveness_model, self.persuasiveness_tokenizer = self._load_model_tokenizer("LACAI/roberta-large-PFG-donation-detection")
+        
+        if self.load_politeness:
+            self.politeness_model, self.politeness_tokenizer = self._load_model_tokenizer("Genius1237/xlm-roberta-large-tydip")
+
+    def _load_model_tokenizer(self, model_name):
+        """Helper function that loads model and tokenizer for given model name"""
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModelForSequenceClassification.from_pretrained(model_name)
+        return model, tokenizer
+
+    def analyze_empathy(self, text):
+        """Analyze empathy score using paragon-analytics/bert_empathy model"""
+        if not self.load_empathy:
+            raise ValueError("Empathy model not loaded.")
+        
+        tokenized = self.empathy_tokenizer(text, return_tensors="pt")
+        output = self.empathy_model(**tokenized)
+        scores = torch.nn.functional.softmax(output.logits, dim=-1)
+        return scores[0][1].item()
+
+    def analyze_formality(self, text):
+        """Analyze formality score using s-nlp/roberta-base-formality-ranker model"""
+        if not self.load_formality:
+            raise ValueError("Formality model not loaded.")
+        
+        tokenized = self.formality_tokenizer(text, return_tensors="pt")
+        output = self.formality_model(**tokenized)
+        scores = torch.nn.functional.softmax(output.logits, dim=-1)
+        return scores[0][1].item()
+
+    def analyze_persuasiveness(self, text):
+        """Analyze persuasiveness score using LACAI/roberta-large-PFG-donation-detection model"""
+        if not self.load_persuasiveness:
+            raise ValueError("Persuasiveness model not loaded.")
+        
+        tokenized = self.persuasiveness_tokenizer(text, return_tensors="pt")
+        output = self.persuasiveness_model(**tokenized)
+        scores = torch.nn.functional.softmax(output.logits, dim=-1)
+        return scores[0][0].item()
+
+    def analyze_politeness(self, text):
+        """Analyze politeness score using Genius1237/xlm-roberta-large-tydip model"""
+        if not self.load_politeness:
+            raise ValueError("Politeness model not loaded.")
+        
+        tokenized = self.politeness_tokenizer(text, return_tensors="pt")
+        output = self.politeness_model(**tokenized)
+        scores = torch.nn.functional.softmax(output.logits, dim=-1)
+        return scores[0][1].item()
+
+    def analyze_text(self, text):
+        """Analyze text and return all available scores"""
+        results = {}
+        if self.load_empathy:
+            results["empathy"] = self.analyze_empathy(text)
+        if self.load_formality:
+            results["formality"] = self.analyze_formality(text)
+        if self.load_persuasiveness:
+            results["persuasiveness"] = self.analyze_persuasiveness(text)
+        if self.load_politeness:
+            results["politeness"] = self.analyze_politeness(text)
+        return results
+
+# ============================================================================
+# 3. PARTICIPANT DATA MANAGEMENT
+# ============================================================================
+
+def authenticate_participant(prolific_id):
+    """Authenticate participant with ID and password"""
+    profile = assign_profile_to_prolific_id(prolific_id)
+    if not profile:
+        return None
+    else:
+        return {
+        'assigned_system': profile['AssignedSystem'],
+        'assigned_problem': profile['AssignedProblem'], 
+        'person_of_interest': profile['PersonofInterest'],
+        'relationship_quality': profile['RelationshipQuality'],
+        'relationship_length': profile['RelationshipLength'],
+        'topic': profile['Topic'],
+        'payment_type': profile['PaymentType'], 
+        'has_topic_been_discussed': profile['PreviousInteraction'],
+        'prolific_id': prolific_id
+    }
+
+def convert_csv_to_info_format(participant_data: dict) -> dict:
+    """Convert CSV participant data to info format expected by the system"""
+    return {
+        "individual": {
+            "id": "individual",
+            "description": f"Your {participant_data['person_of_interest']}",
+            "obtained": True,
+            "explanation": f"Person you're talking to: {participant_data['person_of_interest']}"
+        },
+        "topic": {
+            "id": "topic", 
+            "description": participant_data['assigned_problem'].replace('_', ' ').title(),
+            "obtained": True,
+            "explanation": f"Topic to discuss: {participant_data['assigned_problem'].replace('_', ' ')}"
+        },
+        "previous_interaction": {
+            "id": "previous_interaction",
+            "description": "You have discussed this before" if participant_data['has_topic_been_discussed'] == 'yes' else "This is the first time bringing this up",
+            "obtained": True,
+            "explanation": f"Previous discussions: {participant_data['has_topic_been_discussed']}"
+        },
+        "relationship": {
+            "id": "relationship",
+            "description": f"You have had a {participant_data['relationship_quality']} relationship for {participant_data['relationship_length'].replace('_', ' ')}",
+            "obtained": True,
+            "explanation": f"Relationship: {participant_data['relationship_quality']} for {participant_data['relationship_length'].replace('_', ' ')}"
+        },
+        "work_context": {
+            "id": "work_context",
+            "description": f"You are a {participant_data['payment_type'].replace('_', ' ')}",
+            "obtained": True,
+            "explanation": f"Work context: {participant_data['payment_type'].replace('_', ' ')}"
+        },
+        "language_style": {
+            "id": "language_style",
+            "description": "Automatically analyzed based on user text",
+            "obtained": True,
+            "empathy": 0.0,
+            "formality": 0.0,
+            "persuasiveness": 0.0,
+            "politeness": 0.0,
+            "explanation": "Language style scores range from 0 to 1."
+        },
+        "leadership_style": {
+            "id": "leadership_style",
+            "description": "Automatically inferred from responses about the other person's behavior and leadership style",
+            "obtained": False,
+            "name": None,
+            "traits": None,
+            "pros": [],
+            "cons": [],
+            "confidence": None,
+            "mcq_answers": [],
+            "trait_vector": [],
+            "para_input": None
+        }
+    }
+
+# ============================================================================
+# 4. SENTENCE STARTERS GENERATION
+# ============================================================================
+
+def generate_sentence_starters(client, last_assistant_message, current_phase, participant_data, brett_element=None, brett_example=None):
+    """Generate diverse sentence starters: supporting, opposing, and alternative-seeking"""
+    
+    topic = participant_data['assigned_problem'].replace('_', ' ')
+    person = participant_data['person_of_interest']
+
+    if current_phase == "advice":
+        prompt = f"""
+        The assistant just gave this advice: "{last_assistant_message}"
+        
+        User's situation: Discussing {topic} with their {person}
+        Brett principle being used: {brett_element if brett_element else "general guidance"}
+        
+        Generate 3 different types of follow-up starters (MAXIMUM 4 words each - this is critical):
+        1. SUPPORTING: Shows agreement/wants to build on the advice
+        2. CHALLENGING: Expresses doubt/concern about the advice  
+        3. ALTERNATIVE: Asks for backup plans or different approaches
+        
+        Format: Return only the starters separated by |
+        Example: "That sounds good|I'm worried that|What if instead"
+        
+        CRITICAL RULES:
+        - MAXIMUM 4 words per starter (count carefully!)
+        - NO question marks or punctuation
+        - NO ellipses (...)
+        - Make them feel natural and conversational
+        - Focus on the specific advice given
+        
+        Count each word carefully. Examples of correct length:
+        - "That sounds good" (3 words) ✓
+        - "I'm worried that" (3 words) ✓  
+        - "What if instead" (3 words) ✓
+        - "Actually I think" (3 words) ✓
+        """
+    else: 
+        prompt = f"""
+        The assistant (role-playing as {person}) just said: "{last_assistant_message}"
+        
+        Generate 3 different types of responses for the user (MAXIMUM 4 words each - this is critical):
+        1. AGREEABLE: Goes along with what the boss said
+        2. PUSHBACK: Politely challenges or provides counterpoint
+        3. CLARIFYING: Asks for more details or expresses confusion
+        
+        Format: Return only the starters separated by |
+        Example: "I understand and|Actually I think|Could you clarify"
+        
+        CRITICAL RULES:
+        - MAXIMUM 4 words per starter (count carefully!)
+        - NO question marks or punctuation
+        - NO ellipses (...)
+        - Sound like natural workplace conversation
+        - Appropriate for talking to a {person}
+        
+        Count each word carefully. Examples of correct length:
+        - "I understand and" (3 words) ✓
+        - "Actually I think" (3 words) ✓
+        - "Could you clarify" (3 words) ✓
+        - "That makes sense" (3 words) ✓
+        """
+    
+    try:
+        response = ask_gpt(client, [{"role": "system", "content": prompt}], temperature=0.7, max_tokens=100)
+        starters = response.strip().split('|')
+
+        cleaned_starters = []
+        for i, starter in enumerate(starters[:3]):
+            clean = starter.strip().replace('?', '').replace('...', '').replace('"', '')
+            if clean and len(clean.split()) <= 6:
+                cleaned_starters.append(clean)
+        return cleaned_starters[:3] if cleaned_starters else get_fallback_starters(current_phase)
+        
+    except Exception as e:
+        fallback = get_fallback_starters(current_phase)
+        return fallback
+
+def get_fallback_starters(current_phase):
+    """Provide diverse fallback starters if AI generation fails"""
+    if current_phase == "advice":
+        return [
+            "That sounds good but",   
+            "I'm worried that",       
+            "What if instead"          
+        ]
+    else: 
+        return [
+            "I understand and",        
+            "Actually I think",       
+            "Could you help me"       
+        ]
+
+# ============================================================================
+# 5. POWER DYNAMIC / LEADERSHIP STYLE ASSESSMENT
+# ============================================================================
+
+def parse_mcq_answers(mcq_answers):
+    """Parse MCQ answers into trait vector"""
+    if len(mcq_answers) != 5:
+        raise ValueError("Expected 5 MCQ answers")
+    
+    O = mcq_answers[0]  
+    E = mcq_answers[1]  
+    A = (mcq_answers[2] + mcq_answers[4]) / 2  
+    ES = mcq_answers[3]  
+
+    return np.array([O, E, A, ES])
+
+def get_power_dynamic_model(user_description: str = "", mcq_answers: list = None, para_weight=0.3) -> dict:
+    """Leadership style matching using the leadership_styles data structure"""
+    mcq_vector = None
+    if mcq_answers is not None and len(mcq_answers) == 5:
+        mcq_vector = parse_mcq_answers(mcq_answers)
+
+    para_vector = None
+    if user_description and user_description.strip():
+        model = SentenceTransformer('all-MiniLM-L6-v2')
+        descriptions = []
+        trait_vecs = []
+        for style in leadership_styles:
+            full_desc = f"{style['name']}: {style['traits']}"
+            descriptions.append(full_desc)
+            
+            o, e, a, n = style["traits_vector"]
+            es = 6 - n
+            trait_vecs.append(np.array([o, e, a, es]))
+        
+        leadership_embeddings = model.encode(descriptions, convert_to_tensor=True)
+        user_embedding = model.encode(user_description, convert_to_tensor=True)
+        cosine_scores = util.cos_sim(user_embedding, leadership_embeddings)[0].cpu().numpy()
+        para_vector = np.zeros(4)
+        for i, score in enumerate(cosine_scores):
+            para_vector += score * trait_vecs[i]
+        para_vector /= np.sum(cosine_scores)
+
+    if mcq_vector is not None and para_vector is not None:
+        combo = 0.7 * mcq_vector + para_weight * para_vector
+    elif mcq_vector is not None:
+        combo = mcq_vector
+    elif para_vector is not None:
+        combo = para_vector
+    else:
+        return None
+    best_similarity = -1
+    best_style = None
+    
+    for style in leadership_styles:
+        o, e, a, n = style["traits_vector"]
+        es = 6 - n
+        profile = np.array([o, e, a, es])
+        
+        similarity = np.dot(combo, profile) / (np.linalg.norm(combo) * np.linalg.norm(profile))
+        if similarity > best_similarity:
+            best_similarity = similarity
+            best_style = style
+    
+    if best_style is None:
+        return None
+    
+    return {
+        "name": best_style["name"],
+        "traits": best_style["traits"],
+        "pros": best_style["pros"],
+        "cons": best_style["cons"],
+        "confidence": float(best_similarity),
+        "mcq_answers": mcq_answers if mcq_answers is not None else [],
+        "trait_vector": combo.tolist(),
+        "para_input": user_description if user_description else ""
+    }
+
+def update_info_with_power_dynamic(info: dict, power_dynamic: dict) -> dict:
+    """Update info dictionary with power dynamic results"""
+    if power_dynamic:
+        info["leadership_style"] = {
+            "obtained": True,
+            "name": power_dynamic["name"],
+            "traits": power_dynamic["traits"],
+            "pros": power_dynamic["pros"],
+            "cons": power_dynamic["cons"],
+            "confidence": power_dynamic["confidence"],
+            "mcq_answers": power_dynamic.get("mcq_answers", []),
+            "trait_vector": power_dynamic.get("trait_vector", []),
+            "para_input": power_dynamic.get("para_input", "")
+        }
+    else:
+        info["leadership_style"] = {
+            "obtained": False,
+            "explanation": "User chose to skip or didn't provide enough information to assess leadership style."
+        }
+    return info
+
+# ============================================================================
+# 6. SITUATION CATEGORIZATION
+# ============================================================================
+
+def categorize_situation(client, info_dict: dict) -> dict:
+    """Categorize workplace situation into predefined categories"""
+    categorization_prompt = f"""
+    Given the following JSON representing details about a user's workplace situation:
+    {json.dumps(info_dict, indent=2)}
+
+    Categorize this situation into EXACTLY one of these three categories (copy exactly):
+    1. "Promotion"
+    2. "Sign-on (new job or role)"  
+    3. "Work-related problems"
+
+    Return a valid JSON object with EXACTLY this format:
+    {{
+    "category": "Promotion",  
+    "explanation": "brief explanation"  
+    }}
+
+    The category field must be EXACTLY one of the three options above. Only return valid JSON.
+    """
+    
+    messages = [{"role": "system", "content": categorization_prompt}]
+    situation = ask_gpt(client, messages, temperature=0.1, max_tokens=300)
+    print("DEBUG - Raw AI response:")
+    print(repr(situation))
+    print("DEBUG - Response content:")
+    print(situation)
+
+    try:
+        category_result = json.loads(situation)
+        print(f"DEBUG - Parsed category: '{category_result.get('category')}'")
+        print(f"DEBUG - Expected categories: ['Promotion', 'Sign-on (new job or role)', 'Work-related problems']")
+        return category_result
+    except json.JSONDecodeError:
+        return {
+            "category": "Work-related problems",
+            "explanation": "Unable to parse GPT's response, defaulting to Work-related problems."
+        }
+
+# ============================================================================
+# 7. SCENARIO DATA LOADING
+# ============================================================================
+
+def load_scenario_data(scenario_type: str, category: str, level: int = None) -> dict:
+    """Load scenario data from files based on type and category"""
+    category_map = {
+        "Promotion": "promotion",
+        "Sign-on (new job or role)": "sign_on",
+        "Work-related problems": "job"
+    }
+    if category not in category_map:
+        raise ValueError(f"Unexpected category: {category}")
+    
+    folder = category_map[category]
+    combined = {"dialogue": []}
+    scenario = scenario_type.lower()
+    
+    if scenario == "rehearsal":
+        if level is None:
+            raise ValueError("Rehearsal scenarios require a level (1–5).")
+        levels = [level]
+        print(f"   Rehearsal level: {level}")
+    else:
+        levels = [4, 5]
+        print(f"   Advice levels: {levels}")
+    
+    files_loaded = 0
+    total_dialogues = 0
+    
+    for lvl in levels:
+        path = f"./dataset/{folder}_{scenario}/{folder}_{scenario}_scenario_level_{lvl}_response.txt"
+        print(f"    Trying to load: {path}")
+        
+        if os.path.exists(path):
+            print(f"    File exists!")
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    dialogues_in_file = len(data.get("dialogue", []))
+                    combined["dialogue"].extend(data.get("dialogue", []))
+                    files_loaded += 1
+                    total_dialogues += dialogues_in_file
+                    print(f"   Loaded {dialogues_in_file} dialogue entries from level {lvl}")
+            except Exception as e:
+                print(f"    Error loading file: {e}")
+        else:
+            print(f"  File not found: {path}")
+    
+    if not combined["dialogue"]:
+        print("ERROR: No valid scenario files were loaded!")
+        raise FileNotFoundError("No valid scenario files were loaded.")
+    
+    return combined
+
+def extract_advisor_traits(ideal_dialogue: dict) -> tuple:
+    """Extract advisor traits and responses from dialogue data"""
+    advisor_traits = []
+    advisor_responses = []
+    speaker_possibilities = ["manager", "advisor", "hr_manager"]
+
+    for entry in ideal_dialogue.get("dialogue", []):
+        if any(keyword in entry.get("speaker", "").lower() for keyword in speaker_possibilities):
+            advisor_responses.append(entry["text"])
+            for element in entry.get("brett_elements", []):
+                advisor_traits.append({
+                    "element": element,
+                    "example": entry["text"],
+                    "used": False
+                })
+    return advisor_traits, advisor_responses
+
+def load_combined_scenario_data(category: str, rehearsal_level: int = None) -> dict:
+    """Load scenario data based on category and rehearsal level"""
+    print(f"\n LOADING COMBINED SCENARIO DATA:")
+    print(f"   Category: {category}")
+    print(f"   Rehearsal Level: {rehearsal_level}")
+    print("="*50)
+    
+    print(" LOADING ADVICE DATA...")
+    advice_data = load_scenario_data("advice", category)
+    advice_traits, advice_responses = extract_advisor_traits(advice_data)
+    print(f"   Advice traits extracted: {len(advice_traits)}")
+    print(f"   Advice responses extracted: {len(advice_responses)}")
+    
+    print("\n LOADING REHEARSAL DATA...")
+    rehearsal_data = load_scenario_data("rehearsal", category, rehearsal_level)
+    rehearsal_traits, rehearsal_responses = extract_advisor_traits(rehearsal_data)
+    print(f"   Rehearsal traits extracted: {len(rehearsal_traits)}")
+    print(f"   Rehearsal responses extracted: {len(rehearsal_responses)}")
+    
+    print("\nSAMPLE ADVICE TRAITS:")
+    for i, trait in enumerate(advice_traits[:3]):  # Show first 3
+        print(f"   {i+1}. {trait.get('element', 'No element')}")
+    
+    print("\nSAMPLE REHEARSAL TRAITS:")
+    for i, trait in enumerate(rehearsal_traits[:3]):  # Show first 3
+        print(f"   {i+1}. {trait.get('element', 'No element')}")
+    
+    print("="*50)
+    print("SCENARIO LOADING COMPLETE!\n")
+    
+    return {
+        "advice_traits": advice_traits,
+        "advice_responses": advice_responses, 
+        "rehearsal_traits": rehearsal_traits,
+        "rehearsal_responses": rehearsal_responses
+    }
+
+# ============================================================================
+# 8. CONVERSATION TURN MANAGEMENT
+# ============================================================================
+
+def analyze_conversation_context(visible_messages: list, info: dict, participant_data: dict, analyzer=None) -> dict:
+    """Part 1: Analyze conversation context and prepare data"""
+    turn_count = sum(1 for m in visible_messages if m['role'] == 'assistant')
+    
+    user_tone = info.get("language_style", {
+        "empathy": 0.0,
+        "formality": 0.0, 
+        "persuasiveness": 0.0,
+        "politeness": 0.0
+    })
+    
+    if visible_messages and analyzer:
+        recent_user_messages = [m for m in visible_messages if m['role'] == 'user']
+        if recent_user_messages:
+            last_user_message = recent_user_messages[-1]['content']
+            new_style_scores = analyzer.analyze_text(last_user_message)
+            user_tone.update(new_style_scores)
+            print(f"DEBUG: Analyzed message: '{last_user_message[:50]}...'")
+            print(f"DEBUG: Language scores: {new_style_scores}")
+    
+    info["language_style"] = user_tone
+
+    topic = participant_data['assigned_problem'].replace('_', ' ')
+    individual = participant_data['person_of_interest']
+    relationship_quality = participant_data['relationship_quality']
+    relationship_length = participant_data['relationship_length'].replace('_', ' ')
+    has_discussed = participant_data['has_topic_been_discussed']
+    payment_type = participant_data['payment_type'].replace('_', ' ')
+
+    user_empathy = user_tone.get("empathy", 0.0)
+    user_formality = user_tone.get("formality", 0.0)
+    user_persuasiveness = user_tone.get("persuasiveness", 0.0)
+    user_politeness = user_tone.get("politeness", 0.0)
+
+    leadership_style = info.get("leadership_style", {})
+    boss_style = leadership_style.get("name", "Unknown")
+    boss_traits = leadership_style.get("traits", "Unknown")
+    boss_pros = leadership_style.get("pros", [])
+    boss_cons = leadership_style.get("cons", [])
+
+    return {
+        "turn_count": turn_count,
+        "topic": topic,
+        "individual": individual,
+        "relationship_quality": relationship_quality,
+        "relationship_length": relationship_length,
+        "has_discussed": has_discussed,
+        "payment_type": payment_type,
+        "user_empathy": user_empathy,
+        "user_formality": user_formality,
+        "user_persuasiveness": user_persuasiveness,
+        "user_politeness": user_politeness,
+        "boss_style": boss_style,
+        "boss_traits": boss_traits,
+        "boss_pros": boss_pros,
+        "boss_cons": boss_cons
+    }
+
+def build_conversation_prompt(context_data: dict, info: dict, advisor_traits: list, scenario_type: str, rehearsal_level: int, visible_messages: list) -> tuple:
+    """Part 2: Build conversation prompts based on scenario type"""
+    coaching_suggestions = []
+    if scenario_type == "advice":
+        if any([context_data["user_empathy"], context_data["user_formality"], context_data["user_persuasiveness"], context_data["user_politeness"]]):
+            if context_data["user_empathy"] < 0.4:
+                coaching_suggestions.append("be more empathetic by acknowledging impact on others")
+            if context_data["user_formality"] < 0.3 and context_data["boss_style"] in ["formal", "strict"]:
+                coaching_suggestions.append("use more formal language like 'I would like to discuss'")
+            if context_data["user_persuasiveness"] < 0.4:
+                coaching_suggestions.append("frame requests as benefits: 'This will help me be more productive'")
+            if context_data["user_politeness"] < 0.3:
+                coaching_suggestions.append("soften your approach with 'I was wondering if we could discuss'")
+        
+        language_guidance = ""
+        if coaching_suggestions:
+            language_guidance = f"\n\nCommunication tip: Consider how to {' and '.join(coaching_suggestions)}."
+    else: 
+        language_guidance = ""
+        if any([context_data["user_empathy"], context_data["user_formality"], context_data["user_persuasiveness"], context_data["user_politeness"]]):
+            language_guidance = f"""
+            
+            User's communication style: Empathy {context_data["user_empathy"]:.2f}, Formality {context_data["user_formality"]:.2f}, 
+            Persuasiveness {context_data["user_persuasiveness"]:.2f}, Politeness {context_data["user_politeness"]:.2f}
+            Respond as the boss would, considering their communication approach.
+            """
+
+    feedback_tone_block = construct_feedback_and_tone_prompt(info, advisor_traits, context_data["turn_count"])
+    
+    scenario_context = f"""
+    You are participating in a workplace conversation scenario.
+    The user is preparing for a discussion about: {context_data["topic"]}.
+    The person they are talking to has a leadership style described as: {context_data["boss_style"]} ({context_data["boss_traits"]}).
+    Key strengths: {context_data["boss_pros"]}
+    Key challenges: {context_data["boss_cons"]}
+    Their relationship: {context_data["relationship_quality"]} relationship for {context_data["relationship_length"]}
+    
+
+    The user is preparing for a conversation with their {context_data["individual"]} about {context_data["topic"]}.
+    {language_guidance}
+    {feedback_tone_block}
+    """
+
+    unused = [e for e in advisor_traits if not e["used"]]
+    if not unused:
+        for e in advisor_traits: e["used"] = False
+        unused = advisor_traits
+    pick = random.choice(unused)
+    pick["used"] = True
+    if scenario_type == "rehearsal":
+        instruction = build_rehearsal_instruction(context_data, pick, rehearsal_level, visible_messages)
+    else:
+        instruction = build_advice_instruction(context_data, pick, visible_messages, coaching_suggestions)
+
+    return scenario_context, instruction, pick
+
+def build_rehearsal_instruction(context_data: dict, pick: dict, rehearsal_level: int, visible_messages: list) -> str:
+    """Build rehearsal instruction prompt"""
+    all_strengths = " | ".join(context_data["boss_pros"]) if context_data["boss_pros"] else "general leadership strengths"
+    all_challenges = " | ".join(context_data["boss_cons"]) if context_data["boss_cons"] else "general leadership challenges"
+    
+    rehearsal_messages = [msg for msg in visible_messages if msg.get('phase') == 'rehearsal']
+    recent_user_messages = [msg for msg in rehearsal_messages if msg.get('role') == 'user']
+    last_user_message = recent_user_messages[-1]['content'] if recent_user_messages else ""
+    rehearsal_assistant_count = len([msg for msg in visible_messages if msg.get('phase') == 'rehearsal' and msg.get('role') == 'assistant'])
+    
+    return f"""
+    YOU ARE ROLE-PLAYING AS their {context_data["individual"]} in a conversation about {context_data["topic"]}
+    
+    CRITICAL RULES:
+    - NEVER use trait jargon (Openness, Extraversion, etc.) - embody behaviors naturally
+    - Keep response under 150 words
+    - SHOW personality through specific behaviors, not generic boss responses
+    - NEVER describe or explain your personality traits - just BE them
+    - NEVER say things like "I tend to be impulsive" or "I avoid difficult conversations"
+    - NEVER announce your psychological patterns - demonstrate them through actions
+    - Respond as a real person who is unaware of their own personality quirks
+    
+    YOUR PERSONALITY PROFILE: {context_data["boss_traits"]}
+    YOUR BEHAVIORAL PATTERNS:
+    - STRENGTHS YOU SHOW: {all_strengths}
+    - CHALLENGES YOU HAVE: {all_challenges}
+    
+    REALISM LEVEL {rehearsal_level}/5 - SPECIFIC BEHAVIORAL REQUIREMENTS:
+    
+    Level 1-2 (Difficult): Your specific challenges DOMINATE your response:
+    - EMBODY THESE EXACT CHALLENGES: {all_challenges}
+    - Don't describe them - just naturally BE them in your response
+    - Act out the behaviors that these challenges would cause
+    - Be completely unaware that you're demonstrating these patterns
+    - Each challenge should create specific behavioral problems in how you handle this request
+    
+    FORBIDDEN: Never say things like:
+    - "I tend to be impulsive, so..."
+    - "Sometimes I rely on charm..."
+    - "I might avoid difficult conversations..."
+    - "Don't take it personally if I seem..."
+    
+    REQUIRED: Instead, just naturally:
+    - BE impulsive (change your mind mid-sentence)
+    - USE charm (be enthusiastic but vague)  
+    - AVOID difficulties (deflect to easier topics)
+    - Just act naturally without self-commentary
+    
+    Level 3-4 (Mixed): Show BOTH strengths and challenges:
+    - Start with {all_strengths} but let {all_challenges} create realistic friction
+    - Be helpful but with personality-driven hesitations or complications
+    
+    Level 5 (Supportive): Lead with {all_strengths}:
+    - Your positive traits dominate: {all_strengths}
+    - Challenges barely show, you're at your best
+    
+    CONVERSATION CONTEXT:
+    - Employee relationship: {context_data["relationship_quality"]} for {context_data["relationship_length"]}
+    - Previous discussions: {context_data["has_discussed"]}
+    - They are a: {context_data["payment_type"]}
+    - Their message: "{last_user_message}"
+    
+    FAILURE MODE ACTIVATION:
+    When people with {context_data["boss_traits"]} feel pressured, they specifically:
+    - [Generate specific defensive behaviors based on their trait combination]
+    - [Show how their challenges manifest under stress]
+    If the user's request triggers these, SHOW these reactions authentically.
+    
+    RESPONSE APPROACH:
+    {("Acknowledge they wanted to discuss " + context_data["topic"] + " then immediately show your personality challenges through natural behavior - don't describe them") if rehearsal_assistant_count == 0 else ("Respond to their message by naturally embodying your traits - be unconsciously difficult, don't explain why you're difficult")}
+    
+    EMBODY VS. DESCRIBE:
+    WRONG: "I tend to be impulsive, so I might change my mind"
+    RIGHT: "Yes! Absolutely! Wait... actually, let me think about that..."
+    
+    WRONG: "I rely on charm over substance, so I might be vague"  
+    RIGHT: "Oh that's wonderful! I'm sure we can work something out somehow!"
+    
+    WRONG: "I avoid difficult conversations, so this is hard"
+    RIGHT: "Speaking of time off, did you see the new project updates?"
+    
+    BRETT ELEMENT APPLICATION:
+    Demonstrate "{pick['element']}" through the filter of your {context_data["boss_traits"]} and realism level.
+    Template: "{pick['example']}" - adapt this to show how YOUR personality type would handle this principle.
+    
+    AUTHENTICITY CHECK:
+    - Are you naturally demonstrating these specific challenges: {all_challenges}?
+    - Are you acting unconsciously difficult rather than explaining why you're difficult?
+    - Would a real person with these limitations respond this way?
+    - Did you avoid describing your personality and just embody it instead?
+    - At Level 1-2, are these challenges creating real problems WITHOUT you announcing them?
+    
+    FINAL RULE: Respond as someone who has these challenges but is completely unaware they have them. Just be naturally difficult in the ways your personality makes you difficult.
+    
+    WORD LIMIT: Under 150 words.
+    """
+
+def build_advice_instruction(context_data: dict, pick: dict, visible_messages: list, coaching_suggestions: list) -> str:
+    """Build advice instruction prompt"""
+    all_strengths = " | ".join(context_data["boss_pros"]) if context_data["boss_pros"] else "general leadership strengths" 
+    all_challenges = " | ".join(context_data["boss_cons"]) if context_data["boss_cons"] else "general leadership challenges"
+    advice_messages = [msg for msg in visible_messages if msg.get('phase', 'advice') == 'advice']
+    recent_advice_exchanges = advice_messages[-4:] if len(advice_messages) >= 4 else advice_messages
+    
+    conversation_memory = ""
+    if len(recent_advice_exchanges) > 2:
+        conversation_memory = "\n\nRECENT CONVERSATION:\n"
+        for msg in recent_advice_exchanges[-4:]:
+            role = "You" if msg['role'] == 'assistant' else "User"
+            conversation_memory += f"{role}: {msg['content'][:100]}...\n"
+
+    recent_user_messages = [msg for msg in advice_messages if msg.get('role') == 'user']
+    last_user_message = recent_user_messages[-1]['content'].lower() if recent_user_messages else ""
+    
+    satisfaction_signals = ["thanks", "that's good", "no thanks", "that helps", "perfect", 
+                        "sounds good", "i'm good", "that's enough", "got it"]
+    is_satisfied = any(signal in last_user_message for signal in satisfaction_signals)
+
+    coaching_guidance = ""
+    if coaching_suggestions:
+        coaching_guidance = f"\n\nCOACHING TIP: {' and '.join(coaching_suggestions)}."
+
+    is_first_advice = len([msg for msg in advice_messages if msg.get('role') == 'assistant']) == 0
+    
+    if is_first_advice:
+        return f"""
+        The user wants advice for discussing {context_data["topic"]} with their {context_data["individual"]} who has these specific traits: {context_data["boss_traits"]}
+        
+        CRITICAL RULES:
+        - NEVER mention trait names (Openness, Extraversion, etc.) - translate into behavioral language
+        - Keep response under 200 words total
+        - END with a question to encourage dialogue
+        - Be specific to this exact trait combination
+        
+        PERSONALITY-BASED ANALYSIS:
+        
+        STEP 1 - TRANSLATE TRAITS TO BEHAVIOR:
+        Based on {context_data["boss_traits"]}, describe their behavior patterns without using jargon:
+        - How do they naturally communicate and make decisions?
+        - What energizes vs. drains them in conversations?
+        
+        STEP 2 - PREDICT FAILURE MODES:
+        Explain exactly what goes wrong when people with {context_data["boss_traits"]} feel pressured or uncomfortable:
+        - What defensive behaviors emerge?
+        - How do they shut down or become resistant?
+        
+        STEP 3 - DESIGN SPECIFIC STRATEGY:
+        Create advice that prevents these failure modes and leverages their natural preferences.
+        
+        FORMAT:
+        - ACKNOWLEDGMENT: "I understand you need to discuss [topic] with your [boss type]..." (no trait jargon)
+        - STRATEGY (2 sentences max): Specific approach based on their behavioral patterns
+        - EXAMPLE PHRASE: One exact phrase tailored to their communication style  
+        - WARNING (1 sentence): What specifically to avoid
+        - CONVERSATION STARTER: End with a question like "How does this approach feel to you?" or "What concerns do you have about this strategy?"
+        
+        BRETT ELEMENT APPLICATION:
+        Apply "{pick['element']}" using this template: "{pick['example']}"
+        Adapt the template to their specific situation and boss's traits: {context_data["boss_traits"]}
+        
+        WORD LIMIT: Under 200 words total.{coaching_guidance}
+        """
+        
+    elif is_satisfied:
+        return f"""
+        USER SAID: "{last_user_message[:100]}"
+        
+        They seem satisfied. Give a brief, supportive response.
+        
+        RULES:
+        - NO trait jargon (Openness, Extraversion, etc.)
+        - Under 50 words
+        - Reference their boss's behavioral style naturally
+        
+        FORMAT:
+        - ACKNOWLEDGMENT: Recognize their satisfaction 
+        - CLOSING: Brief supportive response + offer continued help
+        
+        BRETT ELEMENT APPLICATION:
+        Subtly incorporate "{pick['element']}" using this template: "{pick['example']}"
+        
+        Based on {context_data["boss_traits"]}, acknowledge their readiness using natural language about their boss's style.
+        """
+        
+    else:
+        return f"""
+        USER'S LATEST MESSAGE: "{last_user_message[:150]}"
+        
+        CONVERSATION CONTEXT: {conversation_memory}
+        
+        BOSS'S TRAITS: {context_data["boss_traits"]}
+        
+        CRITICAL RULES:
+        - NEVER use trait jargon (Openness, Extraversion, etc.)
+        - Under 150 words total
+        - Address their specific concern
+        - END with a question to encourage dialogue
+        
+        FAILURE MODE ANALYSIS:
+        Explain exactly what goes wrong when people with {context_data["boss_traits"]} feel pressured:
+        - What defensive behaviors do they show?
+        - How do they resist or shut down?
+        
+        RESPONSE PATTERN:
+        - ACKNOWLEDGMENT: Recognize what they just said specifically
+        - TARGETED ADVICE (1-2 sentences): Address their concern using behavioral language
+        - SPECIFIC EXAMPLE: One concrete phrase or approach
+        - CONVERSATION STARTER: End with a question to keep dialogue going
+        
+        BRETT ELEMENT APPLICATION:
+        Apply "{pick['element']}" using this template: "{pick['example']}"
+        Adapt the template to address their specific concern and boss's traits: {context_data["boss_traits"]}
+        
+        Translate their boss's {context_data["boss_traits"]} into natural behavioral descriptions.{coaching_guidance}
+        """
+
+def generate_assistant_response(client, visible_messages: list, scenario_context: str, instruction: str, pick: dict, context_data: dict, scenario_type: str) -> tuple:
+    """Part 3: Generate and return assistant response"""
+    if scenario_type == "rehearsal":
+        rehearsal_assistant_count = len([msg for msg in visible_messages if msg.get('phase') == 'rehearsal' and msg.get('role') == 'assistant'])
+        print(f"   Rehearsal turn: {rehearsal_assistant_count + 1}")
+
+    context = [m.copy() for m in visible_messages]
+    context.append({"role": "system", "content": scenario_context + "\n" + instruction})
+
+    reply = ask_gpt(client, context, temperature=0.7, max_tokens=250).strip()
+    visible_messages.append({
+        "role": "assistant", 
+        "content": reply, 
+        "brett_element": pick["element"], 
+        "brett_example": pick["example"]
+    })
+    
+    return reply, context_data["turn_count"] + 1
+
+def get_next_assistant_turn(client, visible_messages: list, info: dict, advisor_traits: list, scenario_type: str, category: str, turn_count: int, rehearsal_level: int = None, participant_data: dict = None, analyzer=None) -> Tuple[str, int]:
+    """Main function: Generate next assistant turn using the three-part approach"""
+    
+    context_data = analyze_conversation_context(visible_messages, info, participant_data, analyzer)
+    
+    scenario_context, instruction, pick = build_conversation_prompt(
+        context_data, info, advisor_traits, scenario_type, rehearsal_level, visible_messages
+    )
+    return generate_assistant_response(
+        client, visible_messages, scenario_context, instruction, pick, context_data, scenario_type
+    )
+
+def summarize_user_feedback(feedback_list, client, info, advisor_traits, turn_count):
+    """Summarize user feedback for assistant adaptation"""
+    if not feedback_list:
+        return "No user feedback to summarize."
+    
+    latest_feedback = feedback_list[-1]
+    leadership = info.get("leadership_style", {})
+    boss_name = leadership.get("name", "Unknown")
+    boss_traits = leadership.get("traits", "Unknown")
+    boss_pros = ", ".join(leadership.get("pros", []))
+    boss_cons = ", ".join(leadership.get("cons", []))
+    tone = info.get("language_style", {})
+    empathy = tone.get("empathy", "unknown")
+    formality = tone.get("formality", "unknown")
+    persuasiveness = tone.get("persuasiveness", "unknown")
+    politeness = tone.get("politeness", "unknown")
+    current_trait = advisor_traits[turn_count % len(advisor_traits)].get("element", "neutral_tone")
+
+    system_prompt = f"""
+    You are an AI assisting another AI in adapting its tone and behavior for a workplace rehearsal scenario.
+
+    The user just gave feedback about a simulated conversation with their boss.
+    You must summarize how the assistant should adapt its tone or realism based on:
+    - The feedback itself
+    - The boss's leadership style
+    - The user's tone
+    - The Brett element in use
+
+    Do not simply restate the feedback. Instead, extract actionable insight:
+    - What tone or behavior should be dialed up or down?
+    - Should the assistant be warmer, more vague, more decisive, less formal, etc.?
+    - Does this feedback contradict the leadership style? Should it be partially ignored?
+    - How heavily should this be weighted in the next response?
+
+    Boss's leadership style: {boss_name} ({boss_traits})
+    Strengths: {boss_pros}
+    Challenges: {boss_cons}
+
+    User's language style:
+    - Empathy: {empathy}
+    - Formality: {formality}
+    - Persuasiveness: {persuasiveness}
+    - Politeness: {politeness}
+
+    Brett element currently in use: {current_trait}
+
+    Latest user feedback:
+    \"\"\"{latest_feedback.strip()}\"\"\"
+
+    Respond with 2–3 sentences of advice for the assistant. Be realistic, not overly obedient.
+    """
+    
+    messages = [{"role": "system", "content": system_prompt}]
+    response = ask_gpt(client, messages, temperature=0.3, max_tokens=200)
+    return response.strip() if response else "No feedback summary available."
+
+def construct_feedback_and_tone_prompt(info: dict, traits: list, turn_count: int) -> str:
+    """Construct feedback and tone guidance prompt"""
+    feedback_section = ""
+    if "latest_feedback_summary" in info and info["latest_feedback_summary"]:
+        feedback_section = f"""
+            The user provided the following feedback summary for the assistant:
+            \"\"\"{info["latest_feedback_summary"].strip()}\"\"\"
+            Use this as guidance for your tone, realism, and approach in this turn.
+        """
+
+    tone_summary = ""
+    if "language_style" in info and isinstance(info["language_style"], dict):
+        style = info["language_style"]
+        tone_summary = f"""
+            The user currently appears to be:
+            - Politeness: {style.get('politeness', 'unknown')}
+            - Formality: {style.get('formality', 'unknown')}
+            - Persuasiveness: {style.get('persuasiveness', 'unknown')}
+            - Empathy: {style.get('empathy', 'unknown')}
+
+            Adjust your tone to match or strategically counterbalance this style based on the scenario's power dynamics.
+        """
+
+    if traits:
+        current_trait = traits[turn_count % len(traits)].get("element", "neutral_tone")
+    else:
+        current_trait = "neutral_tone"
+    trait_note = f"\nFocus this turn on the trait: **{current_trait}**\n"
+
+    if not (feedback_section or tone_summary):
+        return ""
+    return feedback_section + tone_summary + trait_note
+
+# ============================================================================
+# 9. GENERAL CONVERSATION MANAGEMENT
+# ============================================================================
+
+def general_next_assistant_turn(client, visible_messages: list) -> str:
+    """Simple turn-by-turn conversation with built-in system prompt"""
+    system_prompt = """You are a helpful workplace conversation assistant. Try to understand what the user wants to gain help about the problem at hand, have they discussed it with the person before, and what is the relationship between them.
+    Further from there ask them if they wanna rehearse or just gain advice about it and then get going. 
+    Provide clear, professional advice for workplace situations. """
+    
+    context = [{"role": "system", "content": system_prompt}]
+    
+    for message in visible_messages:
+        if message.get("role") in ["user", "assistant"]:
+            context.append({
+                "role": message["role"], 
+                "content": message["content"]
+            })
+    reply = ask_gpt(client, context, temperature=0.7, max_tokens=300).strip()
+    
+    visible_messages.append({"role": "assistant", "content": reply})
+    
+    return reply
+
+# ============================================================================
+# 10. DATA SAVING
+# ============================================================================
+
+def save_chat_locally(info, category, language_analysis, messages, advisor_traits, scenario_type, rehearsal_level=None, folder="saved_chats", feedback_log=None, **kwargs):
+    """Save chat data locally to JSON file"""
+    os.makedirs(folder, exist_ok=True)
+    export_data = {
+        "timestamp": datetime.now().isoformat(),
+        "scenario_type": scenario_type,
+        "rehearsal_level": rehearsal_level,
+        "info": info,
+        "category": category,
+        "language_analysis": language_analysis,
+        "advisor_traits": advisor_traits,
+        "messages": messages,
+        "feedback_log": feedback_log or [],
+    }
+    export_data.update(kwargs)
+    
+    filename = os.path.join(folder, f"chat_{datetime.now().strftime('%Y-%m-%dT%H-%M-%S')}.json")
+    with open(filename, "w") as f:
+        json.dump(export_data, f, indent=2)
+    print(f"[Saved] Chat written to: {filename}")
+    return filename
+
+def assign_profile_to_prolific_id(prolific_id):
+    conn = sqlite3.connect('./profiles.db', timeout=30)
+    conn.row_factory = sqlite3.Row
+    try:
+        existing = conn.execute("SELECT AssignedSystem, AssignedProblem, PersonofInterest, Topic, RelationshipQuality, RelationshipLength, PaymentType, PreviousInteraction FROM profiles WHERE prolific_id = ?", (prolific_id,)).fetchone()
+        if existing:
+            return dict(existing)
+        conn.execute("BEGIN IMMEDIATE")
+        cursor = conn.execute("""UPDATE profiles SET prolific_id = ?, status = 'assigned' WHERE LoginID = (SELECT LoginID FROM profiles WHERE status = 'available' ORDER BY RANDOM() LIMIT 1)""", (prolific_id,))
+        if cursor.rowcount == 0:
+            conn.rollback()
+            return None
+        assigned = conn.execute("""
+            SELECT AssignedSystem, AssignedProblem, PersonofInterest, Topic, 
+                   RelationshipQuality, RelationshipLength, prolific_id, PaymentType, PreviousInteraction
+            FROM profiles WHERE prolific_id = ?
+        """, (prolific_id,)).fetchone()
+        
+        conn.commit()  
+        
+        return {
+            'AssignedSystem': assigned['AssignedSystem'],
+            'AssignedProblem': assigned['AssignedProblem'],
+            'PersonofInterest': assigned['PersonofInterest'],
+            'Topic': assigned['Topic'],
+            'RelationshipQuality': assigned['RelationshipQuality'],
+            'RelationshipLength': assigned['RelationshipLength'],
+            'PaymentType': assigned['PaymentType'],
+            'PreviousInteraction': assigned['PreviousInteraction'],
+            'prolific_id': prolific_id
+        }
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        return None
+    finally:
+        conn.close()
+    
