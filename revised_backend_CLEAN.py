@@ -170,38 +170,51 @@ def authenticate_participant(prolific_id):
         'prolific_id': prolific_id
     }
 
-def convert_csv_to_info_format(participant_data: dict) -> dict:
-    """Convert CSV participant data to info format expected by the system"""
+def convert_sqlite_to_info_format(participant_data: dict) -> dict:
+    """Convert SQLite participant data to info format expected by the system"""
+    payment_descriptions = {
+        'salary': 'You receive a fixed annual salary',
+        'hourly_wages': 'You are paid hourly wages'
+    }
     return {
         "individual": {
             "id": "individual",
             "description": f"Your {participant_data['person_of_interest']}",
             "obtained": True,
-            "explanation": f"Person you're talking to: {participant_data['person_of_interest']}"
+            "explanation": f"Person you're talking to: {participant_data['person_of_interest']}",
+            "value": participant_data['person_of_interest']
         },
         "topic": {
             "id": "topic", 
             "description": participant_data['assigned_problem'].replace('_', ' ').title(),
             "obtained": True,
-            "explanation": f"Topic to discuss: {participant_data['assigned_problem'].replace('_', ' ')}"
+            "explanation": f"Topic to discuss: {participant_data['assigned_problem'].replace('_', ' ')}",
+            "value": participant_data['assigned_problem']
         },
         "previous_interaction": {
             "id": "previous_interaction",
             "description": "You have discussed this before" if participant_data['has_topic_been_discussed'] == 'yes' else "This is the first time bringing this up",
             "obtained": True,
-            "explanation": f"Previous discussions: {participant_data['has_topic_been_discussed']}"
+            "explanation": f"Previous discussions: {participant_data['has_topic_been_discussed']}",
+            "value": participant_data['has_topic_been_discussed']
         },
         "relationship": {
             "id": "relationship",
             "description": f"You have had a {participant_data['relationship_quality']} relationship for {participant_data['relationship_length'].replace('_', ' ')}",
             "obtained": True,
-            "explanation": f"Relationship: {participant_data['relationship_quality']} for {participant_data['relationship_length'].replace('_', ' ')}"
+            "explanation": f"Relationship: {participant_data['relationship_quality']} for {participant_data['relationship_length'].replace('_', ' ')}",
+            "quality": participant_data['relationship_quality'],
+            "length": participant_data['relationship_length']
         },
         "work_context": {
             "id": "work_context",
-            "description": f"You are a {participant_data['payment_type'].replace('_', ' ')}",
+            "description": payment_descriptions.get(
+                participant_data['payment_type'], 
+                f"You are a {participant_data['payment_type'].replace('_', ' ')} worker"
+            ),
             "obtained": True,
-            "explanation": f"Work context: {participant_data['payment_type'].replace('_', ' ')}"
+            "explanation": f"Employment type: {payment_descriptions.get(participant_data['payment_type'], participant_data['payment_type'].replace('_', ' '))}",
+            "value": participant_data['payment_type']
         },
         "language_style": {
             "id": "language_style",
@@ -225,18 +238,18 @@ def convert_csv_to_info_format(participant_data: dict) -> dict:
             "mcq_answers": [],
             "trait_vector": [],
             "para_input": None
-        }
+        },
+        "_source": participant_data
     }
-
 # ============================================================================
 # 4. SENTENCE STARTERS GENERATION
 # ============================================================================
 
-def generate_sentence_starters(client, last_assistant_message, current_phase, participant_data, brett_element=None, brett_example=None):
+def generate_sentence_starters(client, last_assistant_message, current_phase, info, brett_element=None, brett_example=None):
     """Generate diverse sentence starters: supporting, opposing, and alternative-seeking"""
     
-    topic = participant_data['assigned_problem'].replace('_', ' ')
-    person = participant_data['person_of_interest']
+    topic = info['topic']['value'].replace('_', ' ')
+    person = info['individual']['value'].replace('_', ' ')
 
     if current_phase == "advice":
         prompt = f"""
@@ -245,51 +258,118 @@ def generate_sentence_starters(client, last_assistant_message, current_phase, pa
         User's situation: Discussing {topic} with their {person}
         Brett principle being used: {brett_element if brett_element else "general guidance"}
         
-        Generate 3 different types of follow-up starters (MAXIMUM 4 words each - this is critical):
-        1. SUPPORTING: Shows agreement/wants to build on the advice
-        2. CHALLENGING: Expresses doubt/concern about the advice  
-        3. ALTERNATIVE: Asks for backup plans or different approaches
+        ANALYZE specific details in the assistant's advice and generate targeted starters:
+        
+        Look for:
+        - Specific strategies or approaches mentioned
+        - Particular phrases or scripts suggested
+        - Specific warnings or things to avoid
+        - Details about timing, tone, or approach
+        - Concrete examples or scenarios provided
+        
+        Generate starters that reference SPECIFIC elements from the advice:
+        
+        Instead of "that sounds good" → "The timing approach"
+        Instead of "i'm worried" → "What if they"
+        Instead of "what if instead" → "The phrase you"
+        
+        Generate 3 highly specific starters (MAXIMUM 4 words each) that reference concrete details from the assistant's advice:
+        1. SUPPORTING: References specific advice positively
+        2. CHALLENGING: Questions a specific aspect mentioned  
+        3. ALTERNATIVE: Asks about specific alternatives or modifications
         
         Format: Return only the starters separated by |
-        Example: "That sounds good|I'm worried that|What if instead"
         
         CRITICAL RULES:
-        - MAXIMUM 4 words per starter (count carefully!)
+        - MAXIMUM 4 words per starter
         - NO question marks or punctuation
-        - NO ellipses (...)
-        - Make them feel natural and conversational
-        - Focus on the specific advice given
+        - Reference SPECIFIC details from the assistant's advice
+        - Avoid generic phrases like "that sounds good", "i'm worried"
+        - Make them actionable and advice-specific
         
-        Count each word carefully. Examples of correct length:
-        - "That sounds good" (3 words) ✓
-        - "I'm worried that" (3 words) ✓  
-        - "What if instead" (3 words) ✓
-        - "Actually I think" (3 words) ✓
+        Examples for strategy advice: "That timing sounds|What if they|Could I say"
+        Examples for phrase suggestions: "I like that|What if instead|How about saying"
+        Examples for approach guidance: "The direct approach|But what if|Should I prepare"
         """
-    else: 
+    elif current_phase == "control":
+        prompt = f"""
+                The assistant just said: "{last_assistant_message}"
+                
+                User's situation: Getting help with discussing {topic} with their {person}.
+                
+                ANALYZE specific details in the assistant's message and generate targeted starters:
+                
+                Look for:
+                - Specific suggestions or recommendations mentioned
+                - Particular steps or actions proposed  
+                - Specific choices or options offered
+                - Details about approach, timing, or format
+                
+                Generate starters that reference SPECIFIC elements from the message:
+                
+                Instead of "that makes sense" → "One page sounds"
+                Instead of "i need advice" → "What talking points"  
+                Instead of "let's practice" → "Let's practice the"
+                
+                Generate 3 highly specific starters (MAXIMUM 4 words each) that reference concrete details from the assistant's message:
+                
+                Format: Return only the starters separated by |
+                
+                CRITICAL RULES:
+                - MAXIMUM 4 words per starter
+                - NO question marks or punctuation
+                - Reference SPECIFIC details from the assistant's message
+                - Avoid generic phrases like "that makes sense", "tell me more"
+                - Make them actionable and content-specific
+                
+                Examples for document advice: "One page sounds|Should I include|The summary document"
+                Examples for practice offers: "Let's practice the|How should I|The talking points"
+                Examples for preparation steps: "Should I prepare|The meeting approach|What metrics should"
+                """
+    elif current_phase == "rehearsal":
         prompt = f"""
         The assistant (role-playing as {person}) just said: "{last_assistant_message}"
         
-        Generate 3 different types of responses for the user (MAXIMUM 4 words each - this is critical):
-        1. AGREEABLE: Goes along with what the boss said
-        2. PUSHBACK: Politely challenges or provides counterpoint
-        3. CLARIFYING: Asks for more details or expresses confusion
+        User's situation: Practicing conversation with their {person}
+        
+        ANALYZE specific details in what the boss just said and generate targeted responses:
+        
+        Look for:
+        - Specific concerns or objections they raised
+        - Particular questions they asked
+        - Specific suggestions or alternatives they offered
+        - Details about their reaction or mood
+        - Concrete points they made about the request
+        
+        Generate responses that reference SPECIFIC elements from what the boss said:
+        
+        Instead of "I understand" → "About the timing"
+        Instead of "actually I think" → "But the workload"
+        Instead of "could you clarify" → "When you said"
+        
+        Generate 3 highly specific responses (MAXIMUM 4 words each) that address concrete details from the boss's response:
+        1. AGREEABLE: Acknowledges specific points they made
+        2. PUSHBACK: Addresses specific concerns they raised
+        3. CLARIFYING: Asks about specific details they mentioned
         
         Format: Return only the starters separated by |
-        Example: "I understand and|Actually I think|Could you clarify"
         
         CRITICAL RULES:
-        - MAXIMUM 4 words per starter (count carefully!)
+        - MAXIMUM 4 words per starter
         - NO question marks or punctuation
-        - NO ellipses (...)
-        - Sound like natural workplace conversation
-        - Appropriate for talking to a {person}
+        - Reference SPECIFIC details from what the boss said
+        - Avoid generic phrases like "I understand", "actually I think"
+        - Make them realistic workplace responses
         
-        Count each word carefully. Examples of correct length:
-        - "I understand and" (3 words) ✓
-        - "Actually I think" (3 words) ✓
-        - "Could you clarify" (3 words) ✓
-        - "That makes sense" (3 words) ✓
+        Examples for concerns raised: "About the timing|But the deadline|When you mentioned"
+        Examples for questions asked: "Yes the project|However my performance|What specifically about"
+        Examples for suggestions made: "That approach could|But considering my|The alternative you"
+        """
+    else:
+        # Handle unexpected phase values
+        prompt = f"""
+        Generate 3 general conversational starters (MAXIMUM 4 words each):
+        Format: Return only the starters separated by |
         """
     
     try:
@@ -425,44 +505,40 @@ def update_info_with_power_dynamic(info: dict, power_dynamic: dict) -> dict:
 # 6. SITUATION CATEGORIZATION
 # ============================================================================
 
-def categorize_situation(client, info_dict: dict) -> dict:
-    """Categorize workplace situation into predefined categories"""
-    categorization_prompt = f"""
-    Given the following JSON representing details about a user's workplace situation:
-    {json.dumps(info_dict, indent=2)}
-
-    Categorize this situation into EXACTLY one of these three categories (copy exactly):
-    1. "Promotion"
-    2. "Sign-on (new job or role)"  
-    3. "Work-related problems"
-
-    Return a valid JSON object with EXACTLY this format:
-    {{
-    "category": "Promotion",  
-    "explanation": "brief explanation"  
-    }}
-
-    The category field must be EXACTLY one of the three options above. Only return valid JSON.
-    """
+def categorize_situation(info_dict: dict) -> dict:
+    """Directly categorize workplace situation based on assigned problem type"""
     
-    messages = [{"role": "system", "content": categorization_prompt}]
-    situation = ask_gpt(client, messages, temperature=0.1, max_tokens=300)
-    print("DEBUG - Raw AI response:")
-    print(repr(situation))
-    print("DEBUG - Response content:")
-    print(situation)
-
-    try:
-        category_result = json.loads(situation)
-        print(f"DEBUG - Parsed category: '{category_result.get('category')}'")
-        print(f"DEBUG - Expected categories: ['Promotion', 'Sign-on (new job or role)', 'Work-related problems']")
-        return category_result
-    except json.JSONDecodeError:
-        return {
-            "category": "Work-related problems",
-            "explanation": "Unable to parse GPT's response, defaulting to Work-related problems."
+    # Get the assigned problem from the info dict
+    assigned_problem = info_dict.get('topic', {}).get('value', '').lower()
+    
+    # Direct mapping from your CSV problem types to scenario categories
+    problem_to_category_map = {
+        'asking_for_raise': {
+            'category': 'Promotion (salary increase, promotion, etc.)',
+            'explanation': 'User is asking for a salary raise, which falls under promotion/compensation discussions.'
+        },
+        'asking_for_promotion': {
+            'category': 'Promotion (salary increase, promotion, etc.)',
+            'explanation': 'User is asking for a promotion, which is a career advancement discussion.'
+        },
+        'asking_for_time_off': {
+            'category': 'Work-related problems',
+            'explanation': 'User is requesting time off, which is a general workplace request/issue.'
         }
-
+    }
+    
+    # Look up the category
+    if assigned_problem in problem_to_category_map:
+        result = problem_to_category_map[assigned_problem]
+        print(f"DEBUG - Direct mapping: '{assigned_problem}' → '{result['category']}'")
+        return result
+    else:
+        # Fallback for unexpected problem types
+        print(f"DEBUG - Unknown problem type: '{assigned_problem}', defaulting to Work-related problems")
+        return {
+            'category': 'Work-related problems',
+            'explanation': f'Unknown problem type "{assigned_problem}", defaulting to general work-related category.'
+        }
 # ============================================================================
 # 7. SCENARIO DATA LOADING
 # ============================================================================
@@ -471,7 +547,7 @@ def load_scenario_data(scenario_type: str, category: str, level: int = None) -> 
     """Load scenario data from files based on type and category"""
     category_map = {
         "Promotion": "promotion",
-        "Sign-on (new job or role)": "sign_on",
+        "Sign-on": "sign_on",
         "Work-related problems": "job"
     }
     if category not in category_map:
@@ -576,7 +652,7 @@ def load_combined_scenario_data(category: str, rehearsal_level: int = None) -> d
 # 8. CONVERSATION TURN MANAGEMENT
 # ============================================================================
 
-def analyze_conversation_context(visible_messages: list, info: dict, participant_data: dict, analyzer=None) -> dict:
+def analyze_conversation_context(visible_messages: list, info: dict, analyzer=None) -> dict:
     """Part 1: Analyze conversation context and prepare data"""
     turn_count = sum(1 for m in visible_messages if m['role'] == 'assistant')
     
@@ -598,12 +674,12 @@ def analyze_conversation_context(visible_messages: list, info: dict, participant
     
     info["language_style"] = user_tone
 
-    topic = participant_data['assigned_problem'].replace('_', ' ')
-    individual = participant_data['person_of_interest']
-    relationship_quality = participant_data['relationship_quality']
-    relationship_length = participant_data['relationship_length'].replace('_', ' ')
-    has_discussed = participant_data['has_topic_been_discussed']
-    payment_type = participant_data['payment_type'].replace('_', ' ')
+    topic = info['topic']['value'].replace('_', ' ')
+    individual = info['individual']['value']
+    relationship_quality = info['relationship']['quality']
+    relationship_length = info['relationship']['length'].replace('_', ' ')
+    has_discussed = info['previous_interaction']['value']
+    payment_type = info['work_context']['value'].replace('_', ' ')
 
     user_empathy = user_tone.get("empathy", 0.0)
     user_formality = user_tone.get("formality", 0.0)
@@ -700,6 +776,24 @@ def build_rehearsal_instruction(context_data: dict, pick: dict, rehearsal_level:
     last_user_message = recent_user_messages[-1]['content'] if recent_user_messages else ""
     rehearsal_assistant_count = len([msg for msg in visible_messages if msg.get('phase') == 'rehearsal' and msg.get('role') == 'assistant'])
     
+    previous_assistant_responses = [msg["content"] for msg in rehearsal_messages if msg.get("role") == "assistant"]
+    repetition_warning = ""
+    if len(previous_assistant_responses) > 1:
+        all_previous = " ".join(previous_assistant_responses).lower()
+        repeated_topics = []
+        if "lunch" in all_previous:
+            repeated_topics.append("team lunch")
+        if "celebrat" in all_previous:
+            repeated_topics.append("celebration")
+        if "meeting" in all_previous and "schedule" in all_previous:
+            repeated_topics.append("scheduling meetings")
+            
+        if repeated_topics:
+            repetition_warning = f"""
+            AVOID REPETITION: You have already mentioned {', '.join(repeated_topics)} in previous responses.
+            Do NOT repeat these topics. Find different ways to respond that fit your personality.
+            """
+
     return f"""
     YOU ARE ROLE-PLAYING AS their {context_data["individual"]} in a conversation about {context_data["topic"]}
     
@@ -712,6 +806,8 @@ def build_rehearsal_instruction(context_data: dict, pick: dict, rehearsal_level:
     - NEVER announce your psychological patterns - demonstrate them through actions
     - Respond as a real person who is unaware of their own personality quirks
     
+    {repetition_warning} 
+
     YOUR PERSONALITY PROFILE: {context_data["boss_traits"]}
     YOUR BEHAVIORAL PATTERNS:
     - STRENGTHS YOU SHOW: {all_strengths}
@@ -915,7 +1011,8 @@ def generate_assistant_response(client, visible_messages: list, scenario_context
     context = [m.copy() for m in visible_messages]
     context.append({"role": "system", "content": scenario_context + "\n" + instruction})
 
-    reply = ask_gpt(client, context, temperature=0.7, max_tokens=250).strip()
+    temperature = 0.9 if scenario_type == "rehearsal" else 0.7
+    reply = ask_gpt(client, context, temperature, max_tokens=250).strip()
     visible_messages.append({
         "role": "assistant", 
         "content": reply, 
@@ -925,10 +1022,10 @@ def generate_assistant_response(client, visible_messages: list, scenario_context
     
     return reply, context_data["turn_count"] + 1
 
-def get_next_assistant_turn(client, visible_messages: list, info: dict, advisor_traits: list, scenario_type: str, category: str, turn_count: int, rehearsal_level: int = None, participant_data: dict = None, analyzer=None) -> Tuple[str, int]:
+def get_next_assistant_turn(client, visible_messages: list, info: dict, advisor_traits: list, scenario_type: str, category: str, turn_count: int, rehearsal_level: int = None, analyzer=None) -> Tuple[str, int]:
     """Main function: Generate next assistant turn using the three-part approach"""
     
-    context_data = analyze_conversation_context(visible_messages, info, participant_data, analyzer)
+    context_data = analyze_conversation_context(visible_messages, info, analyzer)
     
     scenario_context, instruction, pick = build_conversation_prompt(
         context_data, info, advisor_traits, scenario_type, rehearsal_level, visible_messages
@@ -1030,12 +1127,32 @@ def construct_feedback_and_tone_prompt(info: dict, traits: list, turn_count: int
 # 9. GENERAL CONVERSATION MANAGEMENT
 # ============================================================================
 
-def general_next_assistant_turn(client, visible_messages: list) -> str:
+def general_next_assistant_turn(client, visible_messages: list, info: dict) -> str:
     """Simple turn-by-turn conversation with built-in system prompt"""
-    system_prompt = """You are a helpful workplace conversation assistant. Try to understand what the user wants to gain help about the problem at hand, have they discussed it with the person before, and what is the relationship between them.
-    Further from there ask them if they wanna rehearse or just gain advice about it and then get going. 
-    Provide clear, professional advice for workplace situations. """
-    
+
+    if info:
+        topic = info.get('topic', {}).get('value', 'workplace issue').replace('_', ' ')
+        person = info.get('individual', {}).get('value', 'colleague')
+        relationship_desc = info.get('relationship', {}).get('description', 'unknown relationship')
+        previous_interaction = info.get('previous_interaction', {}).get('description', 'unknown discussion history')
+        work_context = info.get('work_context', {}).get('description', 'unknown work context')
+        
+        system_prompt = f"""You are a helpful workplace conversation assistant helping a user with a specific situation. Let each response not be more than 400 words long.
+
+            CONTEXT:
+            - The user needs help discussing {topic} with their {person}
+            - Their relationship: {relationship_desc}
+            - Previous discussions: {previous_interaction}
+            - Work context: {work_context}
+
+            APPROACH:
+            - Use this context to provide targeted, relevant advice
+            - Ask clarifying questions that build on what you already know
+            - Offer both strategic advice and roleplay practice options
+            - Be professional but conversational
+            - Help them prepare for this specific conversation with their {person}
+
+            Start by acknowledging their situation and offering to help them navigate this conversation about {topic}."""
     context = [{"role": "system", "content": system_prompt}]
     
     for message in visible_messages:
@@ -1044,7 +1161,7 @@ def general_next_assistant_turn(client, visible_messages: list) -> str:
                 "role": message["role"], 
                 "content": message["content"]
             })
-    reply = ask_gpt(client, context, temperature=0.7, max_tokens=300).strip()
+    reply = ask_gpt(client, context, temperature=0.7, max_tokens=500).strip()
     
     visible_messages.append({"role": "assistant", "content": reply})
     
@@ -1054,7 +1171,7 @@ def general_next_assistant_turn(client, visible_messages: list) -> str:
 # 10. DATA SAVING
 # ============================================================================
 
-def save_chat_locally(info, category, language_analysis, messages, advisor_traits, scenario_type, rehearsal_level=None, folder="saved_chats", feedback_log=None, **kwargs):
+def save_chat_locally(info, category, language_analysis, messages, advisor_traits, scenario_type, rehearsal_level=None, folder="server_saved_chats", feedback_log=None, **kwargs):
     """Save chat data locally to JSON file"""
     os.makedirs(folder, exist_ok=True)
     export_data = {

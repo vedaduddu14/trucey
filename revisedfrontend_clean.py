@@ -20,7 +20,7 @@ from revised_backend_CLEAN import (
     get_openai_client,
     save_chat_locally,
     authenticate_participant,
-    convert_csv_to_info_format,
+    convert_sqlite_to_info_format,
     get_power_dynamic_model,
     update_info_with_power_dynamic,
     categorize_situation,
@@ -53,7 +53,7 @@ MCQ_QUESTIONS = [
 # ============================================================================
 
 def init_session_state():
-    """Initialize all session state variables"""
+    """Initialize all session state variables - improved version"""
     defaults = {
         # Core components
         "client": get_openai_client(),
@@ -112,12 +112,16 @@ def init_session_state():
         "rehearsal_traits": [],
         "advice_choice_made": False,
         "waiting_for_feedback": False,
-        "message_starter": None,
         "current_input": "",
+        
+        # FIXED: Better starter and input state management
         "starter_clicked": False,
-        "input_populated": False
+        "input_populated": False,
+        "message_starter": None,
+        "message_sent": False,  # NEW: Track if message was sent
     }
     
+    # Initialize all at once to reduce multiple re-renders
     for key, default_value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = default_value
@@ -172,29 +176,38 @@ def calculate_duration(start_time, end_time=None):
 # ============================================================================
 # UNIFIED HELPER FUNCTIONS
 # ============================================================================
-
-def render_scenario_info(participant_data, expandable=True, expanded=False):
+def render_scenario_info(info, expandable=True, expanded=False, use_sidebar=False):
     """
-    Unified function to render scenario information
+    Unified function to render scenario information from structured info
     Args:
-        participant_data (dict): Participant data containing scenario details
-        expandable (bool): Whether to use an expander for the scenario content
-        expanded (bool): Initial state of the expander
+        info: Structured info dictionary
+        expandable: Whether to use an expander for the scenario content
+        expanded: Initial state of the expander
+        use_sidebar: Whether to render in sidebar (uses st.sidebar functions)
     """
     scenario_content = f"""
     **Your Situation:**
-    - **Problem to discuss:** {participant_data['assigned_problem'].replace('_', ' ').title()}
-    - **Person you're talking to:** Your {participant_data['person_of_interest']}
-    - **Your relationship:** You have had a {participant_data['relationship_quality']} relationship for {participant_data['relationship_length'].replace('_', ' ')}
-    - **Previous discussions:** {'You have discussed this before' if participant_data['has_topic_been_discussed'] == 'yes' else 'This is the first time bringing this up'}
-    - **Work context:** You are a {participant_data['payment_type'].replace('_', ' ')}
+    - **Problem to discuss:** {info['topic']['description']}
+    - **Person you're talking to:** {info['individual']['description']}
+    - **Your relationship:** {info['relationship']['description']}
+    - **Previous discussions:** {info['previous_interaction']['description']}
+    - **Work context:** {info['work_context']['description']}
     """
     
-    if expandable:
-        with st.expander("View Your Assigned Scenario", expanded=expanded):
-            st.markdown(scenario_content)
+    # Choose the right Streamlit functions based on location
+    if use_sidebar:
+        expander_func = st.sidebar.expander
+        markdown_func = st.sidebar.markdown
     else:
-        st.markdown(scenario_content)
+        expander_func = st.expander
+        markdown_func = st.markdown
+    
+    if expandable:
+        expander_title = "Review Your Scenario" if use_sidebar else "View Your Assigned Scenario"
+        with expander_func(expander_title, expanded=expanded):
+            markdown_func(scenario_content)
+    else:
+        markdown_func(scenario_content)
 
 def count_user_messages(messages, phase=None):
     """
@@ -251,18 +264,31 @@ def render_end_chat_with_minimum_check(messages, system_type, phase=None, min_in
             )
             render_success_message(f"Chat saved to `{filename}`")
             render_success_message("Chat saved. You can now close this tab or stop the server.")
+            
+            # ADD SURVEY LINK HERE TOO:
+            st.markdown("### Thank you for participating!")
+            st.markdown("**Please click the link below to complete the study:**")
+            st.link_button("Complete Study Survey", "https://illinois.qualtrics.com/jfe/form/SV_20mTWTy5iUWn6qW")
             return True
 
 def render_sentence_starters():
     """
-    Unified function to render sentence starters for prompting users as to how to message
+    Fixed version - starters disappear when clicked and populate text box
     """
-    if (st.session_state.messages and 
+    # Check if we should show starters
+    should_show_starters = (
+        st.session_state.messages and 
         st.session_state.messages[-1]["role"] == "assistant" and
         not st.session_state.get("waiting_for_feedback", False) and
-        not st.session_state.get("starter_clicked", False)):
-        
+        not st.session_state.get("starter_clicked", False) and  # Hide if starter was clicked
+        not st.session_state.get("awaiting_response", False) and
+        not st.session_state.get("message_sent", False)  # Hide if message was sent
+    )
+    
+    if should_show_starters:
         starter_key = f"starters_{len(st.session_state.messages)}"
+        
+        # Generate starters if not cached
         if starter_key not in st.session_state:
             try:
                 last_message = st.session_state.messages[-1]["content"]
@@ -274,7 +300,7 @@ def render_sentence_starters():
                     st.session_state.client,
                     last_message, 
                     st.session_state.current_phase, 
-                    st.session_state.participant_data,
+                    st.session_state.info,
                     brett_element,
                     brett_example
                 )
@@ -293,16 +319,24 @@ def render_sentence_starters():
                     if st.button(f"{starter}", 
                             key=f"starter_{i}_{len(st.session_state.messages)}", 
                             use_container_width=True):
+                        # Set the starter text and mark as clicked
                         st.session_state.message_starter = starter
                         st.session_state.starter_clicked = True
+                        st.session_state.input_populated = False
+                        # Force immediate rerun to hide starters
                         st.rerun()
 
 def handle_phase_transition():
     """
-    Handle transition from advice to rehearsal phase
+    Handle transition from advice to rehearsal phase - reset UI states
     """
-    st.session_state.current_phase = "rehearsal"
-    st.session_state.advice_choice_made = True
+    st.session_state.update({
+        'current_phase': "rehearsal",
+        'advice_choice_made': True,
+        'starter_clicked': False,  # Reset starters for new phase
+        'input_populated': False,
+        'message_sent': False  # Reset message sent state
+    })
     
     get_next_assistant_turn(
         st.session_state.client,
@@ -313,7 +347,6 @@ def handle_phase_transition():
         st.session_state.category["category"],
         st.session_state.rehearsal_turn_count,
         st.session_state.get("rehearsal_level"),
-        st.session_state.participant_data,
         st.session_state.analyzer
     )
     
@@ -322,53 +355,131 @@ def handle_phase_transition():
     
     st.session_state.rehearsal_turn_count += 1
 
+
 def render_chat_input_unified():
     """
-    Unified chat input handling
+    Fixed chat input handling with proper state management
     """
     conversation_complete = ((st.session_state.current_phase == "advice" and st.session_state.advice_turn_count >= 5) or
                            (st.session_state.current_phase == "rehearsal" and st.session_state.rehearsal_turn_count >= 7))
     
+    # Create placeholders for dynamic content
+    input_placeholder = st.empty()
+    status_placeholder = st.empty()
+    end_chat_placeholder = st.empty()
+
+    # Show input section only if conversation not complete and not awaiting response
     if (not conversation_complete and 
         not st.session_state.get("awaiting_response", False) and
+        not st.session_state.get("waiting_for_feedback", False) and
+        not st.session_state.get("message_sent", False)):  # Hide input after sending
+
+        with input_placeholder.container():
+            # Handle starter text population
+            current_input_value = ""
+            
+            if (st.session_state.get("message_starter") and 
+                st.session_state.get("starter_clicked", False) and 
+                not st.session_state.get("input_populated", False)):
+                current_input_value = st.session_state.message_starter
+                st.session_state.current_input = current_input_value
+                st.session_state.input_populated = True
+                # Clear the starter from session state
+                if "message_starter" in st.session_state:
+                    del st.session_state.message_starter
+            else:
+                current_input_value = st.session_state.get("current_input", "")
+
+            text_area_key = f"user_input_{len(st.session_state.messages)}_{st.session_state.get('message_sent', False)}"
+            user_text = st.text_area(
+                "Your message:", 
+                value= text_area_key, 
+                key="user_input_direct",
+                placeholder="Type your message or click a starter above...",
+                height=100,
+                label_visibility="visible"
+            )
+
+            # Update current input state
+            if user_text != st.session_state.get("current_input", ""):
+                st.session_state.current_input = user_text
+
+            if st.button("Send", key="send_btn", use_container_width=True) and user_text.strip():
+                # Clear input and set states
+                st.session_state.update({
+                    'current_input': "",
+                    'starter_clicked': False,
+                    'input_populated': False,
+                    'message_sent': True,  # Mark message as sent to hide input
+                    'awaiting_response': True
+                })
+                user_message = {"role": "user", "content": user_text, "phase": st.session_state.current_phase}
+                st.session_state.messages.append(user_message)
+                
+                if (st.session_state.current_phase == "rehearsal" and 
+                    st.session_state.rehearsal_turn_count > 0 and 
+                    st.session_state.rehearsal_turn_count % 2 == 0 and
+                    st.session_state.rehearsal_turn_count < 7):
+                    st.session_state.waiting_for_feedback = True
+                    st.session_state.awaiting_response = False
+                
+                st.rerun()
+
+    # Show loading indicator when awaiting response
+    elif st.session_state.get("awaiting_response", False):
+        with status_placeholder.container():
+            st.info("*Generating response...*")
+    
+    # Show end chat button AFTER the input section (when minimum interactions met)
+    if (st.session_state.current_phase == "rehearsal" and 
         not st.session_state.get("waiting_for_feedback", False)):
         
-        if st.session_state.get("message_starter") and not st.session_state.get("input_populated", False):
-            st.session_state.current_input = st.session_state.message_starter
-            st.session_state.input_populated = True
-            del st.session_state.message_starter
+        user_count = count_user_messages(st.session_state.messages, "rehearsal") 
+        if user_count >= MIN_INTERACTIONS:
+            with end_chat_placeholder.container():
+                st.markdown("---")
+                st.markdown("*You can end the conversation when you feel ready, or continue practicing.*")
+                if st.button("End Chat and Save Conversation", key="end_chat_after_input", use_container_width=True):
+                    # Handle end chat logic
+                    session_duration = calculate_duration(st.session_state.get("session_start_time"))
+                    chat_duration = calculate_duration(st.session_state.get("chat_start_time"))
+                    
+                    log_event("session_ended", {
+                        "total_session_duration": session_duration,
+                        "chat_duration": chat_duration,
+                        "total_messages": len(st.session_state.messages),
+                        "user_messages": count_user_messages(st.session_state.messages)
+                    })
+                    
+                    filename = save_chat_locally(
+                        info=st.session_state.get("info", {}),
+                        category=st.session_state.get("category", {}),
+                        language_analysis=st.session_state.get("language_analysis", {}),
+                        messages=st.session_state.get("messages", []),
+                        advisor_traits=st.session_state.get("advice_traits", []) + st.session_state.get("rehearsal_traits", []),
+                        scenario_type="trucey_rehearsal",
+                        rehearsal_level=st.session_state.get("rehearsal_level"),
+                        feedback_log=st.session_state.get("feedback_log", []),
+                        time_tracking={
+                            "session_start_time": st.session_state.get("session_start_time"),
+                            "chat_start_time": st.session_state.get("chat_start_time"),
+                            "advice_start_time": st.session_state.get("advice_start_time"),
+                            "rehearsal_start_time": st.session_state.get("rehearsal_start_time"),
+                            "session_end_time": datetime.now().isoformat(),
+                            "total_session_duration_seconds": session_duration,
+                            "chat_duration_seconds": chat_duration,
+                            "timestamps": st.session_state.get("timestamps", [])
+                        },
+                        participant_data=st.session_state.get("participant_data", {})
+                    )
+                    
+                    st.success(f"Chat saved to `{filename}`")
+                    st.success("Chat saved. You can now close this tab or stop the server.")
+                    
+                    st.markdown("### Thank you for participating!")
+                    st.markdown("**Please click the link below to complete the study:**")
+                    st.link_button("Complete Study Survey", "https://illinois.qualtrics.com/jfe/form/SV_20mTWTy5iUWn6qW")
 
-        user_text = st.text_area(
-            "Your message:", 
-            value=st.session_state.current_input,
-            key="user_input_direct",
-            placeholder="Type your message or click a starter above...",
-            height=100,
-            label_visibility="visible"
-        )
-
-        if user_text != st.session_state.current_input:
-            st.session_state.current_input = user_text
-
-        if st.button("Send", key="send_btn") and user_text.strip():
-            st.session_state.current_input = ""
-            st.session_state.starter_clicked = False
-            st.session_state.input_populated = False
-            
-            user_message = {"role": "user", "content": user_text, "phase": st.session_state.current_phase}
-            st.session_state.messages.append(user_message)
-            
-            if (st.session_state.current_phase == "rehearsal" and 
-                st.session_state.rehearsal_turn_count > 0 and 
-                st.session_state.rehearsal_turn_count % 2 == 0 and
-                st.session_state.rehearsal_turn_count < 7):
-                st.session_state.waiting_for_feedback = True
-            else:
-                st.session_state.awaiting_response = True
-            st.rerun()
-    
-    elif st.session_state.get("awaiting_response", False):
-        st.info("Generating response...")
 
 # ============================================================================
 # SHARED UI COMPONENTS
@@ -403,62 +514,106 @@ def render_chat_input(placeholder="Your message…", key_suffix=""):
     return st.chat_input(placeholder, key=f"chat_input_{key_suffix}")
 
 def render_feedback_form(turn_count):
-    with st.expander("Optional: Give feedback on the assistant's tone or realism"):
-        feedback_input = st.text_area(
-            "What could the assistant improve? (e.g., tone, realism, phrasing)",
-            key=f"feedback_text_{turn_count}"
-        )
-        if st.button("Submit Feedback", key=f"feedback_submit_{turn_count}", use_container_width=True):
-            return feedback_input.strip() if feedback_input.strip() else ""
+    st.markdown("**How was that response?** Any suggestions for better tone, realism, or phrasing? (Optional - leave blank if none, then Submit)")
+    feedback_input = st.text_area(
+        "Your feedback (optional):",
+        key=f"feedback_text_{turn_count}"
+    )
+    if st.button("Submit Feedback", key=f"feedback_submit_{turn_count}", use_container_width=True):
+        return feedback_input.strip() if feedback_input.strip() else ""
     return None
+
+def handle_end_chat_save():
+    """Handle the end chat and save functionality"""
+    session_duration = calculate_duration(st.session_state.get("session_start_time"))
+    chat_duration = calculate_duration(st.session_state.get("chat_start_time"))
+    
+    log_event("session_ended", {
+        "total_session_duration": session_duration,
+        "chat_duration": chat_duration,
+        "total_messages": len(st.session_state.messages),
+        "user_messages": count_user_messages(st.session_state.messages),
+        "phase_ended": st.session_state.current_phase
+    })
+    
+    filename = save_chat_locally(
+        info=st.session_state.get("info", {}),
+        category=st.session_state.get("category", {}),
+        language_analysis=st.session_state.get("language_analysis", {}),
+        messages=st.session_state.get("messages", []),
+        advisor_traits=st.session_state.get("advice_traits", []) + st.session_state.get("rehearsal_traits", []),
+        scenario_type="trucey_rehearsal",
+        rehearsal_level=st.session_state.get("rehearsal_level"),
+        feedback_log=st.session_state.get("feedback_log", []),
+        time_tracking={
+            "session_start_time": st.session_state.get("session_start_time"),
+            "chat_start_time": st.session_state.get("chat_start_time"),
+            "advice_start_time": st.session_state.get("advice_start_time"),
+            "rehearsal_start_time": st.session_state.get("rehearsal_start_time"),
+            "session_end_time": datetime.now().isoformat(),
+            "total_session_duration_seconds": session_duration,
+            "chat_duration_seconds": chat_duration,
+            "timestamps": st.session_state.get("timestamps", [])
+        },
+        participant_data=st.session_state.get("participant_data", {})
+    )
+    
+    st.success(f"Chat saved to `{filename}`")
+    st.success("Chat saved. You can now close this tab or stop the server.")
+    
+    st.markdown("### Thank you for participating!")
+    st.markdown("**Please click the link below to complete the study:**")
+    st.link_button("Complete Study Survey", "https://illinois.qualtrics.com/jfe/form/SV_20mTWTy5iUWn6qW")
 
 # ============================================================================
 # MAIN RENDER FUNCTIONS
 # ============================================================================
 def render_home_page():
     """
-    Login page with time tracking
-    As soon as the participant logs in, we start the session timer
-    The participant logging in will be convert to a hash program with from their prolific ID instead
+    Fixed login page - reduces re-rendering
     """
     render_page_header("SoCALM User Study")
     render_section_separator()
     
     st.markdown("### Participant Login")
-    st.info("Please enter your assigned participant ID and password to begin the study.")
+    st.info("Please enter your Prolific ID to begin the study. We thank you for your participation!")
     
     if st.session_state.login_error:
         st.error(st.session_state.login_error)
     
     with st.form("login_form"):
-        participant_id = st.text_input("Participant ID:", placeholder="e.g., trial_user_1")
+        prolific_id = st.text_input("Prolific ID:", placeholder="e.g., trial_user_1")
         login_btn = st.form_submit_button("Login", use_container_width=True)
         
         if login_btn:
             st.session_state.login_attempted = True
             st.session_state.login_error = ""
             
-            participant_data = authenticate_participant(participant_id)
+            participant_data = authenticate_participant(prolific_id)
             
             if participant_data:
-                st.session_state.session_start_time = datetime.now().isoformat()
+                # Set all session state at once to reduce re-renders
+                st.session_state.update({
+                    'session_start_time': datetime.now().isoformat(),
+                    'info': convert_sqlite_to_info_format(participant_data),
+                    'authenticated': True,
+                    'participant_loaded': True,
+                    'system_type': participant_data['assigned_system'],
+                    'messages': []
+                })
+                
                 log_event("session_started", {
-                    "participant_id": participant_id,
+                    "prolific_id": prolific_id,
                     "assigned_system": participant_data['assigned_system']
                 })
                 
-                st.session_state.authenticated = True
-                st.session_state.participant_data = participant_data
-                st.session_state.participant_loaded = True
-                st.session_state.system_type = participant_data['assigned_system']
-
-                st.session_state.info = participant_data
                 log_event("participant_info_loaded", {
                     "problem": participant_data['assigned_problem'],
                     "person_of_interest": participant_data['person_of_interest'],
                     "relationship_quality": participant_data['relationship_quality']
                 })
 
+                # Set the appropriate step based on system type
                 if participant_data['assigned_system'] == TRUCEY_REHEARSAL:
                     st.session_state.step = "info"
                     log_event("trucey_system_entered")
@@ -466,19 +621,117 @@ def render_home_page():
                     st.session_state.step = "control_info"
                     st.session_state.current_phase = "control" 
                     log_event("control_system_entered")
-                    
-                st.session_state.messages = []
+                
+                # FIXED: Only call rerun once after all state changes
                 st.rerun()
             else:
                 st.session_state.login_error = "Invalid participant ID or password. Please try again."
-                log_event("login_failed", {"participant_id": participant_id})
+                log_event("login_failed", {"participant_id": prolific_id})
+                # Don't call st.rerun() for errors - form will handle it
+
+# ============================================================================
+# FIXED CHAT INPUT FUNCTION
+# ============================================================================
+
+def render_chat_input_unified():
+    """
+    Fixed chat input handling with proper end chat button placement
+    """
+    conversation_complete = ((st.session_state.current_phase == "advice" and st.session_state.advice_turn_count >= 5) or
+                           (st.session_state.current_phase == "rehearsal" and st.session_state.rehearsal_turn_count >= 7))
+    
+    # Create placeholders for dynamic content
+    input_placeholder = st.empty()
+    status_placeholder = st.empty()
+    end_chat_placeholder = st.empty()
+
+    # Show input section only if conversation not complete and not awaiting response
+    if (not conversation_complete and 
+        not st.session_state.get("awaiting_response", False) and
+        not st.session_state.get("waiting_for_feedback", False) and
+        not st.session_state.get("message_sent", False)):
+
+        with input_placeholder.container():
+            # Handle starter text population
+            current_input_value = ""
+            
+            if (st.session_state.get("message_starter") and 
+                st.session_state.get("starter_clicked", False) and 
+                not st.session_state.get("input_populated", False)):
+                current_input_value = st.session_state.message_starter
+                st.session_state.current_input = current_input_value
+                st.session_state.input_populated = True
+                if "message_starter" in st.session_state:
+                    del st.session_state.message_starter
+            else:
+                current_input_value = st.session_state.get("current_input", "")
+
+            user_text = st.text_area(
+                "Your message:", 
+                value=current_input_value,
+                key="user_input_direct",
+                placeholder="Type your message or click a starter above...",
+                height=100,
+                label_visibility="visible"
+            )
+
+            if user_text != st.session_state.get("current_input", ""):
+                st.session_state.current_input = user_text
+
+            if st.button("Send", key="send_btn", use_container_width=True) and user_text.strip():
+                st.session_state.update({
+                    'current_input': "",
+                    'starter_clicked': False,
+                    'input_populated': False,
+                    'message_sent': True,
+                    'awaiting_response': True
+                })
+                
+                user_message = {"role": "user", "content": user_text, "phase": st.session_state.current_phase}
+                st.session_state.messages.append(user_message)
+                
+                if (st.session_state.current_phase == "rehearsal" and 
+                    st.session_state.rehearsal_turn_count > 0 and 
+                    st.session_state.rehearsal_turn_count % 2 == 0 and
+                    st.session_state.rehearsal_turn_count < 7):
+                    st.session_state.waiting_for_feedback = True
+                    st.session_state.awaiting_response = False
+                
                 st.rerun()
+
+    # Show loading indicator when awaiting response
+    elif st.session_state.get("awaiting_response", False):
+        with status_placeholder.container():
+            st.info("*Generating response...*")
+    
+    # FIXED: Show end chat button after minimum interactions for BOTH advice and rehearsal
+    current_phase = st.session_state.current_phase
+    
+    # Check if we should show end chat button
+    should_show_end_chat = False
+    user_count = 0
+    
+    if current_phase == "advice":
+        user_count = count_user_messages(st.session_state.messages, "advice")
+        should_show_end_chat = (user_count >= MIN_INTERACTIONS and 
+                               not st.session_state.get("waiting_for_feedback", False) and
+                               not conversation_complete)
+    elif current_phase == "rehearsal":
+        user_count = count_user_messages(st.session_state.messages, "rehearsal") 
+        should_show_end_chat = (user_count >= MIN_INTERACTIONS and 
+                               not st.session_state.get("waiting_for_feedback", False) and
+                               not conversation_complete)
+    
+    if should_show_end_chat:
+        with end_chat_placeholder.container():
+            st.markdown("---")
+            st.markdown(f"*You've sent {user_count} messages in {current_phase} phase. You can end the conversation when you feel ready, or continue practicing.*")
+            if st.button("End Chat and Save Conversation", key=f"end_chat_{current_phase}", use_container_width=True):
+                handle_end_chat_save()
 
 def render_info_gathering_step():
     """
-    Step 1: Show CSV data that was loaded
-    This is our stage 1 where we provide the details by which our participant must abide by
-    There is no difference between the rehearsal and control system at this stage but we have two different functions currently
+    UPDATED: Step 1 using structured info with unified scenario display
     """
     render_page_header("SoCALM User Study")
     render_section_separator()
@@ -497,19 +750,7 @@ def render_info_gathering_step():
         st.error("Participant data not loaded. Please contact the researcher.")
         return
     
-    with st.expander("Review Your Scenario", expanded=True):
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("**Conversation Details:**")
-            st.write(f"• **Topic:** {st.session_state.info['topic']}")
-            st.write(f"• **Person:** {st.session_state.info['person_of_interest']}")
-            st.write(f" • **Payment Type:** {st.session_state.info['payment_type']}")
-        
-        with col2:
-            st.markdown("**Relationship Context:**")
-            st.write(f"• **Relationship:** {st.session_state.info['relationship_quality']}")
-            st.write(f"• **Previous Discussion:** {st.session_state.info['has_topic_been_discussed']}")
+    render_scenario_info(st.session_state.info, expandable=False, use_sidebar=False)
     
     log_event("participant_reviewed_loaded_info")
     
@@ -522,21 +763,16 @@ def render_info_gathering_step():
         st.rerun()
 
 def render_control_info_step():
-    """Control system scenario display
-    Step 1: Show CSV data that was loaded
-    This is our stage 1 where we provide the details by which our participant must abide by
-    There is no difference between the rehearsal and control system at this stage but we have two different functions currently
-    """
+    """UPDATED: Control system scenario display using structured info"""
     render_page_header("SoCALM User Study")
     render_section_separator()
     
     st.markdown("### Stage 1: Understanding Your Situation")
     st.info("""
     **What happens next:**
-    - We'll show you the workplace scenario you'll be working through
-    - This is based on your interest form responses  
+    - We'll show you the workplace scenario you'll be working through 
     - You'll then chat directly with an AI assistant for guidance
-    - The assistant will help you explore your situation and develop an approach
+    - The assistant will help you explore your situation however you would like to 
     """)
     
     if not st.session_state.participant_loaded:
@@ -544,9 +780,8 @@ def render_control_info_step():
         return
     
     st.markdown("### Your Assigned Scenario")
-    st.info("Based on your interest form responses, here is the workplace situation we'd like you to work through:")
     
-    render_scenario_info(st.session_state.participant_data, expandable=False)
+    render_scenario_info(st.session_state.info, expandable=False, use_sidebar=False)
     
     st.markdown("---")
     st.markdown("**Take a moment to imagine yourself in this situation.** The AI assistant will help you explore your options and develop an approach for this conversation.")
@@ -579,14 +814,17 @@ def render_power_dynamic_step():
         
         st.subheader("Step 2: Describe your boss's nature and leadership style")
         st.markdown("**Rate how well each statement describes your boss's general approach and personality:**")
-        
+        st.markdown(""" **Rating Scale:** **1** = Strongly Disagree **2** = Disagree **3** = Neutral **4** = Agree **5** = Strongly Agree""")
+
         with st.form("leadership_form", clear_on_submit=False):
             mcq_answers = []
             
             for i, qdict in enumerate(MCQ_QUESTIONS):
-                st.markdown(f"<h4 style='text-align: center; margin-bottom: 30px;'>Q{i+1}. {qdict['q']}</h4>", unsafe_allow_html=True)
+                # LEFT-ALIGNED question (remove center styling)
+                st.markdown(f"**Q{i+1}. {qdict['q']}**")
                 
-                col1, col2, col3 = st.columns([1, 3, 1])
+                # CENTERED radio buttons using columns
+                col1, col2, col3 = st.columns([1, 2, 1])
                 with col2:
                     rating = st.radio(
                         "Rating:",
@@ -598,20 +836,10 @@ def render_power_dynamic_step():
                         label_visibility="collapsed"
                     )
                 
-                st.markdown("""
-                <div style="display: flex; justify-content: center; margin-top: 5px; margin-bottom: 25px;">
-                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; width: 420px; text-align: center;">
-                        <div style="font-size: 0.75em; color: #666; line-height: 1.2;">Strongly<br>Disagree</div>
-                        <div style="font-size: 0.75em; color: #666;">Disagree</div>
-                        <div style="font-size: 0.75em; color: #666;">Neutral</div>
-                        <div style="font-size: 0.75em; color: #666;">Agree</div>
-                        <div style="font-size: 0.75em; color: #666; line-height: 1.2;">Strongly<br>Agree</div>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                
+                st.markdown("<br>", unsafe_allow_html=True)
                 mcq_answers.append(rating)
-                
+        
+        
                 if i < len(MCQ_QUESTIONS) - 1:
                     st.markdown("<br>", unsafe_allow_html=True)
             
@@ -681,7 +909,6 @@ def auto_categorize_and_load():
     """
     if st.session_state.category is None:
         st.session_state.category = categorize_situation(
-            st.session_state.client,
             st.session_state.info
         )
 
@@ -710,10 +937,7 @@ def auto_categorize_and_load():
 
 def render_trucey_chat_step():
     """
-    Main Trucey conversation interface with time tracking
-    For the treatmenet system, we have two phases:
-    - Phase 1: Advice (5 responses) (user gets to send in 5 messages to the assistant to get advice on how to attempt the situation at hand)
-    - Phase 2: Rehearsal (7 responses) (user gets to practice the conversation with the assistant role-playing as their boss based on the leadership style calibrated)
+    Main Trucey conversation interface - CLEANED UP end chat handling
     """
     render_page_header("SoCALM User Study")
     render_section_separator()
@@ -751,6 +975,7 @@ def render_trucey_chat_step():
             """)
             st.markdown("---")
     
+    # Initialize chat if not started
     if not st.session_state.chat_started:
         st.session_state.chat_start_time = datetime.now().isoformat()
         st.session_state.advice_start_time = datetime.now().isoformat()
@@ -768,7 +993,6 @@ def render_trucey_chat_step():
             st.session_state.category["category"],
             st.session_state.advice_turn_count,
             st.session_state.get("rehearsal_level"),
-            st.session_state.participant_data,
             st.session_state.analyzer
         )
         
@@ -778,6 +1002,7 @@ def render_trucey_chat_step():
         st.session_state.chat_started = True
         st.session_state.advice_turn_count += 1
 
+    # Display messages based on current phase
     if st.session_state.current_phase == "advice":
         render_chat_messages(st.session_state.messages)
     else:
@@ -792,6 +1017,7 @@ def render_trucey_chat_step():
         rehearsal_messages = [msg for msg in st.session_state.messages if msg.get("phase") == "rehearsal"]
         render_chat_messages(rehearsal_messages)
     
+    # Handle advice phase transitions
     if (st.session_state.current_phase == "advice" and st.session_state.advice_turn_count >= 2):
         if st.session_state.advice_turn_count >= 5:
             st.info("Great! Now let's practice this conversation. I'll role-play as your boss so you can rehearse what we just discussed.")
@@ -824,30 +1050,13 @@ def render_trucey_chat_step():
                         st.rerun()
                 return
 
-    render_sentence_starters()
-    
+    # Check if rehearsal is complete (7 responses)
     if st.session_state.current_phase == "rehearsal" and st.session_state.rehearsal_turn_count >= 7:
         st.success("Conversation practice complete! Thank you for participating.")
-        if render_end_chat_buttons():
-            filename = save_chat_locally(
-                info=st.session_state.get("info", {}),
-                category=st.session_state.get("category", {}),
-                language_analysis=st.session_state.get("language_analysis", {}),
-                messages=st.session_state.get("messages", []),
-                advisor_traits=st.session_state.get("advice_traits", []) + st.session_state.get("rehearsal_traits", []),
-                scenario_type="trucey_rehearsal",
-                rehearsal_level=st.session_state.get("rehearsal_level"),
-                feedback_log=st.session_state.get("feedback_log", []),
-                participant_data=st.session_state.get("participant_data", {})
-            )
-            render_success_message(f"Chat saved to `{filename}`")
-            render_success_message("Chat saved. You can now close this tab or stop the server.")
+        handle_end_chat_save()
         return
 
-    if st.session_state.current_phase == "rehearsal" and not st.session_state.get("waiting_for_feedback", False):
-        if render_end_chat_with_minimum_check(st.session_state.messages, "trucey_rehearsal", "rehearsal"):
-            return
-
+    # Handle feedback collection
     if st.session_state.current_phase == "rehearsal" and st.session_state.get("waiting_for_feedback", False):
         feedback = render_feedback_form(st.session_state.rehearsal_turn_count)
         if feedback is not None:
@@ -878,8 +1087,13 @@ def render_trucey_chat_step():
             st.rerun()
         return
 
+    # Render sentence starters BEFORE input
+    render_sentence_starters()
+    
+    # Render the chat input (now includes proper end chat button logic)
     render_chat_input_unified()
     
+    # Handle AI response generation
     if st.session_state.get("awaiting_response", False):
         last_user_msg = st.session_state.messages[-1]["content"]
         
@@ -906,7 +1120,6 @@ def render_trucey_chat_step():
             st.session_state.category["category"],
             turn_count,
             st.session_state.get("rehearsal_level"),
-            st.session_state.participant_data,
             st.session_state.analyzer
         )
         
@@ -919,8 +1132,13 @@ def render_trucey_chat_step():
                 st.session_state.advice_choice_made = False
         else:
             st.session_state.rehearsal_turn_count += 1
-            
-        st.session_state.awaiting_response = False
+        
+        # Reset states for next interaction
+        st.session_state.update({
+            'awaiting_response': False,
+            'message_sent': False,
+            'starter_clicked': False
+        })
         st.rerun()
 
 def render_control_chat_step():
@@ -934,9 +1152,6 @@ def render_control_chat_step():
         st.error("Participant data not loaded. Please contact the researcher.")
         return
     
-    render_scenario_info(st.session_state.participant_data, expandable=True, expanded=False)
-    render_section_separator()
-    
     # Chat interface
     render_current_step_header(2, "Stage 2: Chat with AI Assistant")
     render_info_message("I'll assist you in exploring your workplace situation and guide you toward the best approach you may take for this situation. You can ask me for advice or request me to roleplay as your boss too.")
@@ -945,7 +1160,7 @@ def render_control_chat_step():
         st.session_state.chat_start_time = datetime.now().isoformat()
         log_event("control_chat_started")
         
-        general_next_assistant_turn(st.session_state.client, st.session_state.messages)
+        general_next_assistant_turn(st.session_state.client, st.session_state.messages, st.session_state.info)
         st.session_state.control_chat_started = True
 
     render_chat_messages(st.session_state.messages)
@@ -958,18 +1173,98 @@ def render_control_chat_step():
         st.rerun()
 
     if st.session_state.get("awaiting_control_response", False):
-        general_next_assistant_turn(st.session_state.client, st.session_state.messages)
+        general_next_assistant_turn(st.session_state.client, st.session_state.messages, st.session_state.info)
         st.session_state.awaiting_control_response = False
         st.rerun()
 
     render_end_chat_with_minimum_check(st.session_state.messages, "control")
 
+def render_sidebar_scenario():
+    """Simple sidebar that shows info based on completed stages"""
+    
+    current_step = st.session_state.get("step", "home")
+    
+    # If stage 1 passed: show participant details (for BOTH treatment and control)
+    if current_step in ["power", "chat", "control_chat"]:
+        st.sidebar.markdown("---")
+        
+        if not st.session_state.participant_loaded:
+            st.sidebar.error("Participant data not loaded. Please contact the researcher.")
+        else:
+           render_scenario_info(st.session_state.info, expandable=False, use_sidebar=True)
+
+        st.sidebar.markdown("---")
+        # If stage 2 passed: showcase leadership pros and cons (ONLY for treatment)
+        if (st.session_state.system_type == TRUCEY_REHEARSAL and
+            current_step in ["chat"] and 
+            st.session_state.get("leadership_result") and 
+            st.session_state.get("leadership_description")):
+            
+            with st.sidebar.expander("Boss's Leadership Style", expanded=False):
+                if (st.session_state.system_type == TRUCEY_REHEARSAL and
+                current_step in ["chat"] and 
+                st.session_state.get("leadership_result") and 
+                st.session_state.get("leadership_description")):
+                
+                    with st.sidebar.expander("Boss's Leadership Style", expanded=False):
+                        leadership_desc = st.session_state.leadership_description
+                        
+                        lines = [line.strip() for line in leadership_desc.split('\n') if line.strip()]
+                        style_name = ""
+                        pros = []
+                        cons = []
+                        current_section = None
+                        
+                        for line in lines:
+                            if line.startswith("**Based on your answers, the best match is:**"):
+                                style_name = line.split(":")[-1].strip()
+                            elif "Leadership Style" in line and "---" in line:
+                                if "**" in line:
+                                    parts = line.split("**")
+                                    if len(parts) >= 3: 
+                                        style_name = parts[1].strip()
+                            elif line == "**Strengths:**":
+                                current_section = "strengths"
+                            elif line == "**Challenges:**":
+                                current_section = "challenges"
+                            elif line.startswith("- ") and current_section:
+                                item = line[2:].strip()  
+                                if current_section == "strengths":
+                                    pros.append(item)
+                                elif current_section == "challenges":
+                                    cons.append(item)
+                        
+                        # Display the cleaned info
+                        if style_name:
+                            st.sidebar.markdown(f"**Assigned Leadership Style:** {style_name}")
+                        
+                        if pros:
+                            st.sidebar.markdown("**Key Strengths:**")
+                            for pro in pros:
+                                st.sidebar.markdown(f"• {pro}")
+                        
+                        if cons:
+                            st.sidebar.markdown("**Key Challenges:**")
+                            for con in cons:
+                                st.sidebar.markdown(f"• {con}")
+        
+        st.sidebar.markdown("---")
 # ============================================================================
 # MAIN ROUTING
 # ============================================================================
 
 def route_to_system():
     """Main router"""
+    if st.session_state.authenticated:
+        st.info("""
+        **Study Objective:** Practice having a workplace conversation with your boss using AI guidance. Any information collected during previous stages will be available in the sidebar.
+        
+        **Please Contact the Study Organizers in case of any difficulty**
+        
+        **Expected Time:** 5-10 minutes | **Your responses are confidential**
+        """)
+        st.markdown("---")
+        render_sidebar_scenario()
     if not st.session_state.authenticated:
         render_home_page()
         return
