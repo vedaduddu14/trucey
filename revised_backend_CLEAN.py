@@ -65,90 +65,6 @@ def ask_gpt(client, messages: list, temperature=0.7, max_tokens=150) -> str:
         return None
 
 # ============================================================================
-# 2. LANGUAGE STYLE ANALYZER
-# ============================================================================
-
-class LanguageStyleAnalyzer:
-    """Language style analyzer that loads various models for empathy, formality, persuasiveness, and politeness"""
-    
-    def __init__(self, load_empathy=True, load_formality=True, load_persuasiveness=True, load_politeness=True):
-        self.load_empathy = load_empathy
-        self.load_formality = load_formality
-        self.load_persuasiveness = load_persuasiveness
-        self.load_politeness = load_politeness
-
-        if self.load_empathy:
-            self.empathy_model, self.empathy_tokenizer = self._load_model_tokenizer("paragon-analytics/bert_empathy")
-        
-        if self.load_formality:
-            self.formality_model, self.formality_tokenizer = self._load_model_tokenizer("s-nlp/roberta-base-formality-ranker")
-        
-        if self.load_persuasiveness:
-            self.persuasiveness_model, self.persuasiveness_tokenizer = self._load_model_tokenizer("LACAI/roberta-large-PFG-donation-detection")
-        
-        if self.load_politeness:
-            self.politeness_model, self.politeness_tokenizer = self._load_model_tokenizer("Genius1237/xlm-roberta-large-tydip")
-
-    def _load_model_tokenizer(self, model_name):
-        """Helper function that loads model and tokenizer for given model name"""
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        model = AutoModelForSequenceClassification.from_pretrained(model_name)
-        return model, tokenizer
-
-    def analyze_empathy(self, text):
-        """Analyze empathy score using paragon-analytics/bert_empathy model"""
-        if not self.load_empathy:
-            raise ValueError("Empathy model not loaded.")
-        
-        tokenized = self.empathy_tokenizer(text, return_tensors="pt")
-        output = self.empathy_model(**tokenized)
-        scores = torch.nn.functional.softmax(output.logits, dim=-1)
-        return scores[0][1].item()
-
-    def analyze_formality(self, text):
-        """Analyze formality score using s-nlp/roberta-base-formality-ranker model"""
-        if not self.load_formality:
-            raise ValueError("Formality model not loaded.")
-        
-        tokenized = self.formality_tokenizer(text, return_tensors="pt")
-        output = self.formality_model(**tokenized)
-        scores = torch.nn.functional.softmax(output.logits, dim=-1)
-        return scores[0][1].item()
-
-    def analyze_persuasiveness(self, text):
-        """Analyze persuasiveness score using LACAI/roberta-large-PFG-donation-detection model"""
-        if not self.load_persuasiveness:
-            raise ValueError("Persuasiveness model not loaded.")
-        
-        tokenized = self.persuasiveness_tokenizer(text, return_tensors="pt")
-        output = self.persuasiveness_model(**tokenized)
-        scores = torch.nn.functional.softmax(output.logits, dim=-1)
-        return scores[0][0].item()
-
-    def analyze_politeness(self, text):
-        """Analyze politeness score using Genius1237/xlm-roberta-large-tydip model"""
-        if not self.load_politeness:
-            raise ValueError("Politeness model not loaded.")
-        
-        tokenized = self.politeness_tokenizer(text, return_tensors="pt")
-        output = self.politeness_model(**tokenized)
-        scores = torch.nn.functional.softmax(output.logits, dim=-1)
-        return scores[0][1].item()
-
-    def analyze_text(self, text):
-        """Analyze text and return all available scores"""
-        results = {}
-        if self.load_empathy:
-            results["empathy"] = self.analyze_empathy(text)
-        if self.load_formality:
-            results["formality"] = self.analyze_formality(text)
-        if self.load_persuasiveness:
-            results["persuasiveness"] = self.analyze_persuasiveness(text)
-        if self.load_politeness:
-            results["politeness"] = self.analyze_politeness(text)
-        return results
-
-# ============================================================================
 # 3. PARTICIPANT DATA MANAGEMENT
 # ============================================================================
 
@@ -215,16 +131,6 @@ def convert_sqlite_to_info_format(participant_data: dict) -> dict:
             "obtained": True,
             "explanation": f"Employment type: {payment_descriptions.get(participant_data['payment_type'], participant_data['payment_type'].replace('_', ' '))}",
             "value": participant_data['payment_type']
-        },
-        "language_style": {
-            "id": "language_style",
-            "description": "Automatically analyzed based on user text",
-            "obtained": True,
-            "empathy": 0.0,
-            "formality": 0.0,
-            "persuasiveness": 0.0,
-            "politeness": 0.0,
-            "explanation": "Language style scores range from 0 to 1."
         },
         "leadership_style": {
             "id": "leadership_style",
@@ -652,27 +558,9 @@ def load_combined_scenario_data(category: str, rehearsal_level: int = None) -> d
 # 8. CONVERSATION TURN MANAGEMENT
 # ============================================================================
 
-def analyze_conversation_context(visible_messages: list, info: dict, analyzer=None) -> dict:
+def analyze_conversation_context(visible_messages: list, info: dict) -> dict:
     """Part 1: Analyze conversation context and prepare data"""
     turn_count = sum(1 for m in visible_messages if m['role'] == 'assistant')
-    
-    user_tone = info.get("language_style", {
-        "empathy": 0.0,
-        "formality": 0.0, 
-        "persuasiveness": 0.0,
-        "politeness": 0.0
-    })
-    
-    if visible_messages and analyzer:
-        recent_user_messages = [m for m in visible_messages if m['role'] == 'user']
-        if recent_user_messages:
-            last_user_message = recent_user_messages[-1]['content']
-            new_style_scores = analyzer.analyze_text(last_user_message)
-            user_tone.update(new_style_scores)
-            print(f"DEBUG: Analyzed message: '{last_user_message[:50]}...'")
-            print(f"DEBUG: Language scores: {new_style_scores}")
-    
-    info["language_style"] = user_tone
 
     topic = info['topic']['value'].replace('_', ' ')
     individual = info['individual']['value']
@@ -680,11 +568,6 @@ def analyze_conversation_context(visible_messages: list, info: dict, analyzer=No
     relationship_length = info['relationship']['length'].replace('_', ' ')
     has_discussed = info['previous_interaction']['value']
     payment_type = info['work_context']['value'].replace('_', ' ')
-
-    user_empathy = user_tone.get("empathy", 0.0)
-    user_formality = user_tone.get("formality", 0.0)
-    user_persuasiveness = user_tone.get("persuasiveness", 0.0)
-    user_politeness = user_tone.get("politeness", 0.0)
 
     leadership_style = info.get("leadership_style", {})
     boss_style = leadership_style.get("name", "Unknown")
@@ -700,10 +583,6 @@ def analyze_conversation_context(visible_messages: list, info: dict, analyzer=No
         "relationship_length": relationship_length,
         "has_discussed": has_discussed,
         "payment_type": payment_type,
-        "user_empathy": user_empathy,
-        "user_formality": user_formality,
-        "user_persuasiveness": user_persuasiveness,
-        "user_politeness": user_politeness,
         "boss_style": boss_style,
         "boss_traits": boss_traits,
         "boss_pros": boss_pros,
@@ -712,30 +591,6 @@ def analyze_conversation_context(visible_messages: list, info: dict, analyzer=No
 
 def build_conversation_prompt(context_data: dict, info: dict, advisor_traits: list, scenario_type: str, rehearsal_level: int, visible_messages: list) -> tuple:
     """Part 2: Build conversation prompts based on scenario type"""
-    coaching_suggestions = []
-    if scenario_type == "advice":
-        if any([context_data["user_empathy"], context_data["user_formality"], context_data["user_persuasiveness"], context_data["user_politeness"]]):
-            if context_data["user_empathy"] < 0.4:
-                coaching_suggestions.append("be more empathetic by acknowledging impact on others")
-            if context_data["user_formality"] < 0.3 and context_data["boss_style"] in ["formal", "strict"]:
-                coaching_suggestions.append("use more formal language like 'I would like to discuss'")
-            if context_data["user_persuasiveness"] < 0.4:
-                coaching_suggestions.append("frame requests as benefits: 'This will help me be more productive'")
-            if context_data["user_politeness"] < 0.3:
-                coaching_suggestions.append("soften your approach with 'I was wondering if we could discuss'")
-        
-        language_guidance = ""
-        if coaching_suggestions:
-            language_guidance = f"\n\nCommunication tip: Consider how to {' and '.join(coaching_suggestions)}."
-    else: 
-        language_guidance = ""
-        if any([context_data["user_empathy"], context_data["user_formality"], context_data["user_persuasiveness"], context_data["user_politeness"]]):
-            language_guidance = f"""
-            
-            User's communication style: Empathy {context_data["user_empathy"]:.2f}, Formality {context_data["user_formality"]:.2f}, 
-            Persuasiveness {context_data["user_persuasiveness"]:.2f}, Politeness {context_data["user_politeness"]:.2f}
-            Respond as the boss would, considering their communication approach.
-            """
 
     feedback_tone_block = construct_feedback_and_tone_prompt(info, advisor_traits, context_data["turn_count"])
     
@@ -749,7 +604,6 @@ def build_conversation_prompt(context_data: dict, info: dict, advisor_traits: li
     
 
     The user is preparing for a conversation with their {context_data["individual"]} about {context_data["topic"]}.
-    {language_guidance}
     {feedback_tone_block}
     """
 
@@ -762,7 +616,7 @@ def build_conversation_prompt(context_data: dict, info: dict, advisor_traits: li
     if scenario_type == "rehearsal":
         instruction = build_rehearsal_instruction(context_data, pick, rehearsal_level, visible_messages)
     else:
-        instruction = build_advice_instruction(context_data, pick, visible_messages, coaching_suggestions)
+        instruction = build_advice_instruction(context_data, pick, visible_messages)
 
     return scenario_context, instruction, pick
 
@@ -805,6 +659,7 @@ def build_rehearsal_instruction(context_data: dict, pick: dict, rehearsal_level:
     - NEVER say things like "I tend to be impulsive" or "I avoid difficult conversations"
     - NEVER announce your psychological patterns - demonstrate them through actions
     - Respond as a real person who is unaware of their own personality quirks
+    - Respond naturally, as if you are not aware of your own challenges
     
     {repetition_warning} 
 
@@ -883,7 +738,7 @@ def build_rehearsal_instruction(context_data: dict, pick: dict, rehearsal_level:
     WORD LIMIT: Under 150 words.
     """
 
-def build_advice_instruction(context_data: dict, pick: dict, visible_messages: list, coaching_suggestions: list) -> str:
+def build_advice_instruction(context_data: dict, pick: dict, visible_messages: list) -> str:
     """Build advice instruction prompt"""
     all_strengths = " | ".join(context_data["boss_pros"]) if context_data["boss_pros"] else "general leadership strengths" 
     all_challenges = " | ".join(context_data["boss_cons"]) if context_data["boss_cons"] else "general leadership challenges"
@@ -904,9 +759,6 @@ def build_advice_instruction(context_data: dict, pick: dict, visible_messages: l
                         "sounds good", "i'm good", "that's enough", "got it"]
     is_satisfied = any(signal in last_user_message for signal in satisfaction_signals)
 
-    coaching_guidance = ""
-    if coaching_suggestions:
-        coaching_guidance = f"\n\nCOACHING TIP: {' and '.join(coaching_suggestions)}."
 
     is_first_advice = len([msg for msg in advice_messages if msg.get('role') == 'assistant']) == 0
     
@@ -919,6 +771,7 @@ def build_advice_instruction(context_data: dict, pick: dict, visible_messages: l
         - Keep response under 200 words total
         - END with a question to encourage dialogue
         - Be specific to this exact trait combination
+        - Respond naturally to the the user's {last_user_message}
         
         PERSONALITY-BASED ANALYSIS:
         
@@ -946,7 +799,7 @@ def build_advice_instruction(context_data: dict, pick: dict, visible_messages: l
         Apply "{pick['element']}" using this template: "{pick['example']}"
         Adapt the template to their specific situation and boss's traits: {context_data["boss_traits"]}
         
-        WORD LIMIT: Under 200 words total.{coaching_guidance}
+        WORD LIMIT: Under 200 words total.
         """
         
     elif is_satisfied:
@@ -999,7 +852,7 @@ def build_advice_instruction(context_data: dict, pick: dict, visible_messages: l
         Apply "{pick['element']}" using this template: "{pick['example']}"
         Adapt the template to address their specific concern and boss's traits: {context_data["boss_traits"]}
         
-        Translate their boss's {context_data["boss_traits"]} into natural behavioral descriptions.{coaching_guidance}
+        Translate their boss's {context_data["boss_traits"]} into natural behavioral descriptions.
         """
 
 def generate_assistant_response(client, visible_messages: list, scenario_context: str, instruction: str, pick: dict, context_data: dict, scenario_type: str) -> tuple:
@@ -1022,10 +875,10 @@ def generate_assistant_response(client, visible_messages: list, scenario_context
     
     return reply, context_data["turn_count"] + 1
 
-def get_next_assistant_turn(client, visible_messages: list, info: dict, advisor_traits: list, scenario_type: str, category: str, turn_count: int, rehearsal_level: int = None, analyzer=None) -> Tuple[str, int]:
+def get_next_assistant_turn(client, visible_messages: list, info: dict, advisor_traits: list, scenario_type: str, category: str, turn_count: int, rehearsal_level: int = None) -> Tuple[str, int]:
     """Main function: Generate next assistant turn using the three-part approach"""
     
-    context_data = analyze_conversation_context(visible_messages, info, analyzer)
+    context_data = analyze_conversation_context(visible_messages, info)
     
     scenario_context, instruction, pick = build_conversation_prompt(
         context_data, info, advisor_traits, scenario_type, rehearsal_level, visible_messages
@@ -1171,23 +1024,29 @@ def general_next_assistant_turn(client, visible_messages: list, info: dict) -> s
 # 10. DATA SAVING
 # ============================================================================
 
-def save_chat_locally(info, category, language_analysis, messages, advisor_traits, scenario_type, rehearsal_level=None, folder="server_saved_chats", feedback_log=None, **kwargs):
-    """Save chat data locally to JSON file"""
+def save_chat_locally(info, category, messages, advisor_traits, scenario_type, rehearsal_level=None, folder="saved_chats", feedback_log=None, prolific_id=None, **kwargs):
+    """Save chat data locally to JSON file with Prolific ID in filename"""
     os.makedirs(folder, exist_ok=True)
     export_data = {
         "timestamp": datetime.now().isoformat(),
         "scenario_type": scenario_type,
         "rehearsal_level": rehearsal_level,
+        "prolific_id": prolific_id,  # Include in data too
         "info": info,
         "category": category,
-        "language_analysis": language_analysis,
         "advisor_traits": advisor_traits,
         "messages": messages,
         "feedback_log": feedback_log or [],
     }
     export_data.update(kwargs)
     
-    filename = os.path.join(folder, f"chat_{datetime.now().strftime('%Y-%m-%dT%H-%M-%S')}.json")
+    # FIXED: Include prolific_id in filename
+    timestamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
+    if prolific_id and prolific_id != "unknown_user":
+        filename = os.path.join(folder, f"chat_{prolific_id}_{timestamp}.json")
+    else:
+        filename = os.path.join(folder, f"chat_{timestamp}.json")
+    
     with open(filename, "w") as f:
         json.dump(export_data, f, indent=2)
     print(f"[Saved] Chat written to: {filename}")
@@ -1214,6 +1073,7 @@ def assign_profile_to_prolific_id(prolific_id):
         conn.commit()  
         
         return {
+            'ParticipantID': assigned['LoginID'],
             'AssignedSystem': assigned['AssignedSystem'],
             'AssignedProblem': assigned['AssignedProblem'],
             'PersonofInterest': assigned['PersonofInterest'],
