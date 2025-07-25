@@ -75,6 +75,7 @@ def authenticate_participant(prolific_id):
         return None
     else:
         return {
+        'participant_id': profile['LoginID'],
         'assigned_system': profile['AssignedSystem'],
         'assigned_problem': profile['AssignedProblem'], 
         'person_of_interest': profile['PersonofInterest'],
@@ -1056,7 +1057,7 @@ def assign_profile_to_prolific_id(prolific_id):
     conn = sqlite3.connect('./profiles.db', timeout=30)
     conn.row_factory = sqlite3.Row
     try:
-        existing = conn.execute("SELECT AssignedSystem, AssignedProblem, PersonofInterest, Topic, RelationshipQuality, RelationshipLength, PaymentType, PreviousInteraction FROM profiles WHERE prolific_id = ?", (prolific_id,)).fetchone()
+        existing = conn.execute("SELECT LoginID, AssignedSystem, AssignedProblem, PersonofInterest, Topic, RelationshipQuality, RelationshipLength, PaymentType, PreviousInteraction FROM profiles WHERE prolific_id = ?", (prolific_id,)).fetchone()
         if existing:
             return dict(existing)
         conn.execute("BEGIN IMMEDIATE")
@@ -1065,7 +1066,7 @@ def assign_profile_to_prolific_id(prolific_id):
             conn.rollback()
             return None
         assigned = conn.execute("""
-            SELECT AssignedSystem, AssignedProblem, PersonofInterest, Topic, 
+            SELECT LoginID, AssignedSystem, AssignedProblem, PersonofInterest, Topic, 
                    RelationshipQuality, RelationshipLength, prolific_id, PaymentType, PreviousInteraction
             FROM profiles WHERE prolific_id = ?
         """, (prolific_id,)).fetchone()

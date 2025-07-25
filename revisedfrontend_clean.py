@@ -837,6 +837,8 @@ def main():
         st.info("""
         **Study Objective:** Practice having a workplace conversation with your boss using AI guidance.
         **Expected Time:** 5-10 minutes | **Your responses are confidential**
+                
+        **If there is any problem during the study, please use the contact present on the prolific post**
         """)
         st.markdown("---")
         render_sidebar()
