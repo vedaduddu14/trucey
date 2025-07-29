@@ -68,9 +68,9 @@ def ask_gpt(client, messages: list, temperature=0.7, max_tokens=150) -> str:
 # 3. PARTICIPANT DATA MANAGEMENT
 # ============================================================================
 
-def authenticate_participant(prolific_id):
+def authenticate_participant(prolific_id, last_name):
     """Authenticate participant with ID and password"""
-    profile = assign_profile_to_prolific_id(prolific_id)
+    profile = assign_profile_to_prolific_id(prolific_id, last_name)
     if not profile:
         return None
     else:
@@ -84,7 +84,8 @@ def authenticate_participant(prolific_id):
         'topic': profile['Topic'],
         'payment_type': profile['PaymentType'], 
         'has_topic_been_discussed': profile['PreviousInteraction'],
-        'prolific_id': prolific_id
+        'prolific_id': prolific_id,
+        'last_name': last_name
     }
 
 def convert_sqlite_to_info_format(participant_data: dict) -> dict:
@@ -1053,23 +1054,44 @@ def save_chat_locally(info, category, messages, advisor_traits, scenario_type, r
     print(f"[Saved] Chat written to: {filename}")
     return filename
 
-def assign_profile_to_prolific_id(prolific_id):
+def assign_profile_to_prolific_id(prolific_id, last_name):
     conn = sqlite3.connect('./profiles.db', timeout=30)
     conn.row_factory = sqlite3.Row
     try:
-        existing = conn.execute("SELECT LoginID, AssignedSystem, AssignedProblem, PersonofInterest, Topic, RelationshipQuality, RelationshipLength, PaymentType, PreviousInteraction FROM profiles WHERE prolific_id = ?", (prolific_id,)).fetchone()
+        # Check if this prolific_id + last_name combination is already assigned
+        existing = conn.execute("""
+            SELECT LoginID, AssignedSystem, AssignedProblem, PersonofInterest, Topic, 
+                   RelationshipQuality, RelationshipLength, PaymentType, PreviousInteraction, LastName
+            FROM profiles WHERE prolific_id = ? AND LastName = ?
+        """, (prolific_id, last_name)).fetchone()
+        
         if existing:
             return dict(existing)
+        
         conn.execute("BEGIN IMMEDIATE")
-        cursor = conn.execute("""UPDATE profiles SET prolific_id = ?, status = 'assigned' WHERE LoginID = (SELECT LoginID FROM profiles WHERE status = 'available' ORDER BY RANDOM() LIMIT 1)""", (prolific_id,))
+        
+        # Update available profile with both prolific_id and last_name
+        cursor = conn.execute("""
+            UPDATE profiles 
+            SET prolific_id = ?, LastName = ?, status = 'assigned' 
+            WHERE LoginID = (
+                SELECT LoginID FROM profiles 
+                WHERE status = 'available' 
+                ORDER BY RANDOM() LIMIT 1
+            )
+        """, (prolific_id, last_name))
+        
         if cursor.rowcount == 0:
             conn.rollback()
             return None
+        
+        # Retrieve the assigned profile
         assigned = conn.execute("""
             SELECT LoginID, AssignedSystem, AssignedProblem, PersonofInterest, Topic, 
-                   RelationshipQuality, RelationshipLength, prolific_id, PaymentType, PreviousInteraction
-            FROM profiles WHERE prolific_id = ?
-        """, (prolific_id,)).fetchone()
+                   RelationshipQuality, RelationshipLength, prolific_id, PaymentType, 
+                   PreviousInteraction, LastName
+            FROM profiles WHERE prolific_id = ? AND LastName = ?
+        """, (prolific_id, last_name)).fetchone()
         
         conn.commit()  
         
@@ -1083,6 +1105,7 @@ def assign_profile_to_prolific_id(prolific_id):
             'RelationshipLength': assigned['RelationshipLength'],
             'PaymentType': assigned['PaymentType'],
             'PreviousInteraction': assigned['PreviousInteraction'],
+            'LastName': assigned['LastName'],
             'prolific_id': prolific_id
         }
     except sqlite3.Error as e:
