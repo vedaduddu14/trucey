@@ -198,14 +198,16 @@ def render_sentence_starters():
         
         starters = st.session_state[starter_key]
         if starters:
-            st.markdown("**Try:**")
+            st.markdown("**Try asking about:**")
             cols = st.columns(len(starters))
             for i, starter in enumerate(starters):
                 with cols[i]:
-                    if st.button(starter, key=f"starter_{i}_{len(st.session_state.messages)}", use_container_width=True):
-                        # FIXED: Just set the starter text, don't send automatically
-                        st.session_state.selected_starter = starter
-                        st.rerun()
+                    display_text = starter + " ..."
+                    
+                    st.button(display_text, 
+                            key=f"starter_{i}_{len(st.session_state.messages)}", 
+                            use_container_width=True,
+                            help=starter)
 
 def render_chat_input():
     """Unified chat input function"""

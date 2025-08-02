@@ -662,6 +662,7 @@ def build_rehearsal_instruction(context_data: dict, pick: dict, rehearsal_level:
     - NEVER announce your psychological patterns - demonstrate them through actions
     - Respond as a real person who is unaware of their own personality quirks
     - Respond naturally, as if you are not aware of your own challenges
+    - If they aren't responding as you expect (i.e gibberish or not making sense), ask them to clarify
     
     {repetition_warning} 
 
@@ -773,6 +774,7 @@ def build_advice_instruction(context_data: dict, pick: dict, visible_messages: l
         - Keep response under 200 words total
         - END with a question to encourage dialogue
         - Be specific to this exact trait combination
+        - If they aren't responding as you expect (i.e gibberish or not making sense), ask them to clarify
         - Respond naturally to the the user's {last_user_message}
         
         PERSONALITY-BASED ANALYSIS:
@@ -838,6 +840,7 @@ def build_advice_instruction(context_data: dict, pick: dict, visible_messages: l
         - Under 150 words total
         - Address their specific concern
         - END with a question to encourage dialogue
+        - If they aren't responding as you expect (i.e gibberish or not making sense), ask them to clarify
         
         FAILURE MODE ANALYSIS:
         Explain exactly what goes wrong when people with {context_data["boss_traits"]} feel pressured:
