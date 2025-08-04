@@ -389,11 +389,10 @@ def render_home_page():
     
     with st.form("login_form"):
         prolific_id = st.text_input("Prolific ID:", placeholder="e.g., trial_user_1")
-        last_name = st.text_input("Last Name:", placeholder="Smith")
         login_btn = st.form_submit_button("Login", use_container_width=True)
         
         if login_btn:
-            participant_data = authenticate_participant(prolific_id, last_name)
+            participant_data = authenticate_participant(prolific_id)
             
             if participant_data:
                 st.session_state.update({
@@ -407,7 +406,6 @@ def render_home_page():
                 
                 log_event("session_started", {
                     "prolific_id": prolific_id,
-                    "last_name": last_name,
                     "assigned_system": participant_data['assigned_system']
                 })
 
@@ -420,7 +418,7 @@ def render_home_page():
                 
                 st.rerun()
             else:
-                st.session_state.login_error = "Invalid participant ID. Please try again."
+                st.session_state.login_error = "Unable to assign participant ID . Please try again in a minute or contact support."
 
 def render_info_step():
     """Step 1: Show scenario info"""

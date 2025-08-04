@@ -68,8 +68,20 @@ def ask_gpt(client, messages: list, temperature=0.7, max_tokens=150) -> str:
 # 3. PARTICIPANT DATA MANAGEMENT
 # ============================================================================
 
-def authenticate_participant(prolific_id, last_name):
+def authenticate_participant(prolific_id):
     """Authenticate participant with ID and password"""
+    special_cases = {
+        "prolific123": "tester001",
+        "prolific456": "tester002", 
+        "prolific789": "tester003",
+        "prolific000": "tester004"
+    }
+    
+    # Check if this prolific_id needs special handling
+    if prolific_id in special_cases:
+        last_name = special_cases[prolific_id]
+    else:
+        last_name = "unknown_user"
     profile = assign_profile_to_prolific_id(prolific_id, last_name)
     if not profile:
         return None
@@ -85,7 +97,6 @@ def authenticate_participant(prolific_id, last_name):
         'payment_type': profile['PaymentType'], 
         'has_topic_been_discussed': profile['PreviousInteraction'],
         'prolific_id': prolific_id,
-        'last_name': last_name
     }
 
 def convert_sqlite_to_info_format(participant_data: dict) -> dict:
@@ -1057,7 +1068,7 @@ def save_chat_locally(info, category, messages, advisor_traits, scenario_type, r
     print(f"[Saved] Chat written to: {filename}")
     return filename
 
-def assign_profile_to_prolific_id(prolific_id, last_name):
+def assign_profile_to_prolific_id(prolific_id, last_name = "unknown_user"):
     conn = sqlite3.connect('./profiles.db', timeout=30)
     conn.row_factory = sqlite3.Row
     try:
