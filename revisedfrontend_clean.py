@@ -209,6 +209,7 @@ def render_sentence_starters():
                             use_container_width=True,
                             help=starter)
 
+
 def render_chat_input():
     """Unified chat input function"""
     # Don't show input if chat is complete or ended
@@ -230,6 +231,10 @@ def render_chat_input():
             return
         if st.session_state.current_phase == "rehearsal" and st.session_state.rehearsal_turn_count >= 7:
             return
+    
+    # Show any stored error messages
+    if st.session_state.get("message_error"):
+        st.error(st.session_state.message_error)
     
     # Get starter text if available
     starter_text = st.session_state.get("selected_starter", "")
@@ -254,6 +259,17 @@ def render_chat_input():
 
 def send_message(user_text):
     """Handle sending a user message"""
+    
+    if len(user_text.strip()) < 120:
+        # Store error message in session state so it persists after rerun
+        st.session_state.message_error = f"Your message is too short. Please write a longer message for a more quality response"
+        st.rerun()
+        return
+
+    # Clear any error message
+    if "message_error" in st.session_state:
+        del st.session_state.message_error
+
     # Clear any selected starter
     if "selected_starter" in st.session_state:
         del st.session_state.selected_starter
