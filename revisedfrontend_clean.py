@@ -18,11 +18,13 @@ from revised_backend_CLEAN import (
     get_next_assistant_turn,
     general_next_assistant_turn,
     generate_sentence_starters,
-    get_fallback_starters
+    get_fallback_starters,
+    knowledge_test_assistant_turn
 )
 
 TRUCEY_REHEARSAL = "trucey_rehearsal"
 CONTROL_SYSTEM = "control_system"
+KNOWLEDGE_TEST = "knowledge_test"
 MIN_INTERACTIONS = 2
 
 # MCQ Questions for leadership assessment
@@ -87,7 +89,8 @@ def init_session_state():
         "advice_choice_made": False,
         "waiting_for_feedback": False,
         "chat_ended": False,
-        "needs_ai_response": False,  # FIXED: Flag to prevent double rendering
+        "needs_ai_response": False, 
+        "knowledge_test_started": False,
     }
     
     for key, default_value in defaults.items():
@@ -431,6 +434,9 @@ def render_home_page():
                 elif participant_data['assigned_system'] == CONTROL_SYSTEM:
                     st.session_state.step = "control_info"
                     st.session_state.current_phase = "control"
+                elif participant_data['assigned_system'] == KNOWLEDGE_TEST: 
+                    st.session_state.step = "knowledge_test"
+                    st.session_state.current_phase = "knowledge"
                 
                 st.rerun()
             else:
@@ -784,6 +790,42 @@ def render_control_chat():
         general_next_assistant_turn(st.session_state.client, st.session_state.messages, st.session_state.info)
         st.rerun()
 
+def render_knowledge_test():
+    """Knowledge test system - direct ChatGPT-like interface"""
+    st.title("SoCALM User Study")
+    st.markdown("---")
+    
+    # Show completion screen if chat ended
+    if st.session_state.get("chat_ended", False):
+        show_completion_screen()
+        return
+    
+    st.markdown("### AI Chat Assistant")
+    st.info("I'm here to help you with any workplace communication questions or situations you'd like to discuss.")
+    
+    # Initialize chat if not started
+    if not st.session_state.get("knowledge_test_started", False):
+        st.session_state.chat_start_time = datetime.now().isoformat()
+        log_event("knowledge_test_started")
+        
+        welcome_message = {
+            "role": "assistant", 
+            "content": "Hello! I'm an AI assistant who is pretending to be your boss. Try negotiating with me about a workplace situation.",
+            "phase": "knowledge"
+        }
+        st.session_state.messages.append(welcome_message)
+        st.session_state.knowledge_test_started = True
+
+    render_chat_messages(st.session_state.messages)
+    render_chat_input()
+    render_end_chat_button()
+    
+    if st.session_state.get("needs_ai_response", False):
+        st.session_state.needs_ai_response = False
+        knowledge_test_assistant_turn(st.session_state.client, st.session_state.messages)
+        st.rerun()
+
+
 def render_sidebar():
     """Render sidebar with scenario info"""
     current_step = st.session_state.get("step", "home")
@@ -880,6 +922,8 @@ def main():
                 render_control_info()
             elif step == "control_chat":
                 render_control_chat()
+        elif system_type == KNOWLEDGE_TEST: 
+            render_knowledge_test()
 
 # ============================================================================
 # RUN APPLICATION

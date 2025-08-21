@@ -1036,6 +1036,62 @@ def general_next_assistant_turn(client, visible_messages: list, info: dict) -> s
     
     return reply
 
+def knowledge_test_assistant_turn(client, messages):
+    """
+    Generate assistant response for knowledge test system (no scenario context)
+    
+    Args:
+        client: OpenAI client
+        messages: List of conversation messages
+    """
+    
+    # Create a simple system prompt for general workplace communication help
+    system_prompt = """You are a helpful AI assistant pretending to be a boss in a workplace scenario.
+    Your goal is to help users practice workplace conversations and negotiation skills.
+
+Be reasonable, concise and how a boss in a workplace would behave as for situations such asking a raise, promotion or time off. Do offer some resistance initially."""
+    
+    try:
+        # Prepare messages for API call
+        api_messages = [{"role": "system", "content": system_prompt}]
+        
+        # Add conversation history (exclude phase info for API)
+        for msg in messages:
+            api_messages.append({
+                "role": msg["role"],
+                "content": msg["content"]
+            })
+        
+        # Call OpenAI API (use the same model as your other functions)
+        response = client.chat.completions.create(
+            model="gpt-4",  # or whatever model you're using in other functions
+            messages=api_messages,
+            temperature=0.7,
+            max_tokens=500
+        )
+        
+        # Add response to messages
+        assistant_message = {
+            "role": "assistant",
+            "content": response.choices[0].message.content,
+            "phase": "knowledge"
+        }
+        messages.append(assistant_message)
+        
+        return True
+        
+    except Exception as e:
+        print(f"Error in knowledge_test_assistant_turn: {e}")
+        
+        # Fallback message
+        fallback_message = {
+            "role": "assistant", 
+            "content": "Hello! I'm an AI assistant who is pretending to be your boss. Try negotiating with me about a workplace situation.",
+            "phase": "knowledge"
+        }
+        messages.append(fallback_message)
+        return False
+
 # ============================================================================
 # 10. DATA SAVING
 # ============================================================================
@@ -1110,7 +1166,7 @@ def assign_profile_to_prolific_id(prolific_id, last_name = "unknown_user"):
         conn.commit()  
         
         return {
-            'ParticipantID': assigned['LoginID'],
+            'LoginID': assigned['LoginID'],
             'AssignedSystem': assigned['AssignedSystem'],
             'AssignedProblem': assigned['AssignedProblem'],
             'PersonofInterest': assigned['PersonofInterest'],
